@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "rootDir": ".",
+    "outDir": "dist",
+    // "moduleResolution": "Node",
+     "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*", "prisma/**/*", "types/**/*", "build-schema.ts"],
+  "exclude": ["node_modules", "dist"]
+}
+
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",
+//     "module": "ESNext",
+//     "rootDir": "src",
+//     "outDir": "dist",
+//     "moduleResolution": "Node",
+//     "esModuleInterop": true,
+     
+//     "strict": true,
+//       "typeRoots": ["./node_modules/@types", "./src/types"],
+//     "skipLibCheck": true
+//   },
+  
+//   "include": ["src" ,"types", "drizzle.config.ts"],
+//   "exclude": ["node_modules", "dist"]
+// }

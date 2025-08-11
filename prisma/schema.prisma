@@ -1,0 +1,260 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model agency {
+  id                  Int                   @id @default(autoincrement())
+  agency_name          String
+  public_code          String?               @unique(map: "Agency_public_code_key")
+  logo                 String?
+  license_number       String                @unique(map: "Agency_license_number_key")
+  agency_email         String?
+  phone                String?
+  address              String?               @db.Text
+  website              String?
+  status               agency_status         @default(active)
+  owner_user_id        Int                   @unique(map: "Agency_owner_user_id_key")
+  user                 user                  @relation(fields: [owner_user_id], references: [id], map: "Agency_owner_user_id_fkey")
+  agencyagent          agencyagent[]
+  registrationrequest  registrationrequest[]
+}
+
+model agencyagent {
+  id              Int                        @id @default(autoincrement())
+  agency_id       Int
+  agent_id        Int
+  added_by        Int?
+  id_card_number  String?
+  role_in_agency  agencyagent_role_in_agency @default(agent)
+  commission_rate Decimal?                   @db.Decimal(5, 2)
+  start_date      DateTime?
+  end_date        DateTime?
+  status          agencyagent_status         @default(active)
+  created_at      DateTime                   @default(now())
+  updated_at     DateTime?                  @updatedAt
+  addedByUser     user?                      @relation("AgencyAgentAddedBy", fields: [added_by], references: [id])
+  agentUser       user                       @relation("AgencyAgentAgent", fields: [agent_id], references: [id])
+  agency          agency                     @relation(fields: [agency_id], references: [id])
+
+  @@unique([agency_id, agent_id], map: "AgencyAgent_agency_id_agent_id_key")
+  @@index([added_by], map: "AgencyAgent_added_by_fkey")
+  @@index([agent_id], map: "AgencyAgent_agent_id_fkey")
+}
+
+model category {
+  id                  Int                   @id @default(autoincrement())
+  slug                String                @unique(map: "Category_slug_key")
+  createdAt           DateTime              @default(now())
+  updated_at          DateTime?                  @updatedAt
+  categorytranslation categorytranslation[]
+  subcategory         subcategory[]
+}
+
+model categorytranslation {
+  id         Int          @id @default(autoincrement())
+  categoryId Int
+  language   LanguageCode
+  name       String
+  category   category     @relation(fields: [categoryId], references: [id], map: "CategoryTranslation_categoryId_fkey")
+
+  @@unique([categoryId, language], map: "CategoryTranslation_categoryId_language_key")
+}
+
+model listing_type {
+  id                       Int                        @id @default(autoincrement())
+  slug                     String
+  createdAt                DateTime                   @default(now())
+  updatedAt               DateTime?                  @updatedAt
+  listing_type_translation listing_type_translation[]
+}
+
+model listing_type_translation {
+  id            Int          @id @default(autoincrement())
+  listingTypeId Int
+  language      LanguageCode
+  name          String
+  listing_type  listing_type @relation(fields: [listingTypeId], references: [id], map: "Listing_Type_Translation_listingTypeId_fkey")
+
+  @@unique([listingTypeId, language], map: "Listing_Type_Translation_listingTypeId_language_key")
+}
+
+model notification {
+  id                      Int                       @id @default(autoincrement())
+  userId                  Int
+  type                    String
+  status                  NotificationStatus        @default(unread)
+  createdAt               DateTime                  @default(now())
+  user                    user                      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Notification_userId_fkey")
+  notificationtranslation notificationtranslation[]
+
+  @@index([userId], map: "Notification_userId_fkey")
+}
+
+model notificationtranslation {
+  id             Int          @id @default(autoincrement())
+  notificationId Int
+  languageCode   LanguageCode
+  message        String
+  notification   notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, map: "NotificationTranslation_notificationId_fkey")
+
+  @@index([notificationId], map: "NotificationTranslation_notificationId_fkey")
+}
+
+model registrationrequest {
+  id                   Int                                 @id @default(autoincrement())
+  user_id              Int
+  request_type         registrationrequest_request_type
+  id_card_number       String?
+  agency_name          String?
+  agency_id            Int?
+  supporting_documents String?                             @db.Text
+  status               registrationrequest_status          @default(pending)
+  reviewed_by          Int?
+  review_notes         String?                             @db.Text
+  reviewed_at          DateTime?
+  requested_role       registrationrequest_requested_role?
+  license_number       String?
+  created_at           DateTime                            @default(now())
+   updated_at         DateTime?                            @updatedAt
+  agency               agency?                             @relation(fields: [agency_id], references: [id], map: "RegistrationRequest_agency_id_fkey")
+  reviewedByUser       user?                               @relation("RegistrationRequestReviewedBy", fields: [reviewed_by], references: [id])
+  user                 user                                @relation("RegistrationRequestUser", fields: [user_id], references: [id])
+
+  @@unique([user_id, request_type, status], map: "RegistrationRequest_user_id_request_type_status_key")
+  @@index([agency_id], map: "RegistrationRequest_agency_id_idx")
+  @@index([request_type], map: "RegistrationRequest_request_type_idx")
+  @@index([reviewed_by], map: "RegistrationRequest_reviewed_by_idx")
+  @@index([status], map: "RegistrationRequest_status_idx")
+  @@index([user_id], map: "RegistrationRequest_user_id_idx")
+}
+
+model subcategory {
+  id                     Int                      @id @default(autoincrement())
+  categoryId             Int
+  slug                   String                   @unique(map: "Subcategory_slug_key")
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  category               category                 @relation(fields: [categoryId], references: [id], map: "Subcategory_categoryId_fkey")
+  subcategorytranslation subcategorytranslation[]
+
+  @@index([categoryId], map: "Subcategory_categoryId_fkey")
+}
+
+model subcategorytranslation {
+  id            Int          @id @default(autoincrement())
+  subcategoryId Int
+  language      LanguageCode
+  name          String
+  subcategory   subcategory  @relation(fields: [subcategoryId], references: [id], map: "SubcategoryTranslation_subcategoryId_fkey")
+
+  @@unique([subcategoryId, language], map: "SubcategoryTranslation_subcategoryId_language_key")
+}
+
+model user {
+  id                         Int         @id @default(autoincrement())
+  username                   String      @unique(map: "User_username_key")
+  email                      String      @unique(map: "User_email_key")
+  password                   String
+  first_name                 String?
+  last_name                  String?
+  about_me                   String?     @db.Text
+  profile_img                String?
+  phone                      String?
+  website                    String?
+  role                       user_role
+  status                     user_status @default(active)
+  email_verified             Boolean     @default(false)
+  last_login                 DateTime?
+  last_active                DateTime?
+  created_at                 DateTime    @default(now())
+   updated_at      DateTime?                  @updatedAt
+  verification_token         String?
+  verification_token_expires DateTime?
+
+  agency agency?
+
+  agencyAgentAddedBy         agencyagent[] @relation("AgencyAgentAddedBy")
+  agencyAgentAgent           agencyagent[] @relation("AgencyAgentAgent")
+
+  registrationRequestsReviewed registrationrequest[] @relation("RegistrationRequestReviewedBy")
+  registrationRequests         registrationrequest[] @relation("RegistrationRequestUser")
+
+  notification    notification[]
+  usernamehistory usernamehistory[]
+}
+
+model usernamehistory {
+  id                   Int      @id @default(autoincrement())
+  user_id              Int
+  old_username         String
+  new_username         String
+  next_username_update DateTime @default(now())
+  user                 user     @relation(fields: [user_id], references: [id], map: "UsernameHistory_user_id_fkey")
+
+  @@index([user_id], map: "UsernameHistory_user_id_idx")
+}
+
+enum LanguageCode {
+  en
+  al
+}
+
+enum registrationrequest_request_type {
+  agent_license_verification
+  agency_registration
+  role_change_request
+}
+
+enum NotificationStatus {
+  unread
+  read
+}
+
+enum agencyagent_role_in_agency {
+  agent
+  senior_agent
+  team_lead
+}
+
+enum registrationrequest_status {
+  pending
+  approved
+  rejected
+  under_review
+}
+
+enum agency_status {
+  active
+  inactive
+  suspended
+}
+
+enum agencyagent_status {
+  active
+  inactive
+  terminated
+}
+
+enum user_role {
+  user
+  agency_owner
+  agent
+}
+
+enum registrationrequest_requested_role {
+  agent
+  senior_agent
+  team_lead
+}
+
+enum user_status {
+  active
+  inactive
+  pending
+  suspended
+}
