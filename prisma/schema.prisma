@@ -45,7 +45,49 @@ model agencyagent {
   @@index([added_by], map: "AgencyAgent_added_by_fkey")
   @@index([agent_id], map: "AgencyAgent_agent_id_fkey")
 }
+model attribute {
+  id             Int                     @id @default(autoincrement())
+  subcategoryId  Int
+  code           String
+  inputType      String
 
+  subcategory    subcategory              @relation(fields: [subcategoryId], references: [id])
+  translations   attribute_translation[]
+  values        attribute_value[]  
+  @@map("attributes")
+}
+
+model attribute_translation {
+  id            Int          @id @default(autoincrement())
+  attribute_id  Int
+  language      LanguageCode
+  name          String
+
+  attribute     attribute    @relation(fields: [attribute_id], references: [id])
+
+  @@map("attribute_translation")
+}
+
+model attribute_value {
+  id            Int           @id @default(autoincrement())
+  attribute_id  Int
+  value_code    String
+
+  attribute     attribute     @relation(fields: [attribute_id], references: [id])
+   translations  attribute_value_translation[]
+     @@map("attribute_values")
+}
+
+model attribute_value_translation {
+  id                   Int               @id @default(autoincrement())
+  attribute_value_id   Int
+  language             LanguageCode
+  name                 String
+
+ attribute_value      attribute_value    @relation(fields: [attribute_value_id], references: [id])
+  
+  @@map("attribute_value_translations")
+}
 model category {
   id                  Int                   @id @default(autoincrement())
   slug                String                @unique(map: "Category_slug_key")
@@ -141,7 +183,7 @@ model subcategory {
   updatedAt              DateTime                 @updatedAt
   category               category                 @relation(fields: [categoryId], references: [id], map: "Subcategory_categoryId_fkey")
   subcategorytranslation subcategorytranslation[]
-
+   attributes             attribute[]
   @@index([categoryId], map: "Subcategory_categoryId_fkey")
 }
 
