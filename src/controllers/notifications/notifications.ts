@@ -13,7 +13,7 @@ export async function getNotifications(req: Request, res: Response, next: NextFu
   const limit = parseInt(req.query.limit as string) || 10;
   const offset = parseInt(req.query.offset as string) || 0;
 
-  // This returns LanguageCode enum value, not string
+  
   const languageCode = parseLanguageCode(req.params.lang);
 
   if (!userId) {

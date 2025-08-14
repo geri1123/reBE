@@ -31,8 +31,7 @@ async getAllCategories(language: LanguageCode = LanguageCode.al ): Promise<{ id:
       id: subcat.id,
       name: subcat.subcategorytranslation[0]?.name ?? "No translation",
       slug: subcat.slug,
-      // createdAt: subcat.createdAt,
-      // updatedAt: subcat.updatedAt,
+    
       categoryId: subcat.categoryId,
     })),
   }));
