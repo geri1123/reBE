@@ -1,8 +1,9 @@
 // import { prisma } from '../../config/prisma.js';
 import { hashPassword } from '../../utils/hash.js';
 import type { NewUser, UpdatableUserFields, PartialUserForLogin, PartialUserByToken } from '../../types/database.js';
-import type { UserStatus } from '../../types/auth.js';
-import type { IUserRepository } from './IUserRepository.js';
+// import type { UserStatus } from '../../types/auth.js';
+import type { IUserRepository  } from './IUserRepository.js';
+import type { user_status } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
 export class UserRepositoryPrisma implements IUserRepository{
   
@@ -165,12 +166,12 @@ export class UserRepositoryPrisma implements IUserRepository{
     });
   }
 
-   async verifyEmail(userId: number, emailVerified: boolean, statusToUpdate: UserStatus): Promise<void> {
+   async verifyEmail(userId: number, emailVerified: boolean, statusToUpdate: user_status): Promise<void> {
     await this.prisma.user.update({
       where: { id: userId },
       data: {
         email_verified: emailVerified,
-        status: statusToUpdate,
+          status: statusToUpdate,
         verification_token: null,
         verification_token_expires: null,
         updated_at: new Date(),

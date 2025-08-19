@@ -62,7 +62,7 @@ model attribute_translation {
   attribute_id  Int
   language      LanguageCode
   name          String
-
+slug          String?     
   attribute     attribute    @relation(fields: [attribute_id], references: [id])
 
   @@map("attribute_translation")
@@ -83,7 +83,7 @@ model attribute_value_translation {
   attribute_value_id   Int
   language             LanguageCode
   name                 String
-
+  slug                 String?        
  attribute_value      attribute_value    @relation(fields: [attribute_value_id], references: [id])
   
   @@map("attribute_value_translations")
@@ -102,6 +102,7 @@ model categorytranslation {
   categoryId Int
   language   LanguageCode
   name       String
+   slug       String?      
   category   category     @relation(fields: [categoryId], references: [id], map: "CategoryTranslation_categoryId_fkey")
 
   @@unique([categoryId, language], map: "CategoryTranslation_categoryId_language_key")
@@ -120,6 +121,7 @@ model listing_type_translation {
   listingTypeId Int
   language      LanguageCode
   name          String
+    slug          String?     
   listing_type  listing_type @relation(fields: [listingTypeId], references: [id], map: "Listing_Type_Translation_listingTypeId_fkey")
 
   @@unique([listingTypeId, language], map: "Listing_Type_Translation_listingTypeId_language_key")
@@ -181,6 +183,7 @@ model subcategory {
   slug                   String                   @unique(map: "Subcategory_slug_key")
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @updatedAt
+  
   category               category                 @relation(fields: [categoryId], references: [id], map: "Subcategory_categoryId_fkey")
   subcategorytranslation subcategorytranslation[]
    attributes             attribute[]
@@ -192,6 +195,7 @@ model subcategorytranslation {
   subcategoryId Int
   language      LanguageCode
   name          String
+   slug          String?      
   subcategory   subcategory  @relation(fields: [subcategoryId], references: [id], map: "SubcategoryTranslation_subcategoryId_fkey")
 
   @@unique([subcategoryId, language], map: "SubcategoryTranslation_subcategoryId_language_key")

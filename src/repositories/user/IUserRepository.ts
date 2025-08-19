@@ -1,7 +1,8 @@
 // src/repositories/user/IUserRepository.ts
 
 import type { NewUser, PartialUserForLogin, PartialUserByToken, UpdatableUserFields } from '../../types/database.js';
-import type { UserStatus } from '../../types/auth.js';
+// import type { UserStatus } from '../../types/auth.js';
+import { user_status } from '@prisma/client';
 
 export interface IUserRepository {
   // --- Inserts
@@ -27,6 +28,6 @@ export interface IUserRepository {
 
   // --- Updates
   updateFieldsById(userId: number, fields: Partial<UpdatableUserFields>): Promise<void>;
-  verifyEmail(userId: number, emailVerified: boolean, statusToUpdate: UserStatus): Promise<void>;
+  verifyEmail(userId: number, emailVerified: boolean, statusToUpdate: user_status): Promise<void>;
   regenerateVerificationToken(userId: number, token: string, expires: Date): Promise<void>;
 }
