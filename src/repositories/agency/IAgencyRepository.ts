@@ -1,6 +1,7 @@
 import { AgencyModel, NewAgency, NewAgencyUnchecked } from '../../types/database.js';
 
 export interface IAgencyRepository {
+  findAgencyOwnerUserId(ownerUserId: number);
   licenseExists(license: string): Promise<boolean>;
   findByOwnerUserId(ownerUserId: number): Promise<{ id: number } | null>;
   findByPublicCode(publicCode: string): Promise<AgencyModel | null>;

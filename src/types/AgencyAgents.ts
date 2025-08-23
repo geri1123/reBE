@@ -9,3 +9,32 @@ export type NewAgencyAgent = {
   start_date?: Date;
   end_date?: Date | null;
 };
+
+export type AgentInfo = {
+  id: number;
+  agent_id: number;
+  agency_id: number;
+  role_in_agency: string;
+  status: string;
+  commission_rate?: number;
+  start_date?: Date;
+  end_date?: Date;
+  agency: {
+    id: number;
+    agency_name: string;
+    logo?: string | null;
+    license_number: string;
+    phone?: string | null;
+    website?: string | null;
+    status: string;
+    public_code?: string | null;
+    agency_email?: string | null;
+    address?: string | null;
+    owner_user_id: number;
+  };
+  addedByUser?: {
+    id: number;
+    username: string;
+    email: string;
+  } | null;
+};

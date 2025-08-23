@@ -2,10 +2,58 @@
 import type { NewAgencyAgent } from "../../types/AgencyAgents.js";
 import { PrismaClient } from "@prisma/client";
 import { IAgentsRepository } from "./IAgentsRepository.js";
+import { AgentInfo } from "../../types/AgencyAgents.js";
 export class AgentsRepository implements IAgentsRepository {
   constructor(private prisma: PrismaClient) {}
   
-  
+  async findAgentByUserId(userId: number): Promise<AgentInfo | null> {
+    const agent = await this.prisma.agencyagent.findFirst({
+      where: { agent_id: userId },
+      select: {
+        id: true,
+        agent_id: true,
+        agency_id: true,
+        role_in_agency: true,
+        id_card_number: true,
+        status: true,
+        commission_rate: true,
+        start_date: true,
+        end_date: true,
+        created_at: true,
+        agency: {
+          select: {
+            id: true,
+            agency_name: true,
+            logo: true,
+            license_number: true,
+            phone: true,
+            website: true,
+            status: true,
+            public_code: true,
+            agency_email: true,
+            address: true,
+            owner_user_id: true,
+          },
+        },
+        addedByUser: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!agent) return null;
+
+    return {
+      ...agent,
+      commission_rate: agent.commission_rate !== null ? Number(agent.commission_rate) : undefined,
+    } as AgentInfo;
+  }
+
+
   async create(agentData: NewAgencyAgent) {
     
     return await this.prisma.agencyagent.create({

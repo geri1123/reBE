@@ -11,7 +11,7 @@ export class ListingTypeRepo implements IListingTypeRepo {
                 id: true,
                 listing_type_translation: {
                     where: { language },
-                    select: { name: true },
+                    select: { name: true , slug:true },
                 },
             },
         });
@@ -20,6 +20,7 @@ export class ListingTypeRepo implements IListingTypeRepo {
         return listingTypes.map((lt) => ({
             id: lt.id,
             name: lt.listing_type_translation[0]?.name ?? "",
+            slug:lt.listing_type_translation[0]?.slug ?? null,
         }));
     }
 }

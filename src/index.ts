@@ -10,7 +10,7 @@ import { Server } from 'socket.io';
 import { config } from './config/config.js';
 import errorHandler from './middlewares/errorHandler.js';
 import agencyRouter from './routes/agencyRouter.js';
-import updateProfile from './routes/userRoutes.js';
+import user from './routes/userRoutes.js';
 import authRouter from './routes/authRoutes.js';
 import notificationRouter from './routes/notificationRouter.js';
 import category from './routes/categoryRouter.js';
@@ -53,7 +53,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/auth', authRouter);
-app.use('/profile', updateProfile);
+app.use('/profile', user);
 app.use('/agencyapi', agencyRouter);
 app.use('/api/notification', notificationRouter);
 app.use('/apiCat', category);

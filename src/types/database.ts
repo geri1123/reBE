@@ -3,7 +3,8 @@ import type {
   user,
   agency,
   registrationrequest,
-  usernamehistory
+  usernamehistory,
+  agencyagent
 } from '@prisma/client';
 
 // Model types (from Prisma client)
@@ -28,6 +29,8 @@ export type UpdatableUserFields = Partial<Pick<
 export type AgencyModel = agency;
 export type NewAgency = Prisma.agencyCreateInput;
 export type NewAgencyUnchecked = Prisma.agencyUncheckedCreateInput;
+
+export type Agencyagent=agencyagent;
 
 
 export type RegistrationRequestModel = registrationrequest;

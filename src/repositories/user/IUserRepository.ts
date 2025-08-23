@@ -3,7 +3,7 @@
 import type { NewUser, PartialUserForLogin, PartialUserByToken, UpdatableUserFields } from '../../types/database.js';
 // import type { UserStatus } from '../../types/auth.js';
 import { user_status } from '@prisma/client';
-
+import type { BaseUserInfo } from '../../types/userinfo.js';
 export interface IUserRepository {
   // --- Inserts
   create(
@@ -11,7 +11,7 @@ export interface IUserRepository {
   ): Promise<number>;
 
   // --- Queries
-  findById(userId: number): Promise<{ id: number; email: string | null; username: string | null } | null>;
+ findById(userId: number): Promise<BaseUserInfo | null>;
   findByIdentifier(identifier: string): Promise<PartialUserForLogin | null>;
   findByVerificationToken(token: string): Promise<PartialUserByToken | null>;
   findByIdForProfileImage(userId: number): Promise<{ id: number; profile_img: string | null } | null>;

@@ -5,6 +5,8 @@ import { AgencyModel, NewAgency, NewAgencyUnchecked } from '../../types/database
 import { PrismaClient } from '@prisma/client';
 export class AgencyRepository {
   constructor(private prisma : PrismaClient) {}
+ 
+
   async licenseExists(license: string): Promise<boolean> {
     const agency = await this.prisma.agency.findFirst({
       where: { license_number: license },

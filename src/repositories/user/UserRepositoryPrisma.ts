@@ -5,6 +5,7 @@ import type { NewUser, UpdatableUserFields, PartialUserForLogin, PartialUserByTo
 import type { IUserRepository  } from './IUserRepository.js';
 import type { user_status } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
+import { BaseUserInfo } from '../../types/userinfo.js';
 export class UserRepositoryPrisma implements IUserRepository{
   
   constructor(private prisma: PrismaClient) {}
@@ -26,18 +27,32 @@ export class UserRepositoryPrisma implements IUserRepository{
   }
 
   // READ
-   async findById(userId: number) {
-    const result = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        username: true,
-      },
-    });
+async findById(userId: number): Promise<BaseUserInfo | null> {
+  const user = await this.prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      email: true,
+      username: true,
+      role: true,
+      first_name: true,
+      last_name: true,
+      about_me: true,
+      profile_img: true,
+      phone: true,
+      website: true,
+      status: true,
+      last_login: true,
+      last_active: true,
+      created_at: true,
+      updated_at: true,
+    },
+  });
 
-    return result || null;
-  }
+  return user ? (user as BaseUserInfo) : null;
+}
+  // Complex query that coordinates with other repositories
+
 
    async findByIdentifier(identifier: string): Promise<PartialUserForLogin | null> {
     const result = await this.prisma.user.findFirst({

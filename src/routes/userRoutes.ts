@@ -3,7 +3,7 @@ import { verifyToken } from '../middlewares/verifyToken.js';
 import { uploadSingleProfileImage } from '../middlewares/uploadFile.js';
 import { updateProfileImage } from '../controllers/user/updateprofile.js';
 import { changeUsername } from '../controllers/user/updateUsername.js';
-
+import { userInfo } from '../controllers/user/userInfo.js';
 import { changePassword } from '../controllers/user/updatePassword.js';
 
 import { updateProfileFields } from '../controllers/user/updateProfileFields.js';
@@ -12,5 +12,6 @@ router.use(verifyToken);
 router.patch('/update-profileImg',  uploadSingleProfileImage, updateProfileImage);
 router.patch('/update-username' ,  changeUsername); 
 router.patch('/update-password' ,  changePassword);
-router.patch('/user/update-me' , updateProfileFields )
+router.patch('/update-me' , updateProfileFields )
+router.get('/userInfo' , verifyToken ,userInfo )
 export default router;
