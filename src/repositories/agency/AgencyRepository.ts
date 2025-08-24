@@ -3,8 +3,34 @@
 import { generatePublicCode } from '../../utils/hash.js';
 import { AgencyModel, NewAgency, NewAgencyUnchecked } from '../../types/database.js';
 import { PrismaClient } from '@prisma/client';
+import { AgencyInfo } from '../../types/userinfo.js';
 export class AgencyRepository {
   constructor(private prisma : PrismaClient) {}
+ async findAgencyByUserId(userId: number): Promise<AgencyInfo | null> {
+  const agency = await this.prisma.agency.findFirst({
+    where: { owner_user_id: userId },
+    select: {
+      id: true,
+      agency_name: true,
+      logo: true,
+      license_number: true,
+      phone: true,
+      website: true,
+      status: true,
+      public_code: true,
+      agency_email: true,
+      address: true,
+      owner_user_id: true,
+      created_at: true,
+      updated_at: true,
+    },
+  });
+
+  if (!agency) return null;
+
+  // Type assertion to avoid manual mapping
+  return agency as AgencyInfo;
+}
  
 
   async licenseExists(license: string): Promise<boolean> {

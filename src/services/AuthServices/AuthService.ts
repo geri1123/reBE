@@ -6,6 +6,8 @@ import { UnauthorizedError } from '../../errors/BaseError.js';
 import jwt from 'jsonwebtoken';
 import { comparePassword } from '../../utils/hash.js';
 import { config } from '../../config/config.js';
+import { SupportedLang  } from '../../locales/translations.js';
+import {t} from '../../middlewares/langMiddleware.js';
 import type { IUserRepository } from '../../repositories/user/IUserRepository.js';
 import { IAgencyRepository } from '../../repositories/agency/IAgencyRepository.js';
 import { loginValidation , type LoginRequestData } from '../../validators/users/loginValidation.js';
@@ -34,20 +36,18 @@ export class AuthService {
         throw new Error("Invalid role.");
     }
   }
-
-
-    async login(data: LoginRequestData) {
+  async login(data: LoginRequestData, language: SupportedLang ) {
     const { identifier, password } = data;
 
     const user = await this.userRepo.findByIdentifier(identifier);
-    if (!user) throw new UnauthorizedError('Invalid credentials');
+    if (!user) throw new UnauthorizedError(t('invalidCredentials', language));
 
     if (user.status !== 'active') {
-      throw new UnauthorizedError('Account not active. Verify email or contact support.');
+      throw new UnauthorizedError(t('accountNotActive', language));
     }
 
     const isMatch = await comparePassword(password, user.password);
-    if (!isMatch) throw new UnauthorizedError('Invalid password.');
+    if (!isMatch) throw new UnauthorizedError(t('invalidPassword', language));
 
     await this.userRepo.updateFieldsById(user.id, { last_login: new Date() });
 
@@ -64,22 +64,10 @@ export class AuthService {
 
     return { user, token };
   }
-  // async registerUserByRole(body: RegistrationData): Promise<number> {
-  //   const role = body.role;
 
-  //   switch (role) {
-  //     case 'user':
-  //       return new UserRegistration(this.userRepo).register(body);
-  //     case 'agency_owner':
-  //       return new AgencyOwnerRegistration(this.userRepo, this.agencyRepo).register(body);
-  //     case 'agent':
-  //       return new AgentRegistration(this.userRepo,this.agencyRepo  ,this.requestRepo ).register(body);
-  //     default:
-  //       throw new Error('Invalid role.');
-  //   }
-  // }
+  //   async login(data: LoginRequestData) {
+  //   const { identifier, password } = data;
 
-  // async login(identifier: string, password: string) {
   //   const user = await this.userRepo.findByIdentifier(identifier);
   //   if (!user) throw new UnauthorizedError('Invalid credentials');
 
@@ -105,4 +93,5 @@ export class AuthService {
 
   //   return { user, token };
   // }
+  
 }

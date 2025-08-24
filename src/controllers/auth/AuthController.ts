@@ -13,8 +13,9 @@ import { registrationSchema } from '../../validators/users/authValidatorAsync.js
 import { prisma } from '../../config/prisma.js';
 import { loginValidation, type LoginRequestData } from '../../validators/users/loginValidation.js';
 import { RegistrationData } from '../../validators/users/authValidatorAsync.js';
-// Initialize repositories
+import { SupportedLang } from '../../locales/translations.js';
 const userRepo = new UserRepositoryPrisma(prisma);
+import {t} from '../../middlewares/langMiddleware.js';
 const agencyRepo = new AgencyRepository(prisma);
 const requestRepo = new RegistrationRequestRepository(prisma);
 
@@ -26,11 +27,12 @@ export async function register(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+    const language: SupportedLang = res.locals.lang;
   try {
       const validatedBody = await registrationSchema.parseAsync(req.body);
     const userId = await authService.registerUserByRole(validatedBody);
     res.status(201).json({
-      message: "Registration successful. Please verify your email.",
+       message: t("registrationSuccess", language),
       userId,
     });
   } catch (err) {
@@ -44,12 +46,13 @@ export async function loginUser(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+   const language: SupportedLang = res.locals.lang;
   try {
     // Validate request body with Zod
     const validatedData = loginValidation.parse(req.body);
 
     // Pass validated data directly to the service
-    const { user, token } = await authService.login(validatedData);
+    const { user, token } = await authService.login(validatedData ,language);
 
     // Set cookie
     res.cookie('token', token, {
@@ -63,36 +66,12 @@ export async function loginUser(
 
     // Send response
     res.status(200).json({
-      message: 'Login successful',
+       message: t("loginSuccess", language),
       user: { id: user.id, username: user.username, email: user.email },
     });
   } catch (err) {
     handleZodError(err, next);
   }
 
-// export async function loginUser(
-//   req: Request<{}, {}, LoginRequest>,
-//   res: Response,
-//   next: NextFunction
-// ): Promise<void> {
-//   try {
-//     const { identifier, password } = loginValidation.parse(req.body);
-//     const { user, token } = await authService.login(identifier, password);
 
-//     res.cookie('token', token, {
-//       httpOnly: true,
-//       // secure: process.env.NODE_ENV === 'production',
-//       secure: false,
-//       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-//       maxAge: 86400000,
-//       path: '/',
-//     });
-
-//     res.status(200).json({
-//       message: 'Login successful',
-//       user: { id: user.id, username: user.username, email: user.email },
-//     });
-//   } catch (err) {
-//     handleZodError(err, next);
-//   }
 }

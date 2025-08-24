@@ -6,8 +6,8 @@ import { parseLanguageCode } from "../../utils/language";
 const categoryRepository = new CategoryRepository(prisma);
 
 export async function getAllCategories(req:Request, res:Response, next:NextFunction) {
-  const languageCode = parseLanguageCode(req.params.language );
-
+  // const languageCode = parseLanguageCode(req.params.language );
+     const languageCode = res.locals.lang; 
   try {
     const categories = await categoryRepository.getAllCategories(languageCode);
     res.status(200).json({ success: true, categories });

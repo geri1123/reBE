@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
 import http from 'http';
 import { Server } from 'socket.io';
-
+import { detectLanguage } from './middlewares/langMiddleware.js';
 import { config } from './config/config.js';
 import errorHandler from './middlewares/errorHandler.js';
 import agencyRouter from './routes/agencyRouter.js';
@@ -50,6 +50,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(detectLanguage);
 
 // Routes
 app.use('/api/auth', authRouter);

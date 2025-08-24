@@ -18,6 +18,8 @@ model agency {
   address              String?               @db.Text
   website              String?
   status               agency_status         @default(active)
+  created_at      DateTime                   @default(now())
+  updated_at     DateTime?                  @updatedAt
   owner_user_id        Int                   @unique(map: "Agency_owner_user_id_key")
   user                 user                  @relation(fields: [owner_user_id], references: [id], map: "Agency_owner_user_id_fkey")
   agencyagent          agencyagent[]

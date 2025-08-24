@@ -1,20 +1,64 @@
-import { IAgentsRepository } from "../../repositories/agents/IAgentsRepository";
+// backend/src/services/userService/UserInfoService.ts
 import { IUserRepository } from "../../repositories/user/IUserRepository";
-
+import { IAgentsRepository } from "../../repositories/agents/IAgentsRepository";
+import { IAgencyRepository } from "../../repositories/agency/IAgencyRepository";
 import { BaseUserService } from "./BaseUserService";
+import { UserWithRoleInfo, AgentInfo, AgencyInfo } from "../../types/userinfo";
 
-export class UserInfoService extends BaseUserService{
-    constructor(
-        userRepo:IUserRepository , 
-          private agentRepo: IAgentsRepository 
-    )
-        {
-        super(userRepo)
+export class UserInfoService extends BaseUserService {
+  constructor(
+    userRepo: IUserRepository,
+    private agentRepo: IAgentsRepository,
+    private agencyRepo: IAgencyRepository
+  ) {
+    super(userRepo);
+  }
+
+  async getUserInfo(userId: number): Promise<UserWithRoleInfo | null> {
+    const user = await this.userRepo.findById(userId);
+    if (!user) return null;
+
+    const result: UserWithRoleInfo = { ...user };
+
+    // Agent role
+    if (user.role === "agent") {
+      const agentData: AgentInfo | null = await this.agentRepo.findAgentByUserId(userId);
+      if (agentData) result.agentInfo = [agentData]; // wrap in array to match type
     }
-    async getUserinfo(userId:number){
-         return  this.userRepo.findById(userId)
+
+    // Agency owner role
+    if (user.role === "agency_owner") {
+      const agencyData: AgencyInfo | null = await this.agencyRepo.findAgencyByUserId(userId);
+      if (agencyData) result.agencyInfo = agencyData;
     }
-   async getagentInfo(userId:number){
-    return this.agentRepo.findAgentByUserId(userId);
-   }
+
+    return result;
+  }
 }
+
+
+// import { IAgencyRepository } from "../../repositories/agency/IAgencyRepository";
+// import { IAgentsRepository } from "../../repositories/agents/IAgentsRepository";
+// import { IUserRepository } from "../../repositories/user/IUserRepository";
+
+// import { BaseUserService } from "./BaseUserService";
+
+// export class UserInfoService extends BaseUserService{
+//     constructor(
+//         userRepo:IUserRepository , 
+//           private agentRepo: IAgentsRepository  , 
+//           private agencyRepo:IAgencyRepository
+//     )
+//         {
+//         super(userRepo)
+//     }
+//     async getUserinfo(userId:number){
+//          return  this.userRepo.findById(userId)
+//     }
+//    async getagentInfo(userId:number){
+//     return this.agentRepo.findAgentByUserId(userId);
+//    }
+//    async getagencyInfo(userId:number){
+//     return this.agencyRepo.findAgencyByUserId(userId);
+//    }
+// }
