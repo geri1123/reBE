@@ -1,8 +1,11 @@
-import { z } from 'zod';
+import { z } from "zod";
+import { t } from "../../utils/i18n.js";
+import { SupportedLang } from "../../locales/translations.js";
 
-export const loginValidation = z.object({
-  identifier: z.string().nonempty('Email or username is required'),
-  password: z.string().nonempty('Password is required'),
-});
+export const loginValidation = (language: SupportedLang) =>
+  z.object({
+    identifier: z.string().nonempty(t("identifierRequired", language)),
+    password: z.string().nonempty(t("passwordRequired", language)),
+  });
 
-export type LoginRequestData = z.infer<typeof loginValidation>;
+export type LoginRequestData = z.infer<ReturnType<typeof loginValidation>>;

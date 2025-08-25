@@ -1,173 +1,342 @@
-// validators/users/authValidatorAsync.ts
+// // validators/users/authValidatorAsync.ts
+
 import { z, RefinementCtx } from "zod";
+import { prisma } from "../../config/prisma.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
 import { AgencyRepository } from "../../repositories/agency/AgencyRepository.js";
 import { RegistrationRequestRepository } from "../../repositories/registrationRequest/RegistrationRequest.js";
-import { prisma } from "../../config/prisma.js";
+import { t } from "../../utils/i18n.js";
+import { SupportedLang } from "../../locales/translations.js";
 
 const userRepo = new UserRepositoryPrisma(prisma);
 const agencyRepo = new AgencyRepository(prisma);
 const registrationRequestRepo = new RegistrationRequestRepository(prisma);
 
-export const registrationSchema = z
-  .object({
-    username: z
-      .string()
-      .min(4, "Username must be at least 4 characters long.")
-      .refine((val) => !/\s/.test(val), "Username must not contain spaces."),
-    email: z.email("Email is not valid."),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters long.")
-      .refine((val) => !/\s/.test(val), "Password must not contain spaces."),
-    repeatPassword: z.string(),
-    first_name: z.string().min(1, "First name is required."),
-    last_name: z.string().min(1, "Last name is required."),
-    terms_accepted: z.literal(true, {
-      message: "Please accept the terms and conditions.",
-    }),
-    role: z.enum(["user", "agency_owner", "agent"]),
+export const registrationSchema = (language: SupportedLang) =>
+  z
+    .object({
+      username: z
+        .string()
+        .min(4, t("usernameMin", language))
+        .refine((val) => !/\s/.test(val), t("usernameNoSpaces", language)),
+      email: z.email(t("emailInvalid", language)),
+      password: z
+        .string()
+        .min(8, t("passwordMin", language))
+        .refine((val) => !/\s/.test(val), t("passwordNoSpaces", language)),
+      repeatPassword: z.string(),
+      first_name: z.string().min(1, t("firstNameRequired", language)),
+      last_name: z.string().min(1, t("lastNameRequired", language)),
+      terms_accepted: z.literal(true, {
+        message: t("termsRequired", language),
+      }),
+      role: z.enum(["user", "agency_owner", "agent"]),
+      agency_name: z.string().optional(),
+      license_number: z.string().optional(),
+      address: z.string().optional(),
+      public_code: z.string().optional(),
+      id_card_number: z.string().optional(),
+      requested_role: z
+        .enum(["agent", "senior_agent", "team_lead"])
+        .optional(),
+    })
+    .superRefine(async (data, ctx: RefinementCtx) => {
+      if (data.password !== data.repeatPassword) {
+        ctx.addIssue({
+          code: "custom",
+          message: t("passwordsMismatch", language),
+          path: ["repeatPassword"],
+        });
+      }
 
-    // Optional fields
-    agency_name: z.string().optional(),
-    license_number: z.string().optional(),
-    address: z.string().optional(),
-    public_code: z.string().optional(),
-    id_card_number: z.string().optional(),
-    requested_role: z
-      .enum(["agent", "senior_agent", "team_lead"])
-      .optional(),
-  })
-  .superRefine(async (data, ctx: RefinementCtx) => {
-    if (data.password !== data.repeatPassword) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Passwords do not match.",
-        path: ["repeatPassword"],
-      });
-    }
-
-    if (data.role === "agency_owner") {
-      if (!data.agency_name?.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Agency name is required.",
-          path: ["agency_name"],
-        });
-      }
-      if (!data.license_number?.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          message: "License number is required.",
-          path: ["license_number"],
-        });
-      }
-      if (!data.address?.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Address is required.",
-          path: ["address"],
-        });
-      }
-    }
-
-    if (data.role === "agent") {
-      if (!data.public_code?.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Public code is required.",
-          path: ["public_code"],
-        });
-      }
-      if (!data.id_card_number?.trim()) {
-        ctx.addIssue({
-          code: "custom",
-          message: "ID card number is required.",
-          path: ["id_card_number"],
-        });
-      }
-      if (!data.requested_role) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Role in agency is required.",
-          path: ["requested_role"],
-        });
-      }
-    }
-
-    // Uniqueness checks
-    try {
-      if (await userRepo.emailExists(data.email)) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Email already exists.",
-          path: ["email"],
-        });
-      }
-      if (await userRepo.usernameExists(data.username)) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Username already exists.",
-          path: ["username"],
-        });
-      }
       if (data.role === "agency_owner") {
-        if (
-          data.agency_name &&
-          (await agencyRepo.agencyNameExist(data.agency_name))
-        ) {
+        if (!data.agency_name?.trim()) {
           ctx.addIssue({
             code: "custom",
-            message: "Agency name already exists.",
+            message: t("agencyNameRequired", language),
             path: ["agency_name"],
           });
         }
-        if (
-          data.license_number &&
-          (await agencyRepo.licenseExists(data.license_number))
-        ) {
+        if (!data.license_number?.trim()) {
           ctx.addIssue({
             code: "custom",
-            message: "License number already exists.",
+            message: t("licenseRequired", language),
             path: ["license_number"],
           });
         }
-      }
-      if (data.role === "agent") {
-        const agency = data.public_code
-          ? await agencyRepo.findByPublicCode(data.public_code)
-          : null;
-        if (!agency) {
+        if (!data.address?.trim()) {
           ctx.addIssue({
             code: "custom",
-            message: "Invalid public code.",
+            message: t("addressRequired", language),
+            path: ["address"],
+          });
+        }
+      }
+
+      if (data.role === "agent") {
+        if (!data.public_code?.trim()) {
+          ctx.addIssue({
+            code: "custom",
+            message: t("publicCodeRequired", language),
             path: ["public_code"],
           });
         }
-        if (
-          data.id_card_number &&
-          (await registrationRequestRepo.idCardExists(data.id_card_number))
-        ) {
+        if (!data.id_card_number?.trim()) {
           ctx.addIssue({
             code: "custom",
-            message: "ID card number already submitted.",
+            message: t("idCardRequired", language),
             path: ["id_card_number"],
           });
         }
+        if (!data.requested_role) {
+          ctx.addIssue({
+            code: "custom",
+            message: t("agencyRoleRequired", language),
+            path: ["requested_role"],
+          });
+        }
       }
-    } catch (error) {
-      console.error("Validation error:", error);
-      ctx.addIssue({
-        code: "custom",
-        message:
-          "Validation failed due to server error. Please try again.",
-        path: ["root"],
-      });
-    }
-  });
 
-// Export a type directly from Zod
-export type RegistrationData = z.infer<typeof registrationSchema>;
+      try {
+        if (await userRepo.emailExists(data.email)) {
+          ctx.addIssue({
+            code: "custom",
+            message: t("emailExists", language),
+            path: ["email"],
+          });
+        }
+        if (await userRepo.usernameExists(data.username)) {
+          ctx.addIssue({
+            code: "custom",
+            message: t("usernameExists", language),
+            path: ["username"],
+          });
+        }
+        if (data.role === "agency_owner") {
+          if (
+            data.agency_name &&
+            (await agencyRepo.agencyNameExist(data.agency_name))
+          ) {
+            ctx.addIssue({
+              code: "custom",
+              message: t("agencyExists", language),
+              path: ["agency_name"],
+            });
+          }
+          if (
+            data.license_number &&
+            (await agencyRepo.licenseExists(data.license_number))
+          ) {
+            ctx.addIssue({
+              code: "custom",
+              message: t("licenseExists", language),
+              path: ["license_number"],
+            });
+          }
+        }
+        if (data.role === "agent") {
+          const agency = data.public_code
+            ? await agencyRepo.findByPublicCode(data.public_code)
+            : null;
+          if (!agency) {
+            ctx.addIssue({
+              code: "custom",
+              message: t("invalidPublicCode", language),
+              path: ["public_code"],
+            });
+          }
+          if (
+            data.id_card_number &&
+            (await registrationRequestRepo.idCardExists(data.id_card_number))
+          ) {
+            ctx.addIssue({
+              code: "custom",
+              message: t("idCardExists", language),
+              path: ["id_card_number"],
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Validation error:", error);
+        ctx.addIssue({
+          code: "custom",
+          message: t("validationServerError", language),
+          path: ["root"],
+        });
+      }
+    });
+
+export type RegistrationData = z.infer<ReturnType<typeof registrationSchema>>;
+
+// import { z, RefinementCtx } from "zod";
+// import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
+// import { AgencyRepository } from "../../repositories/agency/AgencyRepository.js";
+// import { RegistrationRequestRepository } from "../../repositories/registrationRequest/RegistrationRequest.js";
+// import { prisma } from "../../config/prisma.js";
+
+// const userRepo = new UserRepositoryPrisma(prisma);
+// const agencyRepo = new AgencyRepository(prisma);
+// const registrationRequestRepo = new RegistrationRequestRepository(prisma);
+
+// export const registrationSchema = z
+//   .object({
+//     username: z
+//       .string()
+//       .min(4, "Username must be at least 4 characters long.")
+//       .refine((val) => !/\s/.test(val), "Username must not contain spaces."),
+//     email: z.email("Email is not valid."),
+//     password: z
+//       .string()
+//       .min(8, "Password must be at least 8 characters long.")
+//       .refine((val) => !/\s/.test(val), "Password must not contain spaces."),
+//     repeatPassword: z.string(),
+//     first_name: z.string().min(1, "First name is required."),
+//     last_name: z.string().min(1, "Last name is required."),
+//     terms_accepted: z.literal(true, {
+//       message: "Please accept the terms and conditions.",
+//     }),
+//     role: z.enum(["user", "agency_owner", "agent"]),
+
+//     // Optional fields
+//     agency_name: z.string().optional(),
+//     license_number: z.string().optional(),
+//     address: z.string().optional(),
+//     public_code: z.string().optional(),
+//     id_card_number: z.string().optional(),
+//     requested_role: z
+//       .enum(["agent", "senior_agent", "team_lead"])
+//       .optional(),
+//   })
+//   .superRefine(async (data, ctx: RefinementCtx) => {
+//     if (data.password !== data.repeatPassword) {
+//       ctx.addIssue({
+//         code: "custom",
+//         message: "Passwords do not match.",
+//         path: ["repeatPassword"],
+//       });
+//     }
+
+//     if (data.role === "agency_owner") {
+//       if (!data.agency_name?.trim()) {
+//         ctx.addIssue({
+//           code: "custom",
+//           message: "Agency name is required.",
+//           path: ["agency_name"],
+//         });
+//       }
+//       if (!data.license_number?.trim()) {
+//         ctx.addIssue({
+//           code: "custom",
+//           message: "License number is required.",
+//           path: ["license_number"],
+//         });
+//       }
+//       if (!data.address?.trim()) {
+//         ctx.addIssue({
+//           code: "custom",
+//           message: "Address is required.",
+//           path: ["address"],
+//         });
+//       }
+//     }
+
+//     if (data.role === "agent") {
+//       if (!data.public_code?.trim()) {
+//         ctx.addIssue({
+//           code: "custom",
+//           message: "Public code is required.",
+//           path: ["public_code"],
+//         });
+//       }
+//       if (!data.id_card_number?.trim()) {
+//         ctx.addIssue({
+//           code: "custom",
+//           message: "ID card number is required.",
+//           path: ["id_card_number"],
+//         });
+//       }
+//       if (!data.requested_role) {
+//         ctx.addIssue({
+//           code: "custom",
+//           message: "Role in agency is required.",
+//           path: ["requested_role"],
+//         });
+//       }
+//     }
+
+//     // Uniqueness checks
+//     try {
+//       if (await userRepo.emailExists(data.email)) {
+//         ctx.addIssue({
+//           code: "custom",
+//           message: "Email already exists.",
+//           path: ["email"],
+//         });
+//       }
+//       if (await userRepo.usernameExists(data.username)) {
+//         ctx.addIssue({
+//           code: "custom",
+//           message: "Username already exists.",
+//           path: ["username"],
+//         });
+//       }
+//       if (data.role === "agency_owner") {
+//         if (
+//           data.agency_name &&
+//           (await agencyRepo.agencyNameExist(data.agency_name))
+//         ) {
+//           ctx.addIssue({
+//             code: "custom",
+//             message: "Agency name already exists.",
+//             path: ["agency_name"],
+//           });
+//         }
+//         if (
+//           data.license_number &&
+//           (await agencyRepo.licenseExists(data.license_number))
+//         ) {
+//           ctx.addIssue({
+//             code: "custom",
+//             message: "License number already exists.",
+//             path: ["license_number"],
+//           });
+//         }
+//       }
+//       if (data.role === "agent") {
+//         const agency = data.public_code
+//           ? await agencyRepo.findByPublicCode(data.public_code)
+//           : null;
+//         if (!agency) {
+//           ctx.addIssue({
+//             code: "custom",
+//             message: "Invalid public code.",
+//             path: ["public_code"],
+//           });
+//         }
+//         if (
+//           data.id_card_number &&
+//           (await registrationRequestRepo.idCardExists(data.id_card_number))
+//         ) {
+//           ctx.addIssue({
+//             code: "custom",
+//             message: "ID card number already submitted.",
+//             path: ["id_card_number"],
+//           });
+//         }
+//       }
+//     } catch (error) {
+//       console.error("Validation error:", error);
+//       ctx.addIssue({
+//         code: "custom",
+//         message:
+//           "Validation failed due to server error. Please try again.",
+//         path: ["root"],
+//       });
+//     }
+//   });
+
+// // Export a type directly from Zod
+// export type RegistrationData = z.infer<typeof registrationSchema>;
 
 
 

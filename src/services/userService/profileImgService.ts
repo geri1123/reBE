@@ -4,7 +4,8 @@ import fs from 'fs/promises';
 import type { IUserRepository } from '../../repositories/user/IUserRepository.js';
 import { FileSystemError, NotFoundError } from '../../errors/BaseError.js';
 import { BaseUserService } from './BaseUserService.js';
-
+import { SupportedLang } from '../../locales/translations.js';
+import { t } from '../../utils/i18n.js';
 export class ProfileImageService extends BaseUserService {
   constructor(userRepo: IUserRepository) {
     super(userRepo);
@@ -13,10 +14,12 @@ export class ProfileImageService extends BaseUserService {
   async updateProfileImage(
     userId: number,
     file: Express.Multer.File,
-    baseDir: string
+    baseDir: string,
+     language: SupportedLang
   ): Promise<string> {
+    
     const user = await this.userRepo.findByIdForProfileImage(userId);
-    if (!user) throw new NotFoundError('User not found');
+    if (!user) throw new NotFoundError(t('userNotFound', language));
 
     // Remove old image if it exists
     if (user.profile_img && user.profile_img.trim() !== '') {

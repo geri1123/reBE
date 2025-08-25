@@ -7,9 +7,10 @@ import jwt from 'jsonwebtoken';
 import { comparePassword } from '../../utils/hash.js';
 import { config } from '../../config/config.js';
 import { SupportedLang  } from '../../locales/translations.js';
-import {t} from '../../middlewares/langMiddleware.js';
+import { t } from '../../utils/i18n.js';
 import type { IUserRepository } from '../../repositories/user/IUserRepository.js';
 import { IAgencyRepository } from '../../repositories/agency/IAgencyRepository.js';
+
 import { loginValidation , type LoginRequestData } from '../../validators/users/loginValidation.js';
 import type { IRegistrationRequestRepository } from '../../repositories/registrationRequest/IRegistrationRequestRepository.js';
 // import { NotificationService } from '../Notifications/Notifications.js';
@@ -21,7 +22,7 @@ export class AuthService {
     private readonly requestRepo: IRegistrationRequestRepository,
       // private readonly notificationService: NotificationService 
   ) {}
-  async registerUserByRole(body: RegistrationData) {
+  async registerUserByRole(body: RegistrationData , language:SupportedLang) {
     switch (body.role) {
       case "user":
         return new UserRegistration(this.userRepo).register(body as any); 
@@ -30,7 +31,7 @@ export class AuthService {
         return new AgencyOwnerRegistration(this.userRepo, this.agencyRepo).register(body as any); 
         
       case "agent":
-        return new AgentRegistration(this.userRepo, this.agencyRepo, this.requestRepo).register(body as any); 
+        return new AgentRegistration(this.userRepo, this.agencyRepo, this.requestRepo).register(body as any , language); 
         
       default:
         throw new Error("Invalid role.");
@@ -65,33 +66,5 @@ export class AuthService {
     return { user, token };
   }
 
-  //   async login(data: LoginRequestData) {
-  //   const { identifier, password } = data;
-
-  //   const user = await this.userRepo.findByIdentifier(identifier);
-  //   if (!user) throw new UnauthorizedError('Invalid credentials');
-
-  //   if (user.status !== 'active') {
-  //     throw new UnauthorizedError('Account not active. Verify email or contact support.');
-  //   }
-
-  //   const isMatch = await comparePassword(password, user.password);
-  //   if (!isMatch) throw new UnauthorizedError('Invalid password.');
-
-  //   await this.userRepo.updateFieldsById(user.id, { last_login: new Date() });
-
-  //   const token = jwt.sign(
-  //     {
-  //       userId: user.id,
-  //       username: user.username,
-  //       email: user.email,
-  //       role: user.role,
-  //     },
-  //     config.secret.jwtSecret as string,
-  //     { expiresIn: '1d' }
-  //   );
-
-  //   return { user, token };
-  // }
   
 }

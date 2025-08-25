@@ -6,6 +6,8 @@ import { UnauthorizedError } from '../../errors/BaseError.js';
 import { getFullImageUrl } from '../../utils/imageUrl.js';
 import { ProfileImageService } from '../../services/userService/profileImgService.js';
 import { prisma } from '../../config/prisma.js';
+import { SupportedLang } from '../../locales/translations.js';
+import { t } from '../../utils/i18n.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -17,13 +19,14 @@ export async function updateProfileImage(
   res: Response, 
   next: NextFunction
 ): Promise<void> {
+ const language: SupportedLang = res.locals.lang;
   if (!req.file) {
-    res.status(400).json({ error: 'No file uploaded' });
+    res.status(400).json({ error:t('nofileUpload' , language) });
     return;
   }
 
   if (!req.userId) {
-    throw new UnauthorizedError('User not authenticated');
+    throw new UnauthorizedError(t('userNotAuthenticated' , language));
   }
 
   try {
@@ -33,7 +36,9 @@ export async function updateProfileImage(
     const newImagePath = await profileImageService.updateProfileImage(
       req.userId, 
       req.file, 
-      baseDir
+      baseDir,
+      language
+     
     );
     
     const fullUrl = getFullImageUrl(newImagePath, req);
@@ -41,7 +46,8 @@ export async function updateProfileImage(
     res.json({ 
       success: true, 
       profilePicture: fullUrl,
-      message: 'Profile image updated successfully'
+      // message: 'Profile image updated successfully'
+      message:(t("successfullyUpload" , language))
     });
   } catch (error) {
     next(error);

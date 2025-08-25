@@ -8,6 +8,8 @@ import { ChangeUsernameBody } from "../../validators/users/updateUsernameSchema.
 import { UsernameHistoryRepository } from "../../repositories/usernameHistory/UsernameHistoryRepository.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
 import {prisma} from "../../config/prisma.js";
+import { SupportedLang } from "../../locales/translations.js";
+import { t } from "../../utils/i18n.js";
 const userRepo = new UserRepositoryPrisma(prisma);
 const usernameHistoryRepo = new UsernameHistoryRepository(prisma);
 const usernameService = new UsernameService(userRepo, usernameHistoryRepo);
@@ -17,8 +19,9 @@ export async function changeUsername(
   next: NextFunction
 ): Promise<void> {
   const userId = req.userId;
+   const language:SupportedLang=res.locals.lang;
   if (!userId) {
-    return next(new UnauthorizedError('User not authenticated'));
+    return next(new UnauthorizedError(t("userNotAuthenticated" , language)));
   }
 
   try {
@@ -27,10 +30,10 @@ export async function changeUsername(
     
     const canUpdate = await usernameService.canUpdateUsername(userId);
     if (!canUpdate) {
-  throw new TooManyRequestsError("You can only update your username once every 10 days.");
+  throw new TooManyRequestsError(t('TooManyUsernameRequestsError' , language));
 }
-    await usernameService.changeUsername(userId, username);
-    res.json({ success: true, message: "Username updated successfully." });
+    await usernameService.changeUsername(userId, username , language);
+    res.json({ success: true, message: (t("successfullyUpdatedUsername" , language)) });
   } catch (err) {
     
       return handleZodError(err, next);

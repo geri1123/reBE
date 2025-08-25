@@ -4,7 +4,7 @@ import { parseLanguageCode } from "../../utils/language";
 import { NotificationRepository } from "../../repositories/notification/notificationRepository";
 import { GetNotificationService } from "../../services/Notifications/getNotifications";
 import { prisma } from "../../config/prisma";
-import { t } from "../../middlewares/langMiddleware";
+import {t} from '../../utils/i18n.js';
 import { SupportedLang } from "../../locales/translations";
 const notificationRepo = new NotificationRepository(prisma);
 const getNotificationService = new GetNotificationService(notificationRepo);
@@ -22,7 +22,7 @@ export async function getNotifications(req: Request, res: Response, next: NextFu
  
 
   if (!userId) {
-     throw new UnauthorizedError(t("userNotAuthenticated", language));
+     throw new UnauthorizedError(t("userNotAuthenticated" , language));
   }
 
   try {
@@ -43,12 +43,12 @@ export async function markNotificationAsRead(req: Request, res: Response, next: 
   const notificationId = parseInt(req.params.id);
  const language: SupportedLang = res.locals.lang;
   if (!userId) {
-   throw new UnauthorizedError(t("userNotAuthenticated", language));
+   throw new UnauthorizedError(t("userNotAuthenticated" , language));
   }
 
   try {
     await getNotificationService.markAsRead(notificationId);
-       res.status(200).json({ success: true, message: t("notificationMarkedRead", language) });
+       res.status(200).json({ success: true, message: t("notificationMarkedRead" , language) });
   } catch (error) {
     next(error);
   }

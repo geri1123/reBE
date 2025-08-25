@@ -2,11 +2,12 @@ import { BaseRegistration } from '../../../types/auth.js';
 
 import { VerificationEmail } from '../../emailServices/verificationEmailservice.js';
 import { generateToken } from '../../../utils/hash.js';
+import { t } from '../../../utils/i18n.js';
 import type { AgentRegistration as AgentRegistrationType } from '../../../types/auth.js';
 import type { IUserRepository } from '../../../repositories/user/IUserRepository.js';
 import { IRegistrationRequestRepository } from '../../../repositories/registrationRequest/IRegistrationRequestRepository.js';
 import { IAgencyRepository } from '../../../repositories/agency/IAgencyRepository.js';
-
+import { SupportedLang } from '../../../locales/translations.js';
 export class AgentRegistration {
   constructor(
     private readonly userRepo: IUserRepository,
@@ -15,7 +16,7 @@ export class AgentRegistration {
     
   ) {}
 
-  async register(body: AgentRegistrationType): Promise<number> {
+  async register(body: AgentRegistrationType ,  language: SupportedLang): Promise<number> {
     const {
       username, email, password,
       first_name, last_name,
@@ -34,7 +35,7 @@ export class AgentRegistration {
     const verification_token_expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     const agency = await this.agencyRepo.findByPublicCode(public_code);
-    if (!agency) throw new Error('Invalid agency code.');
+   if (!agency) throw new Error(t("invalidAgencyCode", language));
 
     const userId = await this.userRepo.create({
       ...baseData,

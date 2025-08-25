@@ -5,25 +5,28 @@ import { changePasswordSchema } from "../../validators/users/updatePasswordSchem
 import { handleZodError } from "../../validators/zodErrorFormated";
 import { prisma } from "../../config/prisma.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
+import { SupportedLang } from "../../locales/translations.js";
 const userRepo = new UserRepositoryPrisma(prisma);
 const passwordService = new PasswordService(userRepo);
-
+import { t } from "../../utils/i18n.js";
 export async function changePassword(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
+   const language: SupportedLang = res.locals.lang;
   const userId = req.userId;
   if (!userId) {
-  throw new UnauthorizedError("User not authenticated");
+  throw new UnauthorizedError(t('userNotAuthenticated' , language));
   }
 
   try {
-    const { currentPassword, newPassword, confirmPassword } = changePasswordSchema.parse(req.body);
+    const { currentPassword, newPassword, confirmPassword } = changePasswordSchema(language).parse(req.body);
 
-    await passwordService.changePassword(userId, currentPassword, newPassword);
+    await passwordService.changePassword(userId, currentPassword, newPassword , language);
 
-    res.status(200).json({ message: "Password changed successfully." });
+    // res.status(200).json({ message: "Password changed successfully." });
+     res.status(200).json({ message: t("passwordChangeSuccess" , language) });
   } catch (err) {
   
 

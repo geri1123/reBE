@@ -1,7 +1,9 @@
 import { ValidationError, NotFoundError } from "../../errors/BaseError.js";
+import { SupportedLang } from "../../locales/translations.js";
 import type { IUserRepository } from "../../repositories/user/IUserRepository.js";
 import type { IUsernameHistoryRepository } from "../../repositories/usernameHistory/IUsernameHistoryRepository.js";
 import { BaseUserService } from "./BaseUserService.js";
+import { t } from "../../utils/i18n.js";
 export class UsernameService extends BaseUserService {
   
     constructor(userRepo: IUserRepository, private usernameHistoryRepo: IUsernameHistoryRepository) {
@@ -15,15 +17,15 @@ export class UsernameService extends BaseUserService {
     return new Date() >= new Date(lastChange.next_username_update);
   }
 
-  async changeUsername(userId: number, newUsername: string): Promise<void> {
+  async changeUsername(userId: number, newUsername: string ,language:SupportedLang): Promise<void> {
     const usernameTaken = await this.userRepo.usernameExists(newUsername);
     if (usernameTaken) {
-      throw new ValidationError({ username: "Username already taken" });
-    }
+   throw new ValidationError({ message: t("usernameExists", language) });
+}
 
     const currentUsername = await this.userRepo.getUsernameById(userId);
     if (!currentUsername) {
-      throw new NotFoundError("User not found");
+       throw new NotFoundError(t("userNotFound", language));
     }
 
     const nextUpdate = new Date();

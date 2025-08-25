@@ -4,6 +4,8 @@ import { IAgencyRepository } from '../../repositories/agency/IAgencyRepository.j
 import { IRegistrationRequestRepository } from '../../repositories/registrationRequest/IRegistrationRequestRepository.js';
 import { ValidationError, NotFoundError } from '../../errors/BaseError.js';
 import { generateToken } from '../../utils/hash.js';
+import { SupportedLang } from '../../locales/translations.js';
+import { t } from '../../utils/i18n.js';
 import {
   VerificationEmail,
   WelcomeEmail,
@@ -21,14 +23,14 @@ export class EmailVerificationService {
     private notificationService: NotificationService,
   ) {}
 
-  async verify(token: string): Promise<void> {
+  async verify(token: string , language: SupportedLang): Promise<void> {
     if (!token) {
-      throw new ValidationError({ token: 'Verification token is required.' });
+     throw new ValidationError({ token: t("tokenRequired", language) });
     }
 
     const user = await this.userRepo.findByVerificationToken(token);
     if (!user) {
-      throw new NotFoundError('Invalid or expired verification token.');
+      throw new NotFoundError(t("invalidOrExpiredToken", language));
     }
 
     const emailVerified = true;
@@ -79,7 +81,11 @@ const agentIdentifier = user.username ?? user.email;
                 {
                   languageCode: 'en',
                   message: `${agentIdentifier} has verified their email and requests to join your agency "${agencyWithOwner.agency_name}"`
-                }
+                },
+                {
+                  languageCode: 'it',
+                  message: `${agentIdentifier} ha verificato la sua email e richiede di unirsi alla tua agenzia "${agencyWithOwner.agency_name}"`
+              }
               ],
               extraData: {
                 agentId: user.id,
@@ -110,18 +116,18 @@ const agentIdentifier = user.username ?? user.email;
     }
   }
 
-  async resend(email: string): Promise<void> {
+  async resend(email: string , language:SupportedLang): Promise<void> {
     if (!email) {
-      throw new ValidationError({ email: 'Email is required.' });
+       throw new ValidationError({ email: t("emailRequired", language) });
     }
 
     const user = await this.userRepo.findByEmail(email);
     if (!user) {
-      throw new NotFoundError('User not found.');
+      throw new NotFoundError(t("userNotFound", language));
     }
 
     if (user.email_verified) {
-      throw new ValidationError({ email: 'Email is already verified.' });
+      throw new ValidationError({ email: t("emailAlreadyVerified", language) });
     }
 
     // Generate new verification token

@@ -4,10 +4,6 @@ import { UserRepositoryPrisma } from '../../repositories/user/UserRepositoryPris
 import { AgencyRepository } from '../../repositories/agency/AgencyRepository.js';
 import { RegistrationRequestRepository } from '../../repositories/registrationRequest/RegistrationRequest.js';
 
-// import { LoginRequest } from "../../types/auth.js";
-// import { RegistrationData } from '../../types/auth.js';
-
-// import { loginValidation } from '../../validators/users/loginValidation.js';
 import { handleZodError } from '../../validators/zodErrorFormated.js';
 import { registrationSchema } from '../../validators/users/authValidatorAsync.js';
 import { prisma } from '../../config/prisma.js';
@@ -15,7 +11,7 @@ import { loginValidation, type LoginRequestData } from '../../validators/users/l
 import { RegistrationData } from '../../validators/users/authValidatorAsync.js';
 import { SupportedLang } from '../../locales/translations.js';
 const userRepo = new UserRepositoryPrisma(prisma);
-import {t} from '../../middlewares/langMiddleware.js';
+import { t } from '../../utils/i18n.js';
 const agencyRepo = new AgencyRepository(prisma);
 const requestRepo = new RegistrationRequestRepository(prisma);
 
@@ -29,10 +25,11 @@ export async function register(
 ): Promise<void> {
     const language: SupportedLang = res.locals.lang;
   try {
-      const validatedBody = await registrationSchema.parseAsync(req.body);
-    const userId = await authService.registerUserByRole(validatedBody);
+      const validatedBody = await registrationSchema(language).parseAsync(req.body);
+    const userId = await authService.registerUserByRole(validatedBody ,language);
     res.status(201).json({
-       message: t("registrationSuccess", language),
+      //  message: t("registrationSuccess", language),
+      message: t("registrationSuccess" , language),
       userId,
     });
   } catch (err) {
@@ -48,10 +45,10 @@ export async function loginUser(
 ): Promise<void> {
    const language: SupportedLang = res.locals.lang;
   try {
-    // Validate request body with Zod
-    const validatedData = loginValidation.parse(req.body);
 
-    // Pass validated data directly to the service
+    // const validatedData = loginValidation.parse(req.body );
+ const validatedData = loginValidation(language).parse(req.body);
+    
     const { user, token } = await authService.login(validatedData ,language);
 
     // Set cookie
@@ -66,7 +63,8 @@ export async function loginUser(
 
     // Send response
     res.status(200).json({
-       message: t("loginSuccess", language),
+      //  message: t("loginSuccess", language),
+       message: t("loginSuccess" , language), 
       user: { id: user.id, username: user.username, email: user.email },
     });
   } catch (err) {
