@@ -6,6 +6,8 @@ import { getFullImageUrl } from '../../../utils/imageUrl.js';
 import { AgencyRepository } from '../../../repositories/agency/AgencyRepository.js';
 import { AgencyLogoService } from '../../../services/AgencyService/agencyLogoService.js';
 import { prisma } from '../../../config/prisma.js';
+import { SupportedLang } from '../../../locales/index.js';
+import { t } from '../../../utils/i18n.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -17,19 +19,20 @@ export async function updateAgencyLogo(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  if (!req.userId) throw new UnauthorizedError('User not authenticated');
-  if (!req.agencyId) throw new UnauthorizedError('Agency not found');
+   const language:SupportedLang=res.locals.lang;
+  if (!req.userId) throw new UnauthorizedError(t("userNotAuthenticated" , language));
+  if (!req.agencyId) throw new UnauthorizedError(t("userNotFound" , language));
  if (!req.file) {
     
-    res.status(400).json({ success: false, message: 'No logo file uploaded' });
+    res.status(400).json({ success: false, message:t("nofileUpload" , language) });
     return;
   }
   try {
     const baseDir = path.resolve(__dirname, '..', '..', '..');
-    const newPath = await agencyLogoService.updateAgencyLogo(req.agencyId, req.file, baseDir);
+    const newPath = await agencyLogoService.updateAgencyLogo(req.agencyId,language, req.file, baseDir);
     const fullUrl = getFullImageUrl(newPath, req);
 
-    res.json({ success: true, logoUrl: fullUrl, message: 'Agency logo updated successfully' });
+    res.json({ success: true, logoUrl: fullUrl, message:t("agencyLogoUpdated" , language) });
   } catch (error) {
     next(error);
   }

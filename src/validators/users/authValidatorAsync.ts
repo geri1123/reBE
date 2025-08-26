@@ -6,7 +6,7 @@ import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPris
 import { AgencyRepository } from "../../repositories/agency/AgencyRepository.js";
 import { RegistrationRequestRepository } from "../../repositories/registrationRequest/RegistrationRequest.js";
 import { t } from "../../utils/i18n.js";
-import { SupportedLang } from "../../locales/translations.js";
+import { SupportedLang } from "../../locales/index.js";
 
 const userRepo = new UserRepositoryPrisma(prisma);
 const agencyRepo = new AgencyRepository(prisma);

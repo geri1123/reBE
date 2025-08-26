@@ -6,7 +6,7 @@ import { UnauthorizedError } from '../../errors/BaseError.js';
 import jwt from 'jsonwebtoken';
 import { comparePassword } from '../../utils/hash.js';
 import { config } from '../../config/config.js';
-import { SupportedLang  } from '../../locales/translations.js';
+import { SupportedLang  } from '../../locales/index.js';
 import { t } from '../../utils/i18n.js';
 import type { IUserRepository } from '../../repositories/user/IUserRepository.js';
 import { IAgencyRepository } from '../../repositories/agency/IAgencyRepository.js';

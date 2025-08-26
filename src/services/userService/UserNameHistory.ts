@@ -1,5 +1,5 @@
 import { ValidationError, NotFoundError } from "../../errors/BaseError.js";
-import { SupportedLang } from "../../locales/translations.js";
+import { SupportedLang } from "../../locales/index.js";
 import type { IUserRepository } from "../../repositories/user/IUserRepository.js";
 import type { IUsernameHistoryRepository } from "../../repositories/usernameHistory/IUsernameHistoryRepository.js";
 import { BaseUserService } from "./BaseUserService.js";

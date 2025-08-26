@@ -5,6 +5,8 @@ import { ValidationError } from "../../../errors/BaseError";
 import { updateAgencySchema } from "../../../validators/agency/updateAgencyFields";
 import { handleZodError } from "../../../validators/zodErrorFormated";
 import { prisma } from "../../../config/prisma";
+import { SupportedLang } from "../../../locales/index.js";
+import { t } from "../../../utils/i18n";
 const agencyrepo = new AgencyRepository(prisma);
 const service = new updateAgencyInfoService(agencyrepo);
 
@@ -14,9 +16,10 @@ export const updateAgencyFields = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+      const language:SupportedLang=res.locals.lang;
     const agencyId = req.agencyId;
     if (!agencyId) {
-      throw new ValidationError({ agencyId: "Agency ID is required" });
+      throw new ValidationError({ agencyId:t("invalidAgencyId" ,language) });
     }
 
     const parsedData = updateAgencySchema.parse(req.body);
@@ -25,24 +28,24 @@ export const updateAgencyFields = async (
     const messages: string[] = [];
 
     if (name) {
-      await service.changeAgencyName(agencyId, name);
-      messages.push("Agency name updated successfully.");
+      await service.changeAgencyName(agencyId, name , language);
+      messages.push(t("agencyNameUpdated" , language));
     }
     if (agency_email) {
       await service.changeAgencyEmail(agencyId, agency_email);
-      messages.push("Agency email updated successfully.");
+      messages.push(t("agencyEmailUpdated" , language));
     }
     if (phone) {
       await service.changeAgencyPhone(agencyId, phone);
-      messages.push("Agency phone number updated successfully.");
+      messages.push(t("agencyPhoneUpdated" , language));
     }
     if (address) {
       await service.changeAgencyAddress(agencyId, address);
-      messages.push("Agency address updated successfully.");
+      messages.push(t("agencyAddressUpdated" , language));
     }
     if (website) {
       await service.changeAgencyWebsite(agencyId, website);
-      messages.push("Agency website updated successfully.");
+      messages.push(t("agencyWebsiteUpdated" , language));
     }
 
     res.status(200).json({

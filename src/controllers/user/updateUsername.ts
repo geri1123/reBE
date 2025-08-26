@@ -8,7 +8,7 @@ import { ChangeUsernameBody } from "../../validators/users/updateUsernameSchema.
 import { UsernameHistoryRepository } from "../../repositories/usernameHistory/UsernameHistoryRepository.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
 import {prisma} from "../../config/prisma.js";
-import { SupportedLang } from "../../locales/translations.js";
+import { SupportedLang } from "../../locales/index.js";
 import { t } from "../../utils/i18n.js";
 const userRepo = new UserRepositoryPrisma(prisma);
 const usernameHistoryRepo = new UsernameHistoryRepository(prisma);
@@ -25,7 +25,7 @@ export async function changeUsername(
   }
 
   try {
-    const { username } = changeUsernameSchema.parse(req.body);
+    const { username } = changeUsernameSchema(language).parse(req.body);
 
     
     const canUpdate = await usernameService.canUpdateUsername(userId);

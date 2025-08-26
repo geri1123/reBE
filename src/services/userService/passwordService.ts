@@ -3,7 +3,7 @@ import type { IUserRepository } from "../../repositories/user/IUserRepository.js
 import { NotFoundError, ValidationError } from "../../errors/BaseError.js";
 import { ChangePasswordEmail } from "../emailServices/verificationEmailservice.js";
 import { BaseUserService } from "./BaseUserService.js";
-import { SupportedLang } from "../../locales/translations.js";
+import { SupportedLang } from "../../locales/index.js";
 import { t } from "../../utils/i18n.js";
 
 export class PasswordService extends BaseUserService {

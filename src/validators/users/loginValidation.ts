@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { t } from "../../utils/i18n.js";
-import { SupportedLang } from "../../locales/translations.js";
+import { SupportedLang } from "../../locales/index.js";
 
 export const loginValidation = (language: SupportedLang) =>
   z.object({

@@ -7,7 +7,7 @@ import type { AgentRegistration as AgentRegistrationType } from '../../../types/
 import type { IUserRepository } from '../../../repositories/user/IUserRepository.js';
 import { IRegistrationRequestRepository } from '../../../repositories/registrationRequest/IRegistrationRequestRepository.js';
 import { IAgencyRepository } from '../../../repositories/agency/IAgencyRepository.js';
-import { SupportedLang } from '../../../locales/translations.js';
+import { SupportedLang } from '../../../locales/index.js';
 export class AgentRegistration {
   constructor(
     private readonly userRepo: IUserRepository,

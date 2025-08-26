@@ -6,7 +6,7 @@ import { UnauthorizedError } from '../../errors/BaseError.js';
 import { getFullImageUrl } from '../../utils/imageUrl.js';
 import { ProfileImageService } from '../../services/userService/profileImgService.js';
 import { prisma } from '../../config/prisma.js';
-import { SupportedLang } from '../../locales/translations.js';
+import { SupportedLang } from "../../locales/index.js";
 import { t } from '../../utils/i18n.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

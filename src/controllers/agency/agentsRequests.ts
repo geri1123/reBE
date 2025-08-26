@@ -9,7 +9,8 @@ import { respondToRequestSchema } from "../../validators/agentsRequests/responde
 import { handleZodError } from "../../validators/zodErrorFormated.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
 import { prisma } from "../../config/prisma.js";
-
+import { SupportedLang } from "../../locales/index.js";
+import { t } from "../../utils/i18n.js";
 const registrationRequestRepo = new RegistrationRequestRepository(prisma);
 const agentRepo = new AgentsRepository(prisma);
 const userRepo = new UserRepositoryPrisma(prisma);
@@ -19,16 +20,17 @@ const agentsRequestsService = new AgentsRequestsService(registrationRequestRepo,
 export class AgentRequestController {
   static async getRequests(req: Request, res: Response, next: NextFunction) {
     try {
+      const language:SupportedLang=res.locals.lang;
       const userId = req.userId;
       const agencyId = req.agencyId;
 
-      if (!userId) throw new UnauthorizedError("User not authenticated");
-      if (!agencyId) throw new ForbiddenError("Agency ID not found");
+      if (!userId) throw new UnauthorizedError(t('userNotFound' , language));
+      if (!agencyId) throw new ForbiddenError(t('agencyNotFound' , language));
 
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 
-      const requests = await agentsRequestsService.fetchRequests(agencyId, limit, page);
+      const requests = await agentsRequestsService.fetchRequests(agencyId, limit, page , language);
 
       res.json({
         data: requests,
@@ -44,11 +46,12 @@ export class AgentRequestController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
+    const language:SupportedLang=res.locals.lang;
     try {
       const reviewerId = req.userId;
-      if (!reviewerId) throw new UnauthorizedError("User not authenticated");
+      if (!reviewerId) throw new UnauthorizedError(t("userNotAuthenticated"  , language));
 
-       const parsed = respondToRequestSchema.parse(req.body);
+       const parsed = respondToRequestSchema(language).parse(req.body);
 
     const { requestId, status, reviewNotes, commissionRate } = parsed;
       
@@ -56,8 +59,10 @@ export class AgentRequestController {
         requestId, 
         status, 
         reviewerId, 
+        language,
         reviewNotes, 
-        commissionRate
+        commissionRate, 
+        
       );
 
       res.json({ message: `Request ${status} successfully` });

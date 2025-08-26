@@ -1,4 +1,4 @@
-import { translations, SupportedLang } from "../locales/translations";
+import { translations, SupportedLang } from "../locales/index.js";
 
 let currentLang: SupportedLang = "al";
 

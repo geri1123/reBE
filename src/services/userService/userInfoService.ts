@@ -23,7 +23,7 @@ export class UserInfoService extends BaseUserService {
     // Agent role
     if (user.role === "agent") {
       const agentData: AgentInfo | null = await this.agentRepo.findAgentByUserId(userId);
-      if (agentData) result.agentInfo = [agentData]; // wrap in array to match type
+      if (agentData) result.agentInfo = [agentData]; 
     }
 
     // Agency owner role
@@ -36,29 +36,3 @@ export class UserInfoService extends BaseUserService {
   }
 }
 
-
-// import { IAgencyRepository } from "../../repositories/agency/IAgencyRepository";
-// import { IAgentsRepository } from "../../repositories/agents/IAgentsRepository";
-// import { IUserRepository } from "../../repositories/user/IUserRepository";
-
-// import { BaseUserService } from "./BaseUserService";
-
-// export class UserInfoService extends BaseUserService{
-//     constructor(
-//         userRepo:IUserRepository , 
-//           private agentRepo: IAgentsRepository  , 
-//           private agencyRepo:IAgencyRepository
-//     )
-//         {
-//         super(userRepo)
-//     }
-//     async getUserinfo(userId:number){
-//          return  this.userRepo.findById(userId)
-//     }
-//    async getagentInfo(userId:number){
-//     return this.agentRepo.findAgentByUserId(userId);
-//    }
-//    async getagencyInfo(userId:number){
-//     return this.agencyRepo.findAgencyByUserId(userId);
-//    }
-// }

@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import type { IUserRepository } from '../../repositories/user/IUserRepository.js';
 import { FileSystemError, NotFoundError } from '../../errors/BaseError.js';
 import { BaseUserService } from './BaseUserService.js';
-import { SupportedLang } from '../../locales/translations.js';
+import { SupportedLang } from '../../locales/index.js';
 import { t } from '../../utils/i18n.js';
 export class ProfileImageService extends BaseUserService {
   constructor(userRepo: IUserRepository) {

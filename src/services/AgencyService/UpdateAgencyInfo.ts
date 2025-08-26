@@ -1,12 +1,13 @@
 import { ValidationError } from "../../errors/BaseError.js";
+import { SupportedLang } from "../../locales/index.js";
 import { IAgencyRepository } from "../../repositories/agency/IAgencyRepository.js";
-
+import { t } from "../../utils/i18n.js";
 export class updateAgencyInfoService {
   constructor(private agencyRepo: IAgencyRepository) {}
 
-  async changeAgencyName(agencyId: number, newName: string): Promise<void> {
+  async changeAgencyName(agencyId: number, newName: string , language:SupportedLang): Promise<void> {
     if (await this.agencyRepo.agencyNameExist(newName)) {
-      throw new ValidationError({ agencyName: "Agency name already exists" });
+     throw new ValidationError({ agencyName: t("agencyNameExists", language) });
     }
     await this.agencyRepo.updateAgencyFields(agencyId, { agency_name: newName });
   }

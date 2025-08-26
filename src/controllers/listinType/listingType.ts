@@ -2,7 +2,7 @@ import { Request , Response , NextFunction } from "express";
 import { prisma } from "../../config/prisma";
 import { ListingTypeRepo } from "../../repositories/listingType/listingTypeRepo";
 
-import { SupportedLang } from "../../locales/translations";
+import { SupportedLang } from "../../locales/index.js";
 const listingTypeRepo = new ListingTypeRepo(prisma);
 
 export async function getAllListingTypes(req: Request, res: Response, next: NextFunction) {

@@ -5,7 +5,7 @@ import { UserRepositoryPrisma } from '../../repositories/user/UserRepositoryPris
 import { ProfileInfoService } from '../../services/userService/profileInfoService.js';
 import { updateProfileSchema } from '../../validators/users/updateProfileSchema.js';
 import { prisma } from '../../config/prisma.js';
-import { SupportedLang } from '../../locales/translations.js';
+import { SupportedLang } from "../../locales/index.js";
 const userRepo = new UserRepositoryPrisma(prisma);
 const profileInfoService = new ProfileInfoService(userRepo);
 import { t } from '../../utils/i18n.js';
@@ -19,7 +19,7 @@ export async function updateProfileFields(
   if (!userId) return next(new UnauthorizedError(t("userNotAuthenticated" , language)));
 
   try {
-    const data = updateProfileSchema.parse(req.body);
+    const data = updateProfileSchema(language).parse(req.body);
 
     const messages: string[] = [];
 

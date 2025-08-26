@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SupportedLang } from "../../locales/translations";
+import { SupportedLang } from "../../locales/index.js";
 import { t } from "../../utils/i18n";
 
 export const changePasswordSchema = (language: SupportedLang) => 
