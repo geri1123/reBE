@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { getAllCategories } from "../controllers/categories/categories";
-import { getAttributes } from "../controllers/categories/attributes";
+import { getFilters } from "../controllers/filters/filter";
+import { getAttributes } from "../controllers/filters/attributes";
 
 const router = Router();
 
-router.get("/categories" ,getAllCategories );
+router.get("/filter" ,getFilters );
 // router.get("/categories/:language" ,getAllCategories );
 router.get("/attributes/:language/:subcategoryId", getAttributes);
 router.get("/attributes/:subcategoryId", getAttributes);
