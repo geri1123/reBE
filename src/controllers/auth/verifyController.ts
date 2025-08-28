@@ -12,7 +12,7 @@ const notificationRepo = new NotificationRepository(prisma);
 const registrationRequestRepo = new RegistrationRequestRepository(prisma);
 const notificationService = new NotificationService(notificationRepo);
 const emailVerificationService = new EmailVerificationService(userRepo, agencyRepo ,registrationRequestRepo, notificationService);
-import { SupportedLang } from '../../locales/translations.js';
+import { SupportedLang } from '../../locales/index.js';
 import { t } from '../../utils/i18n.js';
 export async function verifyEmail(req: Request, res: Response, next: NextFunction) {
   const language: SupportedLang = res.locals.lang;

@@ -9,7 +9,7 @@ import { registrationSchema } from '../../validators/users/authValidatorAsync.js
 import { prisma } from '../../config/prisma.js';
 import { loginValidation, type LoginRequestData } from '../../validators/users/loginValidation.js';
 import { RegistrationData } from '../../validators/users/authValidatorAsync.js';
-import { SupportedLang } from '../../locales/translations.js';
+import { SupportedLang } from '../../locales/index.js';
 const userRepo = new UserRepositoryPrisma(prisma);
 import { t } from '../../utils/i18n.js';
 const agencyRepo = new AgencyRepository(prisma);
@@ -43,33 +43,27 @@ export async function loginUser(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-   const language: SupportedLang = res.locals.lang;
+  const language: SupportedLang = res.locals.lang;
   try {
+    const validatedData = loginValidation(language).parse(req.body);
+   const { user, token } = await authService.login(validatedData, language, validatedData.rememberMe);
 
-    // const validatedData = loginValidation.parse(req.body );
- const validatedData = loginValidation(language).parse(req.body);
-    
-    const { user, token } = await authService.login(validatedData ,language);
+    // Decide cookie duration
+    const maxAge = validatedData.rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000; 
 
-    // Set cookie
     res.cookie('token', token, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === 'production',
       secure: false,
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 86400000, // 1 day
+      maxAge,
       path: '/',
     });
 
-    // Send response
     res.status(200).json({
-      //  message: t("loginSuccess", language),
-       message: t("loginSuccess" , language), 
+      message: t("loginSuccess", language),
       user: { id: user.id, username: user.username, email: user.email },
     });
   } catch (err) {
     handleZodError(err, next);
   }
-
-
 }

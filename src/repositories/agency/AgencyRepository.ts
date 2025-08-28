@@ -28,7 +28,7 @@ export class AgencyRepository {
 
   if (!agency) return null;
 
-  // Type assertion to avoid manual mapping
+  
   return agency as AgencyInfo;
 }
  

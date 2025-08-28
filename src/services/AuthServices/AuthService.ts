@@ -37,7 +37,7 @@ export class AuthService {
         throw new Error("Invalid role.");
     }
   }
-  async login(data: LoginRequestData, language: SupportedLang ) {
+  async login(data: LoginRequestData, language: SupportedLang, rememberMe?: boolean) {
     const { identifier, password } = data;
 
     const user = await this.userRepo.findByIdentifier(identifier);
@@ -51,18 +51,12 @@ export class AuthService {
     if (!isMatch) throw new UnauthorizedError(t('invalidPassword', language));
 
     await this.userRepo.updateFieldsById(user.id, { last_login: new Date() });
-
-    const token = jwt.sign(
-      {
-        userId: user.id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      },
-      config.secret.jwtSecret as string,
-      { expiresIn: '1d' }
-    );
-
+const tokenExpiry = rememberMe ? '30d' : '1d';
+     const token = jwt.sign(
+    { userId: user.id, username: user.username, email: user.email, role: user.role },
+    config.secret.jwtSecret as string,
+    { expiresIn: tokenExpiry }
+  );
     return { user, token };
   }
 
