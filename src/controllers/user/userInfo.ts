@@ -1,11 +1,11 @@
 // backend/src/controllers/userController.ts
 import { Request, Response, NextFunction } from "express";
-import { prisma } from "../../config/prisma";
-import { UserInfoService } from "../../services/userService/userInfoService";
-import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma";
-import { AgentsRepository } from "../../repositories/agents/AgentRepository";
-import { AgencyRepository } from "../../repositories/agency/AgencyRepository";
-import { UnauthorizedError } from "../../errors/BaseError";
+import { prisma } from "../../config/prisma.js";
+import { UserInfoService } from "../../services/userService/userInfoService.js";
+import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
+import { AgentsRepository } from "../../repositories/agents/AgentRepository.js";
+import { AgencyRepository } from "../../repositories/agency/AgencyRepository.js";
+import { UnauthorizedError } from "../../errors/BaseError.js";
 import { t } from "../../utils/i18n.js";
 import { SupportedLang } from "../../locales/index.js";
 const userRepo = new UserRepositoryPrisma(prisma);

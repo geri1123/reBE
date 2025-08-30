@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
+    "module": "Node16",
     "rootDir": ".",
     "outDir": "dist",
-    // "moduleResolution": "Node",
-     "moduleResolution": "Node",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -21,20 +20,3 @@
   "exclude": ["node_modules", "dist"]
 }
 
-// {
-//   "compilerOptions": {
-//     "target": "ES2020",
-//     "module": "ESNext",
-//     "rootDir": "src",
-//     "outDir": "dist",
-//     "moduleResolution": "Node",
-//     "esModuleInterop": true,
-     
-//     "strict": true,
-//       "typeRoots": ["./node_modules/@types", "./src/types"],
-//     "skipLibCheck": true
-//   },
-  
-//   "include": ["src" ,"types", "drizzle.config.ts"],
-//   "exclude": ["node_modules", "dist"]
-// }

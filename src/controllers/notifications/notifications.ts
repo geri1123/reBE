@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { UnauthorizedError } from "../../errors/BaseError";
-import { parseLanguageCode } from "../../utils/language";
-import { NotificationRepository } from "../../repositories/notification/notificationRepository";
-import { GetNotificationService } from "../../services/Notifications/getNotifications";
-import { prisma } from "../../config/prisma";
+import { UnauthorizedError } from "../../errors/BaseError.js";
+import { parseLanguageCode } from "../../utils/language.js";
+import { NotificationRepository } from "../../repositories/notification/notificationRepository.js";
+
+import { GetNotificationService } from "../../services/Notifications/getNotifications.js";
+import { prisma } from "../../config/prisma.js";
 import {t} from '../../utils/i18n.js';
-import { SupportedLang } from "../../locales/translations";
+import { SupportedLang } from "../../locales/index.js";
 const notificationRepo = new NotificationRepository(prisma);
 const getNotificationService = new GetNotificationService(notificationRepo);
 

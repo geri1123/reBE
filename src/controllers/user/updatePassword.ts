@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { PasswordService } from "../../services/userService/passwordService.js";
 import { ValidationError, UnauthorizedError } from "../../errors/BaseError.js";
 import { changePasswordSchema } from "../../validators/users/updatePasswordSchema.js";
-import { handleZodError } from "../../validators/zodErrorFormated";
+import { handleZodError } from "../../validators/zodErrorFormated.js";
 import { prisma } from "../../config/prisma.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
 import { SupportedLang } from "../../locales/index.js";
