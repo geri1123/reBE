@@ -1,4 +1,4 @@
-import { IAttributeRepo } from "../../repositories/attributes/IattributeRepo";
+import { IAttributeRepo } from "../../repositories/attributes/IattributeRepo.js";
 import { LanguageCode } from "@prisma/client";
 
 export class AttributeService {

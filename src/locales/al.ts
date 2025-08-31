@@ -48,6 +48,7 @@ phoneInvalidChars: "Numri i telefonit përmban karaktere të pavlefshme",
     emailRequired: "Email-i është i detyrueshëm.",
     userNotFound: "Përdoruesi nuk u gjet.",
     emailAlreadyVerified: "Email-i është tashmë i verifikuar.",
+    passwordResetLinkSent: "Ne kemi dërguar lidhjen për të rivendosur fjalëkalimin në email.",
     //
     //pass
       currentPasswordRequired: "Fjalëkalimi aktual është i detyrueshëm.",
@@ -58,6 +59,10 @@ phoneInvalidChars: "Numri i telefonit përmban karaktere të pavlefshme",
   passwordChangeSuccess: "Fjalëkalimi u ndryshua me sukses.",
   currentPasswordIncorrect: "Fjalëkalimi aktual është i pavlefshëm.",
   passwordSameAsCurrent: "Fjalëkalimi i ri duhet të jetë i ndryshëm nga ai aktual.",
+    
+  invalidToken: "Token i pavlefshëm.",
+  tokenExpired: "Tokeni i rivendosjes ka skaduar. Ju lutemi kërkoni një të ri.",
+  passwordResetSuccess: "Fjalëkalimi juaj u rivendos me sukses.",
 //
  nofileUpload: "Asnjë skedar i ngarkuar.",
   successfullyUpload: "Foto e profilit u përditësua me sukses",

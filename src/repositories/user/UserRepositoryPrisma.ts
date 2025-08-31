@@ -148,6 +148,7 @@ async findById(userId: number): Promise<BaseUserInfo | null> {
     email: string;
     first_name: string | null;
     email_verified: boolean;
+    status: user_status;
   } | null> {
     const result = await this.prisma.user.findUnique({
       where: { email },
@@ -156,6 +157,8 @@ async findById(userId: number): Promise<BaseUserInfo | null> {
         email: true,
         first_name: true,
         email_verified: true,
+        status: true,
+       
       },
     });
 

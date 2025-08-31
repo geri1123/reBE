@@ -223,7 +223,7 @@ model user {
    updated_at      DateTime?                  @updatedAt
   verification_token         String?
   verification_token_expires DateTime?
-
+ passwordResetTokens PasswordResetToken[]
   agency agency?
 
   agencyAgentAddedBy         agencyagent[] @relation("AgencyAgentAddedBy")
@@ -246,7 +246,14 @@ model usernamehistory {
 
   @@index([user_id], map: "UsernameHistory_user_id_idx")
 }
-
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  user      user     @relation(fields: [userId], references: [id])
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
 enum LanguageCode {
   en
   al

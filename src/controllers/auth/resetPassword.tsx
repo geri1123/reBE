@@ -1,35 +1,38 @@
+// controllers/auth/resetPassword.ts
 import { Request, Response, NextFunction } from "express";
 import { t } from "../../utils/i18n.js";
 import { SupportedLang } from "../../locales/index.js";
 import { handleZodError } from "../../validators/zodErrorFormated.js";
-import { emailValidation } from "../../validators/users/emailValidation.js";
+import { resetPasswordValidation } from "../../validators/users/resetPasswordValidation.js"; 
 import { RecoveryPasswordService } from "../../services/recoveryPassService/recoveryPassword.js";
 import { prisma } from "../../config/prisma.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
 import { PasswordResetTokenRepositoryPrisma } from "../../repositories/passwordResetToken/PasswordResetTokenRepository.js";
-
-export async function RecoverPassword(req: Request, res: Response, next: NextFunction) {
-  const language: SupportedLang = res.locals.lang;
-
-  
   const userRepo = new UserRepositoryPrisma(prisma);
   const tokenRepo = new PasswordResetTokenRepositoryPrisma(prisma);
-  const recoveryService = new RecoveryPasswordService(userRepo, tokenRepo);
+  const resetService = new RecoveryPasswordService(userRepo, tokenRepo);
+export async function ResetPassword(req: Request, res: Response, next: NextFunction) {
+  const language: SupportedLang = res.locals.lang;
+
+
 
   try {
-    const validatedBody = await emailValidation(language).parseAsync(req.body);
-    const { email } = validatedBody;
+   const validatedBody = await resetPasswordValidation(language).parseAsync(req.body);
+    const { token, newPassword , repeatPassword } = validatedBody;
 
-    await recoveryService.recoverPassword(email, language);
+    await resetService.resetPassword(token, newPassword );
 
-    return res.status(200).json({ message: t("passwordResetLinkSent", language) });
+    return res.status(200).json({ message: t("passwordResetSuccess", language) });
   } catch (error) {
     if (error instanceof Error) {
+      if (error.message === "INVALID_TOKEN") {
+        return res.status(400).json({ message: t("invalidToken", language) });
+      }
+      if (error.message === "TOKEN_EXPIRED") {
+        return res.status(410).json({ message: t("tokenExpired", language) });
+      }
       if (error.message === "USER_NOT_FOUND") {
         return res.status(404).json({ message: t("userNotFound", language) });
-      }
-      if (error.message === "ACCOUNT_NOT_ACTIVE") {
-        return res.status(403).json({ message: t("accountNotActive", language) });
       }
     }
     handleZodError(error, next);

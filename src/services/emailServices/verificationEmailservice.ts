@@ -7,6 +7,7 @@ import { pendingApprovalEmailTemplate } from '../../utils/email/templates/welcom
 import { changePasswordTemplate } from '../../utils/email/templates/changePassEmail.js';
 import { AgentWellcomeEmailTemplate } from '../../utils/email/templates/welcomeEmail.js';
 import { AgentRejectedEmailTemplate } from '../../utils/email/templates/verificationEmail.js';
+import { passwordRecoveryTemplate } from '../../utils/email/templates/recoveryPasswordTemplate.js';
 abstract class Email {
   protected to: string;
   protected name: string;
@@ -100,5 +101,23 @@ export class RejectionEmail extends Email {
 
   protected getHtml(): string {
     return AgentRejectedEmailTemplate(this.name);
+  }
+  
+}
+export class PasswordRecoveryEmail extends Email {
+  private token: string;
+
+  constructor(to: string, name: string, token: string) {
+    super(to, name);
+    this.token = token;
+  }
+
+  protected getSubject(): string {
+    return 'Password Recovery';
+  }
+
+  protected getHtml(): string {
+   const resetLink = `${config.client.baseUrl}/reset-password?token=${this.token}`;
+    return passwordRecoveryTemplate(this.name, resetLink);
   }
 }

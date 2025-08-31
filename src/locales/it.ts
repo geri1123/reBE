@@ -48,6 +48,8 @@ atLeastOneFieldRequired: "Deve essere fornito almeno un campo",
     emailRequired: "L'email è obbligatoria.",
     userNotFound: "Utente non trovato.",
     emailAlreadyVerified: "L'email è già stata verificata.",
+    passwordResetLinkSent: "Abbiamo inviato il link per reimpostare la password a email.",
+
     //pass
      currentPasswordRequired: "La password attuale è obbligatoria.",
   newPasswordMinLength: "La nuova password deve contenere almeno 8 caratteri.",
@@ -57,6 +59,9 @@ atLeastOneFieldRequired: "Deve essere fornito almeno un campo",
   passwordChangeSuccess: "Password modificata con successo.",
   currentPasswordIncorrect: "La password attuale non è corretta.",
   passwordSameAsCurrent: "La nuova password deve essere diversa da quella attuale.",
+   invalidToken: "Token non valido.",
+  tokenExpired: "Il token di reimpostazione è scaduto. Richiedi un nuovo token.",
+  passwordResetSuccess: "La tua password è stata reimpostata con successo.",
    // 
      nofileUpload: "Nessun file caricato." ,
     //

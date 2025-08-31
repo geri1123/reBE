@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getFilters } from "../controllers/filters/filter";
-import { getAttributes } from "../controllers/filters/attributes";
+import { getFilters } from "../controllers/filters/filter.js";
+import { getAttributes } from "../controllers/filters/attributes.js";
 
 const router = Router();
 

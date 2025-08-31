@@ -24,6 +24,8 @@ export interface IUserRepository {
     email: string;
     first_name: string | null;
     email_verified: boolean;
+    status: user_status;
+   
   } | null>;
 
   // --- Updates

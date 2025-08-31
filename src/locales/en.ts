@@ -47,6 +47,7 @@ atLeastOneFieldRequired: "At least one field must be provided",
     emailRequired: "Email is required.",
     userNotFound: "User not found.",
     emailAlreadyVerified: "Email is already verified.",
+    passwordResetLinkSent: "We have emailed the link to reset your password to email.",
     
     //
     //pass
@@ -58,6 +59,9 @@ atLeastOneFieldRequired: "At least one field must be provided",
   passwordChangeSuccess: "Password changed successfully.",
   currentPasswordIncorrect: "Current password is incorrect.",
   passwordSameAsCurrent: "New password must be different from the current password.",
+    invalidToken: "Invalid token.",
+  tokenExpired: "The reset token has expired. Please request a new one.",
+  passwordResetSuccess: "Your password has been reset successfully.",
 //
 nofileUpload:'No file upload.',
  successfullyUpload:" Profile image updated successfully",
