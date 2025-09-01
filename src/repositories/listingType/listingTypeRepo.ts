@@ -1,5 +1,5 @@
 import { LanguageCode, PrismaClient } from "@prisma/client";
-import { IListingTypeRepo } from "./IlistingTypeRepo";
+import { IListingTypeRepo } from "./IlistingTypeRepo.js";
 export class ListingTypeRepo implements IListingTypeRepo {
     constructor(private prisma: PrismaClient) {}
 

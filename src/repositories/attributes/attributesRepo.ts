@@ -1,5 +1,5 @@
 import { PrismaClient, LanguageCode } from "@prisma/client";
-import { IAttributeRepo } from "./IattributeRepo";
+import { IAttributeRepo } from "./IattributeRepo.js";
 
 export class AttributeRepo implements IAttributeRepo {
   constructor(private prisma: PrismaClient) {}

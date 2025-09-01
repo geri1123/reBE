@@ -1,7 +1,7 @@
 import { IUserRepository } from "../../repositories/user/IUserRepository.js";
 import { IPasswordResetToken } from "../../repositories/passwordResetToken/IPasswordResetTokenRepository.js";
 import { PasswordRecoveryEmail } from "../emailServices/verificationEmailservice.js";
-import { generateToken } from "../../utils/hash.js";
+import { comparePassword, generateToken } from "../../utils/hash.js";
 import { hashPassword } from "../../utils/hash.js";
 export class RecoveryPasswordService {
   private userRepo: IUserRepository;
@@ -19,16 +19,19 @@ export class RecoveryPasswordService {
       throw new Error("TOKEN_EXPIRED");
     }
 
-    const user = await this.userRepo.findById(tokenRecord.userId);
+    const user = await this.userRepo.findByIdWithPassword(tokenRecord.userId);
+   
     if (!user) throw new Error("USER_NOT_FOUND");
 
-    // Hash new password
+   if (await comparePassword(newPassword, user.password)) {
+    throw new Error("SAME_PASSWORD");
+  }    
     const hashedPassword = await hashPassword(newPassword);
 
-    // Update user password
+    
    await this.userRepo.updateFieldsById(user.id, { password: hashedPassword });
 
-    // Delete used token
+    
     await this.tokenRepo.delete(token);
   }
   async recoverPassword(email: string, lang: string): Promise<void> {
@@ -41,12 +44,12 @@ export class RecoveryPasswordService {
 
     // Generate new token
     const token =generateToken()
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); 
 
     await this.tokenRepo.create(user.id, token, expiresAt);
 
     // Send email
-    const emailSender = new PasswordRecoveryEmail(user.email, user.first_name ?? "User", token);
+    const emailSender = new PasswordRecoveryEmail(user.email, user.first_name ?? "User", token , lang ,expiresAt);
     await emailSender.send();
   }
 

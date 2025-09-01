@@ -1,7 +1,7 @@
 
 
  import { NextFunction, Request, Response } from "express";
-import { setLang } from "../utils/i18n";
+import { setLang } from "../utils/i18n.js";
 import { SupportedLang } from "../locales/index.js";
 export function detectLanguage(req: Request, res: Response, next: NextFunction) {
   const lang = ["en", "it"].includes(req.query.lang as string)

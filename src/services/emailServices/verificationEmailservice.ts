@@ -106,10 +106,15 @@ export class RejectionEmail extends Email {
 }
 export class PasswordRecoveryEmail extends Email {
   private token: string;
+  private lang?: string;
+  private expiresAt: Date; // 👈 add this
 
-  constructor(to: string, name: string, token: string) {
+  constructor(to: string, name: string, token: string, lang?: string, expiresAt?: Date) {
     super(to, name);
     this.token = token;
+    this.lang = lang;
+    // fallback: 15 min default
+    this.expiresAt = expiresAt ?? new Date(Date.now() + 15 * 60 * 1000);
   }
 
   protected getSubject(): string {
@@ -117,7 +122,36 @@ export class PasswordRecoveryEmail extends Email {
   }
 
   protected getHtml(): string {
-   const resetLink = `${config.client.baseUrl}/reset-password?token=${this.token}`;
+    // timestamp in ms → frontend can use it for countdown
+    const expTimestamp = this.expiresAt.getTime();
+
+    let resetLink: string;
+    if (this.lang && this.lang !== 'al') {
+      resetLink = `${config.client.baseUrl}/${this.lang}/recover-password?token=${this.token}&exp=${expTimestamp}`;
+    } else {
+      resetLink = `${config.client.baseUrl}/recover-password?token=${this.token}&exp=${expTimestamp}`;
+    }
+
+    console.log('Generated reset link with exp:', resetLink);
+
     return passwordRecoveryTemplate(this.name, resetLink);
   }
 }
+// export class PasswordRecoveryEmail extends Email {
+//   private token: string;
+ 
+//   constructor(to: string, name: string, token: string) {
+//     super(to, name);
+//     this.token = token;
+    
+//   }
+
+//   protected getSubject(): string {
+//     return 'Password Recovery';
+//   }
+
+//   protected getHtml(): string {
+//    const resetLink = `${config.client.baseUrl}/recover-password?token=${this.token}`;
+//     return passwordRecoveryTemplate(this.name, resetLink);
+//   }
+// }

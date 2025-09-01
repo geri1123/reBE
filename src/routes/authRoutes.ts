@@ -5,6 +5,7 @@ import { resendVerificationEmail } from '../controllers/auth/verifyController.js
 import { loginRateLimiter } from '../middlewares/ratelimit.js';
 import  {verifyEmail}  from '../controllers/auth/verifyController.js';
 import { RecoverPassword } from '../controllers/auth/RecoverPassword.js';
+import { ResetPassword } from '../controllers/auth/resetPassword.js';
 const router = Router();
 
 router.post('/register', register); 
@@ -12,4 +13,5 @@ router.post('/login', loginRateLimiter, loginUser  )
 router.get('/verify-email', verifyEmail); 
 router.post('/resend-verification', resendVerificationEmail);
 router.post('/recover-password', RecoverPassword);
+router.post('/reset-password', ResetPassword);
 export default router;

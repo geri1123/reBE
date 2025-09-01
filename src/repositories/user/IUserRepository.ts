@@ -11,6 +11,7 @@ export interface IUserRepository {
   ): Promise<number>;
 
   // --- Queries
+    findByIdWithPassword(userId: number): Promise<{ id: number; password: string } | null>;
  findById(userId: number): Promise<BaseUserInfo | null>;
   findByIdentifier(identifier: string): Promise<PartialUserForLogin | null>;
   findByVerificationToken(token: string): Promise<PartialUserByToken | null>;

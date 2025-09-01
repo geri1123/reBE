@@ -1,9 +1,9 @@
 // backend/src/services/userService/UserInfoService.ts
-import { IUserRepository } from "../../repositories/user/IUserRepository";
-import { IAgentsRepository } from "../../repositories/agents/IAgentsRepository";
-import { IAgencyRepository } from "../../repositories/agency/IAgencyRepository";
-import { BaseUserService } from "./BaseUserService";
-import { UserWithRoleInfo, AgentInfo, AgencyInfo } from "../../types/userinfo";
+import { IUserRepository } from "../../repositories/user/IUserRepository.js";
+import { IAgentsRepository } from "../../repositories/agents/IAgentsRepository.js";
+import { IAgencyRepository } from "../../repositories/agency/IAgencyRepository.js";
+import { BaseUserService } from "./BaseUserService.js";
+import { UserWithRoleInfo, AgentInfo, AgencyInfo } from "../../types/userinfo.js";
 
 export class UserInfoService extends BaseUserService {
   constructor(

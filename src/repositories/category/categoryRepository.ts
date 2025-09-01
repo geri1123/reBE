@@ -38,7 +38,7 @@
 // }
 // }
 import { PrismaClient, LanguageCode } from "@prisma/client";
-import { ICatRepository } from "./ICatRepository";
+import { ICatRepository } from "./ICatRepository.js";
 
 export class CategoryRepository implements ICatRepository {
   constructor(private prisma: PrismaClient) {}
