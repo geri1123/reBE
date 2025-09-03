@@ -28,18 +28,36 @@ export async function verifyEmail(req: Request, res: Response, next: NextFunctio
     next(error);
   }
 }
-
-export async function resendVerificationEmail(req: Request, res: Response, next: NextFunction) {
+export async function resendVerificationEmail(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const language: SupportedLang = res.locals.lang;
   try {
-    const { email } = req.body;
-    await emailVerificationService.resend(email , language);
+    const { identifier } = req.body; 
+
+    await emailVerificationService.resend(identifier, language);
 
     res.status(200).json({
       success: true,
-       message: t("verificationEmailResent" , language),
+      message: t("verificationEmailResent", language),
     });
   } catch (error) {
     next(error);
   }
 }
+// export async function resendVerificationEmail(req: Request, res: Response, next: NextFunction) {
+//   const language: SupportedLang = res.locals.lang;
+//   try {
+//     const { email } = req.body;
+//     await emailVerificationService.resend(email , language);
+
+//     res.status(200).json({
+//       success: true,
+//        message: t("verificationEmailResent" , language),
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+

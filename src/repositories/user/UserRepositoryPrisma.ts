@@ -75,6 +75,8 @@ async findById(userId: number): Promise<BaseUserInfo | null> {
         password: true,
         status: true,
         role: true,
+        email_verified: true,
+        first_name: true,
       },
     });
 

@@ -1,6 +1,6 @@
 import { Request , Response , NextFunction } from "express";
-import { prisma } from "../../config/prisma";
-import { ListingTypeRepo } from "../../repositories/listingType/listingTypeRepo";
+import { prisma } from "../../config/prisma.js";
+import { ListingTypeRepo } from "../../repositories/listingType/listingTypeRepo.js";
 
 import { SupportedLang } from "../../locales/index.js";
 const listingTypeRepo = new ListingTypeRepo(prisma);

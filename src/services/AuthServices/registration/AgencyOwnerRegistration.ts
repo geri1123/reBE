@@ -4,7 +4,8 @@ import { generateToken } from '../../../utils/hash.js';
 import type { AgencyOwnerRegistration as AgencyOwnerRegistrationType } from '../../../types/auth.js';
 import type { IUserRepository } from '../../../repositories/user/IUserRepository.js';
 import { IAgencyRepository } from '../../../repositories/agency/IAgencyRepository.js';
-
+import { LanguageCode } from '@prisma/client';
+import { SupportedLang } from '../../../locales/index.js';
 
 export class AgencyOwnerRegistration {
   constructor(
@@ -12,7 +13,7 @@ export class AgencyOwnerRegistration {
     private readonly agencyRepo: IAgencyRepository
   ) {}
 
-  async register(body: AgencyOwnerRegistrationType): Promise<number> {
+  async register(body: AgencyOwnerRegistrationType  , language:SupportedLang): Promise<number> {
     const {
       username, email, password,
       first_name, last_name,
@@ -46,7 +47,7 @@ export class AgencyOwnerRegistration {
       owner_user_id: userId,
     });
 
-    const verificationEmail = new VerificationEmail(email, `${first_name} ${last_name}`, verification_token);
+    const verificationEmail = new VerificationEmail(email, `${first_name} ${last_name}`, verification_token , language);
     const emailSent = await verificationEmail.send();
     if (!emailSent) {
       throw new Error('Failed to send verification email');

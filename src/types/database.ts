@@ -40,7 +40,7 @@ export type UsernameHistoryRecord = usernamehistory;
 export type NewUsernameHistoryRecord = Prisma.usernamehistoryCreateInput;
 
 // Partial views
-export type PartialUserForLogin = Pick<user, 'id' | 'username' | 'email' | 'password' | 'status' | 'role'>;
+export type PartialUserForLogin = Pick<user, 'id' | 'username' | 'email' | 'password' | 'status' | 'role'| 'email_verified'| 'first_name'>;
 export type PartialUserByToken = Pick<user, 'id' | 'role' | 'email' | 'first_name'| 'username'>;
 
 // No need for tinyint <-> boolean conversions in Prisma,

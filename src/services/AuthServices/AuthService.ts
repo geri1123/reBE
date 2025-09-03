@@ -25,10 +25,10 @@ export class AuthService {
   async registerUserByRole(body: RegistrationData , language:SupportedLang) {
     switch (body.role) {
       case "user":
-        return new UserRegistration(this.userRepo).register(body as any); 
+        return new UserRegistration(this.userRepo).register(body as any , language); 
       
       case "agency_owner":
-        return new AgencyOwnerRegistration(this.userRepo, this.agencyRepo).register(body as any); 
+        return new AgencyOwnerRegistration(this.userRepo, this.agencyRepo).register(body as any , language); 
         
       case "agent":
         return new AgentRegistration(this.userRepo, this.agencyRepo, this.requestRepo).register(body as any , language); 
@@ -43,10 +43,16 @@ export class AuthService {
     const user = await this.userRepo.findByIdentifier(identifier);
     if (!user) throw new UnauthorizedError(t('invalidCredentials', language));
 
-    if (user.status !== 'active') {
-      throw new UnauthorizedError(t('accountNotActive', language));
-    }
-
+    // if (user.status !== 'active') {
+    //   throw new UnauthorizedError(t('accountNotActive', language));
+    // }
+  if (user.status !== 'active') {
+  throw new UnauthorizedError(
+    t('accountNotActive', language),
+    undefined,              
+    'EMAIL_NOT_VERIFIED'    
+  );
+}
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) throw new UnauthorizedError(t('invalidPassword', language));
 

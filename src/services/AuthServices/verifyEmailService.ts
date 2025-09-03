@@ -116,29 +116,36 @@ const agentIdentifier = user.username ?? user.email;
     }
   }
 
-  async resend(email: string , language:SupportedLang): Promise<void> {
-    if (!email) {
-       throw new ValidationError({ email: t("emailRequired", language) });
-    }
-
-    const user = await this.userRepo.findByEmail(email);
-    if (!user) {
-      throw new NotFoundError(t("userNotFound", language));
-    }
-
-    if (user.email_verified) {
-      throw new ValidationError({ email: t("emailAlreadyVerified", language) });
-    }
-
-    // Generate new verification token
-    const token = generateToken();
-    const expires = new Date();
-    expires.setHours(expires.getHours() + 24); // 24 hours expiry
-
-    await this.userRepo.regenerateVerificationToken(user.id, token, expires);
-
-    // Send verification email
-    const verificationEmail = new VerificationEmail(user.email, user.first_name || 'User', token);
-    await verificationEmail.send();
+  
+  async resend(identifier: string, language: SupportedLang): Promise<void> {
+  if (!identifier) {
+    throw new ValidationError({ identifier: t("identifierRequired", language) });
   }
+
+  const user = await this.userRepo.findByIdentifier(identifier);
+
+  if (!user) {
+    throw new NotFoundError(t("userNotFound", language));
+  }
+
+  if (user.email_verified) {
+    throw new ValidationError({ email: t("emailAlreadyVerified", language) });
+  }
+
+  // Generate new verification token
+  const token = generateToken();
+  const expires = new Date();
+  expires.setHours(expires.getHours() + 24); // 24 hours expiry
+
+  await this.userRepo.regenerateVerificationToken(user.id, token, expires);
+
+  // Always send to the actual registered email
+  const verificationEmail = new VerificationEmail(
+    user.email,
+    user.first_name || "User",
+    token,
+    language
+  );
+  await verificationEmail.send();
+}
 }

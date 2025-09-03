@@ -1,12 +1,19 @@
 export class BaseError extends Error {
   public statusCode: number;
   public errors?: Record<string, string>;
+  public code?: string; 
 
-  constructor(message: string, statusCode = 400, errors?: Record<string, string>) {
+  constructor(
+    message: string,
+    statusCode = 400,
+    errors?: Record<string, string>,
+    code?: string
+  ) {
     super(message);
     this.name = this.constructor.name;
     this.statusCode = statusCode;
     this.errors = errors;
+    this.code = code;
     Error.captureStackTrace(this, this.constructor);
   }
 }
@@ -17,8 +24,12 @@ export class ValidationError extends BaseError {
   }
 }
 export class UnauthorizedError extends BaseError {
-  constructor(message = "Unauthorized", errors?: Record<string, string>) {
-    super(message, 401, errors);
+  constructor(
+    message = "Unauthorized",
+    errors?: Record<string, string>,
+    code?: string
+  ) {
+    super(message, 401, errors, code);
   }
 }
 

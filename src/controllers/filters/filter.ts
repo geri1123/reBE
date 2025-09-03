@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { prisma } from "../../config/prisma";
-import { CategoryRepository } from "../../repositories/category/categoryRepository";
-import { ListingTypeRepo } from "../../repositories/listingType/listingTypeRepo";
+import { prisma } from "../../config/prisma.js";
+import { CategoryRepository } from "../../repositories/category/categoryRepository.js";
+import { ListingTypeRepo } from "../../repositories/listingType/listingTypeRepo.js";
 
 import { 
   getCategoriesFromCache, 
   setCategoriesCache,
   getListingTypesFromCache,
   setListingTypesCache
-} from "../../cache/filtersCache.ts";
+} from "../../cache/filtersCache.js";
 
 const categoryRepository = new CategoryRepository(prisma);
 const listingTypeRepo = new ListingTypeRepo(prisma);
@@ -42,51 +42,3 @@ export async function getFilters(req: Request, res: Response, next: NextFunction
   }
 }
 
-
-
-// import { getCategoriesFromCache, setCategoriesCache } from "../../cache/filtersCache.ts";
-
-// import { Request, Response, NextFunction } from "express";
-// import { prisma } from "../../config/prisma";
-// import { CategoryRepository } from "../../repositories/category/categoryRepository";
-// const categoryRepository = new CategoryRepository(prisma);
-// export async function getAllCategories(req: Request, res: Response, next: NextFunction) {
-//   const languageCode = res.locals.lang;
-
-//   try {
-//     // Check if cached
-//     const cached = getCategoriesFromCache(languageCode);
-//     if (cached) {
-//       return res.status(200).json({ success: true, categories: cached });
-//     }
-
-//     // Fetch from DB
-//     const categories = await categoryRepository.getAllCategories(languageCode);
-
-//     // Save to cache
-//     setCategoriesCache(languageCode, categories);
-
-//     res.status(200).json({ success: true, categories });
-//   } catch (error) {
-//     return next(error);
-//   }
-// }
-
-
-// import { Request, Response, NextFunction } from "express";
-// import { prisma } from "../../config/prisma";
-// import { CategoryRepository } from "../../repositories/category/categoryRepository";
-
-
-// const categoryRepository = new CategoryRepository(prisma);
-
-// export async function getAllCategories(req:Request, res:Response, next:NextFunction) {
-
-//      const languageCode = res.locals.lang; 
-//   try {
-//     const categories = await categoryRepository.getAllCategories(languageCode);
-//     res.status(200).json({ success: true, categories });
-//   } catch (error) {
-//     return next(error);
-//   }
-// }

@@ -41,10 +41,11 @@ abstract class Email {
 
 export class VerificationEmail extends Email {
   private token: string;
-
-  constructor(to: string, name: string, token: string) {
+ private language: string;
+  constructor(to: string, name: string, token: string , language: string) {
     super(to, name);
     this.token = token;
+     this.language = language;
   }
 
   protected getSubject(): string {
@@ -52,7 +53,7 @@ export class VerificationEmail extends Email {
   }
 
   protected getHtml(): string {
-    const verificationLink = `http://localhost:8080/api/auth/verify-email?token=${this.token}`;
+    const verificationLink = `${config.client.baseUrl}/${this.language}/verify-email?token=${this.token}`;
     return verificationEmailTemplate(this.name, verificationLink);
   }
 }

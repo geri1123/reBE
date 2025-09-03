@@ -2,6 +2,7 @@ import { VerificationEmail } from '../../emailServices/verificationEmailservice.
 import { generateToken } from '../../../utils/hash.js';
 import type { UserRegistration as UserRegistrationType } from '../../../types/auth.js';
 import type { IUserRepository } from '../../../repositories/user/IUserRepository.js';
+import { SupportedLang } from '../../../locales/index.js';
 
 export class UserRegistration {
   private userRepo: IUserRepository;
@@ -10,7 +11,7 @@ export class UserRegistration {
     this.userRepo = userRepo;
   }
 
-  async register(body: UserRegistrationType): Promise<number> {
+  async register(body: UserRegistrationType  , language:SupportedLang): Promise<number> {
     const {
       username, email, password,
       first_name, last_name,
@@ -31,7 +32,7 @@ export class UserRegistration {
       verification_token_expires,
     });
 
-    const verificationEmail = new VerificationEmail(email, `${first_name} ${last_name}`, verification_token);
+    const verificationEmail = new VerificationEmail(email, `${first_name} ${last_name}`, verification_token , language);
     const emailSent = await verificationEmail.send();
     if (!emailSent) {
       throw new Error('Failed to send verification email');
