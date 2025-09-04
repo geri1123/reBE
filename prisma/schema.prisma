@@ -289,6 +289,9 @@ model Product {
 
   listingTypeId Int
   listingType   listing_type  @relation(fields: [listingTypeId], references: [id])
+ createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  
 }
 enum LanguageCode {
   en
