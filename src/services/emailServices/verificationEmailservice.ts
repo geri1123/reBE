@@ -53,7 +53,15 @@ export class VerificationEmail extends Email {
   }
 
   protected getHtml(): string {
-    const verificationLink = `${config.client.baseUrl}/${this.language}/verify-email?token=${this.token}`;
+     if (!this.token || this.token.trim() === '') {
+      console.error('ERROR: Token is empty or undefined in VerificationEmail.getHtml()');
+      throw new Error('Verification token cannot be empty');
+    }
+
+     const langSegment = this.language === 'al' ? '' : `/${this.language}`;
+
+  const verificationLink = `${config.client.baseUrl}${langSegment}/verify-email?token=${this.token}`;
+
     return verificationEmailTemplate(this.name, verificationLink);
   }
 }

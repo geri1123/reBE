@@ -55,7 +55,10 @@ export class AgentRegistration {
       request_type: 'agent_license_verification',
     });
  
-    const verificationEmail = new VerificationEmail(email, `${first_name} ${last_name}`, verification_token , language);
+    const verificationEmail = new VerificationEmail(
+      email, `${first_name} ${last_name}`, 
+      verification_token , 
+      language);
     const emailSent = await verificationEmail.send();
     if (!emailSent) {
       throw new Error('Failed to send verification email');

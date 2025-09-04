@@ -24,6 +24,7 @@ model agency {
   user                 user                  @relation(fields: [owner_user_id], references: [id], map: "Agency_owner_user_id_fkey")
   agencyagent          agencyagent[]
   registrationrequest  registrationrequest[]
+  products                   Product[] 
 }
 
 model agencyagent {
@@ -116,6 +117,7 @@ model listing_type {
   createdAt                DateTime                   @default(now())
   updatedAt               DateTime?                  @updatedAt
   listing_type_translation listing_type_translation[]
+  products      Product[]
 }
 
 model listing_type_translation {
@@ -189,6 +191,7 @@ model subcategory {
   category               category                 @relation(fields: [categoryId], references: [id], map: "Subcategory_categoryId_fkey")
   subcategorytranslation subcategorytranslation[]
    attributes             attribute[]
+   products      Product[]
   @@index([categoryId], map: "Subcategory_categoryId_fkey")
 }
 
@@ -234,6 +237,7 @@ model user {
 
   notification    notification[]
   usernamehistory usernamehistory[]
+   products                   Product[] 
 }
 
 model usernamehistory {
@@ -253,6 +257,38 @@ model PasswordResetToken {
   userId    Int
   expiresAt DateTime
   createdAt DateTime @default(now())
+}
+model City {
+  id        Int      @id @default(autoincrement())
+  name      String
+  countryId Int
+  country   Country  @relation(fields: [countryId], references: [id])
+  products  Product[]
+}
+
+model Country {
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  code   String @unique
+  cities City[]
+}
+model Product {
+  id           Int           @id @default(autoincrement())
+  
+  title        String
+  price        Float
+    description  String?       @db.Text
+  cityId       Int
+  city         City          @relation(fields: [cityId], references: [id])
+  agencyId     Int?
+  agency       agency?       @relation(fields: [agencyId], references: [id])
+  userId       Int
+  user         user          @relation(fields: [userId], references: [id])
+  subcategoryId Int
+  subcategory   subcategory   @relation(fields: [subcategoryId], references: [id])
+
+  listingTypeId Int
+  listingType   listing_type  @relation(fields: [listingTypeId], references: [id])
 }
 enum LanguageCode {
   en

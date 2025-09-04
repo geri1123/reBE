@@ -28,7 +28,7 @@ export class AuthService {
         return new UserRegistration(this.userRepo).register(body as any , language); 
       
       case "agency_owner":
-        return new AgencyOwnerRegistration(this.userRepo, this.agencyRepo).register(body as any , language); 
+        return new AgencyOwnerRegistration(this.userRepo, this.agencyRepo).register(body as any , language); ; 
         
       case "agent":
         return new AgentRegistration(this.userRepo, this.agencyRepo, this.requestRepo).register(body as any , language); 

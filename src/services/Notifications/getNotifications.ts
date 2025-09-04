@@ -1,4 +1,4 @@
-import { INotificationRepository } from "../../repositories/notification/INotificationRepository";
+import { INotificationRepository } from "../../repositories/notification/INotificationRepository.js";
 import { LanguageCode } from "@prisma/client";
 
 export class GetNotificationService {
