@@ -1,7 +1,7 @@
 // middleware/roleAuth.ts
 import { Request, Response, NextFunction } from 'express';
 
-import { UnauthorizedError, ForbiddenError } from '../errors/BaseError';
+import { UnauthorizedError, ForbiddenError } from '../errors/BaseError.js';
 
 export const requireRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {

@@ -57,6 +57,7 @@ model attribute {
   subcategory    subcategory              @relation(fields: [subcategoryId], references: [id])
   attributeTranslation   attribute_translation[]
   values        attribute_value[]  
+  productAttributes ProductAttributeValue[] 
   @@map("attributes")
 }
 
@@ -235,9 +236,10 @@ model user {
   registrationRequestsReviewed registrationrequest[] @relation("RegistrationRequestReviewedBy")
   registrationRequests         registrationrequest[] @relation("RegistrationRequestUser")
 
-  notification    notification[]
-  usernamehistory usernamehistory[]
+  notification                notification[]
+  usernamehistory             usernamehistory[]
    products                   Product[] 
+    productImages             ProductImage[]   
 }
 
 model usernamehistory {
@@ -291,7 +293,29 @@ model Product {
   listingType   listing_type  @relation(fields: [listingTypeId], references: [id])
  createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @updatedAt
+  image ProductImage[]
+    attributes   ProductAttributeValue[] 
+}
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  userId    Int
+  imageUrl  String?  @db.Text
+
   
+  product   Product @relation(fields: [productId], references: [id])
+  user      user    @relation(fields: [userId], references: [id])
+}
+model ProductAttributeValue {
+  id          Int       @id @default(autoincrement())
+  productId   Int
+  attributeId Int
+  value       String    @db.Text 
+
+  product     Product   @relation(fields: [productId], references: [id])
+  attribute   attribute @relation(fields: [attributeId], references: [id])
+
+  @@unique([productId, attributeId])
 }
 enum LanguageCode {
   en

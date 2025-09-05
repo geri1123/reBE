@@ -1,9 +1,10 @@
-import { PrismaClient , Product} from "@prisma/client";
+import { PrismaClient, Product } from "@prisma/client";
 import { CreateProduct } from "../../types/CreateProduct.js";
-export class ProductsRepository {
-    constructor(private prisma: PrismaClient) {}
 
-    async createProduct(data: CreateProduct &{userId:number}): Promise<Product> {
+export class ProductsRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  async createProduct(data: CreateProduct & { userId: number }): Promise<Product> {
     const product = await this.prisma.product.create({
       data: {
         title: data.title,
@@ -14,8 +15,22 @@ export class ProductsRepository {
         agency: data.agencyId ? { connect: { id: data.agencyId } } : undefined,
         subcategory: { connect: { id: data.subcategoryId } },
         listingType: { connect: { id: data.listingTypeId } },
+
+        // ✅ Fixed nested create
+        attributes: data.attributes
+          ? {
+              create: data.attributes.map(attr => ({
+                attributeId: attr.attributeId,
+                value: attr.value,
+              })),
+            }
+          : undefined,
+      },
+      include: {
+        attributes: true, // include created attributes in response
       },
     });
+
     return product;
   }
 }
