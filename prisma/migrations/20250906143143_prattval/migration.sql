@@ -6,9 +6,9 @@ CREATE TABLE `ProductAttributeValue` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `productId` INTEGER NOT NULL,
     `attributeId` INTEGER NOT NULL,
-    `value` TEXT NOT NULL,
+    `attributeValueId` INTEGER NOT NULL,
 
-    UNIQUE INDEX `ProductAttributeValue_productId_attributeId_key`(`productId`, `attributeId`),
+    UNIQUE INDEX `ProductAttributeValue_productId_attributeId_attributeValueId_key`(`productId`, `attributeId`, `attributeValueId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -17,3 +17,6 @@ ALTER TABLE `ProductAttributeValue` ADD CONSTRAINT `ProductAttributeValue_produc
 
 -- AddForeignKey
 ALTER TABLE `ProductAttributeValue` ADD CONSTRAINT `ProductAttributeValue_attributeId_fkey` FOREIGN KEY (`attributeId`) REFERENCES `attributes`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ProductAttributeValue` ADD CONSTRAINT `ProductAttributeValue_attributeValueId_fkey` FOREIGN KEY (`attributeValueId`) REFERENCES `attribute_values`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

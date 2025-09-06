@@ -1,13 +1,15 @@
-export type CreateProduct = {
+export interface CreateProduct {
   title: string;
   price: number;
   description?: string;
   cityId: number;
-  agencyId?: number;
   subcategoryId: number;
   listingTypeId: number;
-  attributes?: { attributeId: number; value: string }[];
-};
+  attributes?: Array<{
+    attributeId: number;
+    attributeValueId: number; 
+  }>;
+}
 // export type CreateProductImage={
 //   productId:number;
 //   userId:number;

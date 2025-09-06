@@ -79,6 +79,7 @@ model attribute_value {
 
   attribute     attribute     @relation(fields: [attribute_id], references: [id])
    attributeValueTranslations  attribute_value_translation[]
+   productAttributes           ProductAttributeValue[]
      @@map("attribute_values")
 }
 
@@ -125,7 +126,8 @@ model listing_type_translation {
   id            Int          @id @default(autoincrement())
   listingTypeId Int
   language      LanguageCode
-  name          String
+  name                 String?   
+   numeric_value        Float?       
     slug          String?     
   listing_type  listing_type @relation(fields: [listingTypeId], references: [id], map: "Listing_Type_Translation_listingTypeId_fkey")
 
@@ -307,15 +309,17 @@ model ProductImage {
   user      user    @relation(fields: [userId], references: [id])
 }
 model ProductAttributeValue {
-  id          Int       @id @default(autoincrement())
-  productId   Int
-  attributeId Int
-  value       String    @db.Text 
+  id               Int              @id @default(autoincrement())
+  productId        Int
+  attributeId      Int
+  attributeValueId Int            
 
-  product     Product   @relation(fields: [productId], references: [id])
-  attribute   attribute @relation(fields: [attributeId], references: [id])
+  product          Product          @relation(fields: [productId], references: [id])
+  attribute        attribute        @relation(fields: [attributeId], references: [id])
+  attributeValue   attribute_value  @relation(fields: [attributeValueId], references: [id])
 
-  @@unique([productId, attributeId])
+  @@unique([productId, attributeId, attributeValueId]) 
+ 
 }
 enum LanguageCode {
   en
