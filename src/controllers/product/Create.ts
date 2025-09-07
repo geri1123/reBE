@@ -1,6 +1,5 @@
-// controllers/product/Create.ts
 import { Request, Response, NextFunction } from "express";
-import { prisma } from '../../config/prisma.js';
+import { prisma } from "../../config/prisma.js";
 import { ProductsRepository } from "../../repositories/products/ProductsRepository.js";
 import { ProductImagesRepository } from "../../repositories/productImages/ProductImagesRepo.js";
 import { UnauthorizedError } from "../../errors/BaseError.js";
@@ -15,38 +14,6 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
 
     if (!userId) throw new UnauthorizedError("User not authenticated");
 
-    // ---- Parse attributes safely ----
-    // FIXED: Changed property name from valueId to attributeValueId to match repository expectation
-    let parsedAttributes: Array<{ attributeId: number; attributeValueId: number }> = [];
-    
-    if (req.body.attributes !== undefined && req.body.attributes !== null) {
-      if (typeof req.body.attributes === "string") {
-        try {
-          const parsed = JSON.parse(req.body.attributes);
-          if (!Array.isArray(parsed)) {
-            return res.status(400).json({ error: "Attributes must be an array" });
-          }
-          
-          // FIXED: Transform the data to match expected structure
-          parsedAttributes = parsed.map((attr: any) => ({
-            attributeId: attr.attributeId,
-            attributeValueId: attr.valueId || attr.attributeValueId // Support both formats
-          }));
-          
-        } catch (err) {
-          return res.status(400).json({ error: "Invalid JSON format for attributes" });
-        }
-      } else if (Array.isArray(req.body.attributes)) {
-        // FIXED: Transform the data to match expected structure
-        parsedAttributes = req.body.attributes.map((attr: any) => ({
-          attributeId: attr.attributeId,
-          attributeValueId: attr.valueId || attr.attributeValueId // Support both formats
-        }));
-      } else {
-        return res.status(400).json({ error: "Attributes must be an array or JSON string" });
-      }
-    }
-
     // ---- Validate required fields ----
     const productData = {
       title: req.body.title,
@@ -55,7 +22,6 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
       cityId: parseInt(req.body.cityId),
       subcategoryId: parseInt(req.body.subcategoryId),
       listingTypeId: parseInt(req.body.listingTypeId),
-      attributes: parsedAttributes,
     };
 
     if (
@@ -68,17 +34,50 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
       return res.status(400).json({ error: "Missing or invalid required fields" });
     }
 
-    // FIXED: Add validation for attributes if provided
-    if (parsedAttributes.length > 0) {
-      const invalidAttributes = parsedAttributes.some(attr => 
-        !attr.attributeId || !attr.attributeValueId || 
-        isNaN(attr.attributeId) || isNaN(attr.attributeValueId)
-      );
-      
-      if (invalidAttributes) {
-        return res.status(400).json({ 
-          error: "Invalid attribute format. Each attribute must have attributeId and attributeValueId (or valueId)" 
-        });
+    // ---- Attributes validation and parsing ----
+    let attributes: { attributeId: number; attributeValueId: number }[] = [];
+
+    if (req.body.attributes) {
+      try {
+        // Parse attributes if it's a string (common with form data)
+        let attributesData = req.body.attributes;
+        if (typeof attributesData === 'string') {
+          attributesData = JSON.parse(attributesData);
+        }
+
+        if (Array.isArray(attributesData)) {
+          attributes = attributesData.map((attr: any) => ({
+            attributeId: parseInt(attr.attributeId),
+            attributeValueId: parseInt(attr.attributeValueId),
+          }));
+
+          // Filter out invalid entries
+          attributes = attributes.filter(attr => 
+            !isNaN(attr.attributeId) && !isNaN(attr.attributeValueId)
+          );
+
+          console.log('Parsed attributes:', attributes); // Debug log
+
+          // Validate that attributes belong to the chosen subcategory
+          if (attributes.length > 0) {
+            const validAttributes = await prisma.attribute.findMany({
+              where: { subcategoryId: productData.subcategoryId },
+              select: { id: true },
+            });
+
+            const validAttributeIds = validAttributes.map(a => a.id);
+            for (const attr of attributes) {
+              if (!validAttributeIds.includes(attr.attributeId)) {
+                return res.status(400).json({
+                  error: `Attribute ${attr.attributeId} does not belong to subcategory ${productData.subcategoryId}`,
+                });
+              }
+            }
+          }
+        }
+      } catch (parseError) {
+        console.error('Error parsing attributes:', parseError);
+        return res.status(400).json({ error: "Invalid attributes format" });
       }
     }
 
@@ -87,6 +86,7 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
       ...productData,
       userId,
       agencyId: agencyId ?? undefined,
+      attributes: attributes.length > 0 ? attributes : undefined,
     });
 
     // ---- Add images if any ----

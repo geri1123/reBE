@@ -127,7 +127,7 @@ model listing_type_translation {
   listingTypeId Int
   language      LanguageCode
   name                 String?   
-   numeric_value        Float?       
+      
     slug          String?     
   listing_type  listing_type @relation(fields: [listingTypeId], references: [id], map: "Listing_Type_Translation_listingTypeId_fkey")
 
