@@ -96,5 +96,16 @@ agencyPhoneUpdated: "Numri i telefonit të agjencisë u përditësua me sukses",
 agencyAddressUpdated: "Adresa e agjencisë u përditësua me sukses",
 agencyWebsiteUpdated: "Faqja e internetit e agjencisë u përditësua me sukses",
 agencyNameUpdated: "Emri i agjencisë u përditësua me sukses",
-agencyNameExists :"Emri i agjencisë tashmë ekziston."
+agencyNameExists :"Emri i agjencisë tashmë ekziston.",
+
+//
+ title: "Duhet të shkruash një titull",
+    price: "Duhet të shkruash një çmim",
+    pricePositive: "Çmimi duhet të jetë më i madh se 0",
+    cityId: "Duhet të zgjedhësh një qytet",
+    subcategoryId: "Duhet të zgjedhësh një nënkategori",
+    listingTypeId: "Duhet të zgjedhësh një lloj liste",
+    attribute: "Atributi është i nevojshëm",
+    attributeValue: "Vlera e atributit është e nevojshme",
+
 } as const

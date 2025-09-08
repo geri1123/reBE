@@ -3,7 +3,13 @@ import { IAttributeRepo } from "./IattributeRepo.js";
 
 export class AttributeRepo implements IAttributeRepo {
   constructor(private prisma: PrismaClient) {}
-
+ async getValidAttributeIdsBySubcategory(subcategoryId: number): Promise<number[]> {
+    const attributes = await this.prisma.attribute.findMany({
+      where: { subcategoryId },
+      select: { id: true },
+    });
+    return attributes.map(a => a.id);
+  }
   async getAttributesBySubcategoryId(
     subcategoryId: number,
     language: LanguageCode = LanguageCode.al

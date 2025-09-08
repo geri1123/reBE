@@ -97,5 +97,14 @@ agencyPhoneUpdated: "Numero di telefono dell'agenzia aggiornato con successo",
 agencyAddressUpdated: "Indirizzo dell'agenzia aggiornato con successo",
 agencyWebsiteUpdated: "Sito web dell'agenzia aggiornato con successo",
 agencyNameUpdated: "Nome dell'agenzia aggiornato con successo",
-agencyNameExists:"Il nome dell'agenzia esiste già."
+agencyNameExists:"Il nome dell'agenzia esiste già.",
+//
+    title: "Devi scrivere un titolo",
+    price: "Devi scrivere un prezzo",
+    pricePositive: "Il prezzo deve essere maggiore di 0",
+    cityId: "Devi selezionare una città",
+    subcategoryId: "Devi selezionare una sottocategoria",
+    listingTypeId: "Devi selezionare un tipo di annuncio",
+    attribute: "L'attributo è richiesto",
+    attributeValue: "Il valore dell'attributo è richiesto",
 } as const

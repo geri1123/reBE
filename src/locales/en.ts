@@ -97,6 +97,14 @@ agencyPhoneUpdated: "Agency phone number updated successfully",
 agencyAddressUpdated: "Agency address updated successfully",
 agencyWebsiteUpdated: "Agency website updated successfully",
 agencyNameUpdated: "Agency name updated successfully",
-agencyNameExists:"Agency name already exists."
-
+agencyNameExists:"Agency name already exists.",
+//
+ title: "You must write a title",
+    price: "You must write a price",
+    pricePositive: "Price must be greater than 0",
+    cityId: "You must select a city",
+    subcategoryId: "You must select a subcategory",
+    listingTypeId: "You must select a listing type",
+    attribute: "Attribute is required",
+    attributeValue: "Attribute value is required",
 } as const

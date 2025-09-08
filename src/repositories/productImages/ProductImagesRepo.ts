@@ -1,6 +1,6 @@
 import { PrismaClient, ProductImage, Prisma } from "@prisma/client";
-
-export class ProductImagesRepository {
+import { IProductImageRepo } from "./IProductImageRepo.js";
+export class ProductImagesRepository implements IProductImageRepo {
   constructor(private prisma: PrismaClient) {}
 
   async addImage(data: Prisma.ProductImageCreateInput): Promise<ProductImage> {

@@ -1,7 +1,8 @@
 import { PrismaClient, Product } from "@prisma/client";
 import { CreateProduct } from "../../types/CreateProduct.js";
-
-export class ProductsRepository {
+import { SupportedLang } from "../../locales/index.js";
+import { IProductRepository } from "./IProductRepository.js";
+export class ProductsRepository implements IProductRepository {
   constructor(private prisma: PrismaClient) {}
 
   async createProduct(
@@ -57,30 +58,70 @@ export class ProductsRepository {
 
     return product;
   }
-
-  async getProductWithRelations(productId: number) {
-    return this.prisma.product.findUnique({
-      where: { id: productId },
-      include: {
-        image: true,
-        city: true,
-        subcategory: {
-          include: { subcategorytranslation: true },
+async getProductWithRelations(productId: number, language: SupportedLang) {
+  return this.prisma.product.findUnique({
+    where: { id: productId },
+    include: {
+      image: true,
+      city: true,
+      subcategory: {
+        include: {
+          subcategorytranslation: {
+            where: { language }, 
+          },
         },
-        listingType: {
-          include: { listing_type_translation: true },
+      },
+      listingType: {
+        include: {
+          listing_type_translation: {
+            where: { language },
+          },
         },
-        attributes: {
-          include: {
-            attribute: {
-              include: { attributeTranslation: true },
+      },
+      attributes: {
+        include: {
+          attribute: {
+            include: {
+              attributeTranslation: {
+                where: { language },
+              },
             },
-            attributeValue: {
-              include: { attributeValueTranslations: true },
+          },
+          attributeValue: {
+            include: {
+              attributeValueTranslations: {
+                where: { language },
+              },
             },
           },
         },
       },
-    });
-  }
+    },
+  });
+}
+  // async getProductWithRelations(productId: number) {
+  //   return this.prisma.product.findUnique({
+  //     where: { id: productId },
+  //     include: {
+  //       image: true,
+  //       city: true,
+  //       subcategory: {
+  //         include: { subcategorytranslation: true },
+  //       },
+  //       listingType: {
+  //         include: { listing_type_translation: true },
+  //       },
+  //       attributes: {
+  //         include: {
+  //           attribute: {
+  //             include: { attributeTranslation: true },
+  //           },
+  //           attributeValue: {
+  //             include: { attributeValueTranslations: true },
+  //           },
+          // },
+        // },
+      // },
+    // });
+  // }
 }

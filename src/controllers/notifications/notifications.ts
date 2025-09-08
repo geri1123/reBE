@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UnauthorizedError } from "../../errors/BaseError.js";
-import { parseLanguageCode } from "../../utils/language.js";
+// import { parseLanguageCode } from "../../utils/language.js";
 import { NotificationRepository } from "../../repositories/notification/notificationRepository.js";
 
 import { GetNotificationService } from "../../services/Notifications/getNotifications.js";
