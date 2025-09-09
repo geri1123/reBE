@@ -25,7 +25,7 @@ export class AttributeRepo implements IAttributeRepo {
           include: {
             attributeValueTranslations: {
               where: { language },
-              select: { name: true, slug: true },
+              select: { name: true, slug: true  },
             },
           },
         },
@@ -34,7 +34,7 @@ export class AttributeRepo implements IAttributeRepo {
 
     return attributes.map(attr => ({
       id: attr.id,
-      
+      inputType: attr.inputType,
       name: attr.attributeTranslation[0]?.name ?? "No translation",
       slug: attr.attributeTranslation[0]?.slug ?? null,
       values: attr.values.map(v => ({

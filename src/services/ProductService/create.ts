@@ -23,6 +23,7 @@ export class Create {
       title: string;
       price: number;
       description: string;
+      streetAddress:string;
       cityId: number;
       subcategoryId: number;
       listingTypeId: number;

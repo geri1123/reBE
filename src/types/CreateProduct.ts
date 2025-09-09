@@ -3,6 +3,7 @@ export interface CreateProduct {
   price: number;
   description?: string;
   cityId: number;
+  streetAddress?:string;
   subcategoryId: number;
   listingTypeId: number;
   attributes?: Array<{

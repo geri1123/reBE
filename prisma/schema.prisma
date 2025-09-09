@@ -282,6 +282,7 @@ model Product {
   title        String
   price        Float
     description  String?       @db.Text
+     streetAddress  String?  
   cityId       Int
   city         City          @relation(fields: [cityId], references: [id])
   agencyId     Int?

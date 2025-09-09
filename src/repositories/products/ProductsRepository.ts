@@ -19,6 +19,7 @@ export class ProductsRepository implements IProductRepository {
         price: data.price,
         description: data.description,
         cityId: data.cityId,
+          streetAddress: data.streetAddress, 
         subcategoryId: data.subcategoryId,
         listingTypeId: data.listingTypeId,
         userId: data.userId,

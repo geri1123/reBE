@@ -15,6 +15,7 @@ export const createProductSchema = (language: SupportedLang) =>
     subcategoryId: z.preprocess(val => Number(val), z.number(t("subcategoryId", language))),
     listingTypeId: z.preprocess(val => Number(val), z.number(t("listingTypeId", language))),
     description: z.string().optional(),
+    streetAddress: z.string().optional(),
   attributes: z.preprocess((val) => {
   if (!val) return undefined;            
   if (typeof val === "string") val = JSON.parse(val); 

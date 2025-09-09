@@ -45,6 +45,7 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
         title: parsedData.title,
         price: parsedData.price,
         description: parsedData.description ?? "",
+        streetAddress: parsedData.streetAddress ?? "",
         cityId: parsedData.cityId,
         subcategoryId: parsedData.subcategoryId,
         listingTypeId: parsedData.listingTypeId,
