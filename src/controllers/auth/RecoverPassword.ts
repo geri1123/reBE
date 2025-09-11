@@ -32,6 +32,6 @@ export async function RecoverPassword(req: Request, res: Response, next: NextFun
         return res.status(403).json({ message: t("accountNotActive", language) });
       }
     }
-    handleZodError(error, next);
+     handleZodError(error, next, res.locals.lang);
   }
 }

@@ -33,7 +33,7 @@ export async function register(
       userId,
     });
   } catch (err) {
-    handleZodError(err, next);
+  handleZodError(err, next, res.locals.lang);
   }
 }
 
@@ -64,6 +64,6 @@ export async function loginUser(
       user: { id: user.id, username: user.username, email: user.email },
     });
   } catch (err) {
-    handleZodError(err, next);
+    handleZodError(err, next, res.locals.lang);
   }
 }

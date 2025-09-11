@@ -57,10 +57,10 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
     // ---- Fetch product with relations ----
     const productWithDetails = await productsRepo.getProductWithRelations(product.id, language);
 
-    res.status(201).json({ success: true, product: productWithDetails });
+    res.status(201).json({ success: true,  message: t("successadded", language),product: productWithDetails });
   } catch (err) {
     
     
-    handleZodError(err, next);
+     handleZodError(err, next, res.locals.lang);
   }
 }

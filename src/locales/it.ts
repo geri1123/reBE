@@ -1,7 +1,8 @@
 export const it = {
-
+ validationFailed: "Convalida non riuscita",
      userNotAuthenticated: "Utente non autenticato",
     notificationMarkedRead: "Notifica contrassegnata come letta",
+     internalServerError: "Si è verificato un errore imprevisto",
      tooManyLoginAttempts: "Troppi tentativi di accesso da questo IP, riprova tra 15 minuti.",
     //login,registration
       registrationSuccess: "Registrazione completata. Si prega di verificare la tua email.",
@@ -73,6 +74,10 @@ firstNameUpdated: "Nome aggiornato con successo",
    TooManyUsernameRequestsError: "Puoi aggiornare il tuo nome utente solo una volta ogni 10 giorni.",  
   successfullyUpdatedUsername:"Nome utente aggiornato con successo",
 //agency
+ 
+    approved: "Richiesta approvata con successo",
+    rejected: "Richiesta respinta con successo",
+ 
 agencyNotFound: "Agenzia non trovata.",
 invalidAgencyId: "ID agenzia non valido",
 invalidLimit: "Il limite deve essere compreso tra 1 e 100",
@@ -99,6 +104,7 @@ agencyWebsiteUpdated: "Sito web dell'agenzia aggiornato con successo",
 agencyNameUpdated: "Nome dell'agenzia aggiornato con successo",
 agencyNameExists:"Il nome dell'agenzia esiste già.",
 //
+successadded: "Prodotto registrato con successo",
     title: "Devi scrivere un titolo",
     price: "Devi scrivere un prezzo",
     pricePositive: "Il prezzo deve essere maggiore di 0",
@@ -107,4 +113,5 @@ agencyNameExists:"Il nome dell'agenzia esiste già.",
     listingTypeId: "Devi selezionare un tipo di annuncio",
     attribute: "L'attributo è richiesto",
     attributeValue: "Il valore dell'attributo è richiesto",
-} as const
+ 
+   } as const

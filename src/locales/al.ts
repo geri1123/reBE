@@ -1,6 +1,8 @@
 export const al = {
+  validationFailed: "Validimi dështoi",
      userNotAuthenticated: "Përdoruesi nuk është autentikuar",
     notificationMarkedRead: "Njoftimi u shënua si i lexuar",
+    internalServerError: "Ndodhi një gabim i papritur",
      tooManyLoginAttempts: "Shumë përpjekje për t'u kyçur nga ky IP, provoni përsëri pas 15 minutash.",
     //login,registration
      registrationSuccess: "Regjistrimi u krye me sukses. Ju lutemi verifikoni email-in tuaj.",
@@ -73,6 +75,12 @@ phoneInvalidChars: "Numri i telefonit përmban karaktere të pavlefshme",
   TooManyUsernameRequestsError: "Mund të ndryshoni emrin e përdoruesit vetëm një herë çdo 10 ditë.",
 successfullyUpdatedUsername:"Emri i përdoruesit u përditësua me sukses",
 //agency
+  // agentRequest: {
+  //   approved: "Kërkesa u miratua me sukses",
+  //   rejected: "Kërkesa u refuzua me sukses",
+  // },
+  approved: "Kërkesa u miratua me sukses",
+    rejected: "Kërkesa u refuzua me sukses",
 agencyNotFound: "Agjencia nuk u gjet.",
 invalidAgencyId: "ID i agjencisë është i pavlefshëm",
 invalidLimit: "Limiti duhet të jetë midis 1 dhe 100",
@@ -99,6 +107,7 @@ agencyNameUpdated: "Emri i agjencisë u përditësua me sukses",
 agencyNameExists :"Emri i agjencisë tashmë ekziston.",
 
 //
+successadded: "Produkti u regjistrua me sukses",
  title: "Duhet të shkruash një titull",
     price: "Duhet të shkruash një çmim",
     pricePositive: "Çmimi duhet të jetë më i madh se 0",

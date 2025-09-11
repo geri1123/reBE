@@ -1,5 +1,7 @@
 export const en = {
+   validationFailed: "Validation failed",
   userNotAuthenticated: "User not authenticated",
+   internalServerError: "An unexpected error occurred",
     notificationMarkedRead: "Notification marked as read",
     tooManyLoginAttempts: "Too many login attempts from this IP, please try again after 15 minutes.",
     //login,registration
@@ -73,6 +75,12 @@ nofileUpload:'No file upload.',
     TooManyUsernameRequestsError:"You can only update your username once every 10 days.",
   successfullyUpdatedUsername:"Username updated successfully",
 //agency
+
+  
+    approved: "Request approved successfully",
+    rejected: "Request rejected successfully",
+  
+
 agencyNotFound:"Agency not found.",
 invalidAgencyId: "Invalid agency ID",
 invalidLimit: "Limit must be between 1 and 100",
@@ -99,6 +107,7 @@ agencyWebsiteUpdated: "Agency website updated successfully",
 agencyNameUpdated: "Agency name updated successfully",
 agencyNameExists:"Agency name already exists.",
 //
+  successadded: "Product added successfully",
  title: "You must write a title",
     price: "You must write a price",
     pricePositive: "Price must be greater than 0",

@@ -2,9 +2,80 @@ import { PrismaClient, Product } from "@prisma/client";
 import { CreateProduct } from "../../types/CreateProduct.js";
 import { SupportedLang } from "../../locales/index.js";
 import { IProductRepository } from "./IProductRepository.js";
+import { LanguageCode } from "@prisma/client";
 export class ProductsRepository implements IProductRepository {
   constructor(private prisma: PrismaClient) {}
+ async getAllProductsWithRelations(
+  language: LanguageCode,
+  limit: number = 10,
+  offset: number = 0
+) {
+  return this.prisma.product.findMany({
+    take: limit,                  // limit (number of products)
+    skip: offset,                 // offset (for pagination)
+    orderBy: { createdAt: "desc" }, // latest products first
+    include: {
+      // Product images
+      image: true,
 
+      // City
+      city: true,
+
+      // Subcategory + its translations + category + category translations
+      subcategory: {
+        include: {
+          subcategorytranslation: {
+            where: { language },
+            select: { name: true, slug: true },
+          },
+          category: {
+            include: {
+              categorytranslation: {
+                where: { language },
+                select: { name: true, slug: true },
+              },
+            },
+          },
+        },
+      },
+
+      // Listing type + translations
+      listingType: {
+        include: {
+          listing_type_translation: {
+            where: { language },
+            select: { name: true, slug: true },
+          },
+        },
+      },
+
+      // Attributes + translations
+      attributes: {
+        include: {
+          attribute: {
+            include: {
+              attributeTranslation: {
+                where: { language },
+                select: { name: true, slug: true },
+              },
+            },
+          },
+          attributeValue: {
+            include: {
+              attributeValueTranslations: {
+                where: { language },
+                select: { name: true, slug: true },
+              },
+            },
+          },
+        },
+      },
+
+      // User who created the product
+      user: true,
+    },
+  });
+}
   async createProduct(
     data: CreateProduct & {
       userId: number;

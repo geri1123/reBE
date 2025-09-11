@@ -65,9 +65,9 @@ export class AgentRequestController {
         
       );
 
-      res.json({ message: `Request ${status} successfully` });
+      res.json({ message:t(`${status}`, language)  });
     } catch (err) {
-     handleZodError(err, next);
+      handleZodError(err, next, res.locals.lang);
     }
   }
 }

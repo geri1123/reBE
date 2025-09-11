@@ -1,3 +1,5 @@
+import { SupportedLang } from "../locales/index.js";
+import { t } from "../utils/i18n.js";
 export class BaseError extends Error {
   public statusCode: number;
   public errors?: Record<string, string>;
@@ -17,12 +19,17 @@ export class BaseError extends Error {
     Error.captureStackTrace(this, this.constructor);
   }
 }
-
 export class ValidationError extends BaseError {
-  constructor(errors: Record<string, string>) {
-    super("Validation failed", 400, errors);
+  constructor(errors: Record<string, string>, lang: SupportedLang) {
+    // Translate "Validation failed"
+    super(t("validationFailed", lang), 400, errors);
   }
 }
+// export class ValidationError extends BaseError {
+//   constructor(errors: Record<string, string>) {
+//     super("Validation failed", 400, errors);
+//   }
+// }
 export class UnauthorizedError extends BaseError {
   constructor(
     message = "Unauthorized",
@@ -32,7 +39,11 @@ export class UnauthorizedError extends BaseError {
     super(message, 401, errors, code);
   }
 }
-
+export class InternalServerError extends BaseError {
+  constructor(lang: SupportedLang) {
+    super(t("internalServerError", lang), 500);
+  }
+}
 export class ForbiddenError extends BaseError {
   constructor(message = "Forbidden") {
     super(message, 403);
