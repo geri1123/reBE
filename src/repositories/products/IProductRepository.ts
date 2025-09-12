@@ -3,11 +3,11 @@ import { CreateProduct } from "../../types/CreateProduct.js";
 import { SupportedLang } from "../../locales/index.js";
 import { LanguageCode } from "@prisma/client";
 export interface IProductRepository {
-  getAllProductsWithRelations(
-    language: LanguageCode,
-    limit: number,
-    offset: number
-  ): Promise<Product[]>;
+  // getAllProductsWithRelations(
+  //   language: LanguageCode,
+  //   limit: number,
+  //   offset: number
+  // ): Promise<Product[]>;
   createProduct(
     data: CreateProduct & {
       userId: number;
