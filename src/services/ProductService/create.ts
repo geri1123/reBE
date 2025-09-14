@@ -1,7 +1,7 @@
 import { IAttributeRepo } from "../../repositories/attributes/IattributeRepo.js";
 import { IProductImageRepo } from "../../repositories/productImages/IProductImageRepo.js";
 import { IProductRepository } from "../../repositories/products/IProductRepository.js";
-
+import { uploadFileToFirebase } from "../../utils/firebaseUpload/firebaseUploader.js";
 export class Create {
   constructor(
     private productsRepo:IProductRepository,
@@ -66,18 +66,30 @@ export class Create {
     });
 
     // ---- Add images if any ----
-    if (files && Array.isArray(files)) {
-      await Promise.all(
-        files.map(file =>
-          this.productImagesRepo.addImage({
-            imageUrl: file.path.replace(/\\/g, "/"),
-            product: { connect: { id: product.id } },
-            user: { connect: { id: userId } },
-          })
-        )
-      );
-    }
+    // if (files && Array.isArray(files)) {
+    //   await Promise.all(
+    //     files.map(file =>
+    //       this.productImagesRepo.addImage({
+    //         imageUrl: file.path.replace(/\\/g, "/"),
+    //         product: { connect: { id: product.id } },
+    //         user: { connect: { id: userId } },
+    //       })
+    //     )
+    //   );
+    // }
+if (files && Array.isArray(files)) {
+  await Promise.all(
+    files.map(async (file) => {
+      const imageUrl = await uploadFileToFirebase(file, "product_images");
 
+      await this.productImagesRepo.addImage({
+        imageUrl, // <-- this is the Firebase URL
+        product: { connect: { id: product.id } },
+        user: { connect: { id: userId } },
+      });
+    })
+  );
+}
     return product;
   }
 }

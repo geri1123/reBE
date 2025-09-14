@@ -45,6 +45,6 @@ export async function updateProfileFields(
 
     res.json({ success: true, message: messages.join(', ') });
   } catch (err) {
-    return handleZodError(err, next);
+    return handleZodError(err, next , language);
   }
 }

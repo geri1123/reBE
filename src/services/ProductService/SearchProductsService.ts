@@ -4,6 +4,7 @@ import { SearchProductsRepo } from "../../repositories/products/SearchProductRep
 import { config } from "../../config/config.js";
 import { ISearchProductRepo } from "../../repositories/products/ISearchProductRepo.js";
 import { ProductWithRelations } from "../../types/ProductSearch.js";
+import {getFirebaseImageUrl} from "../../utils/firebaseUpload/firebaseUtils.js"
 export class SearchProductsService  {
   constructor(private repo: ISearchProductRepo) {}
 
@@ -13,7 +14,7 @@ export class SearchProductsService  {
     const productsFullImageurl = (products as ProductWithRelations[]).map(product => {
   const images = product.image.map(img => ({
     ...img,
-    imageUrl: img.imageUrl ? `${config.client.baseUrl}/${img.imageUrl}` : null,
+    imageUrl:  getFirebaseImageUrl(img.imageUrl),
   }));
   return { ...product, image: images };
 });

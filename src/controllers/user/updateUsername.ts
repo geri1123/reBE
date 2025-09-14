@@ -36,7 +36,7 @@ export async function changeUsername(
     res.json({ success: true, message: (t("successfullyUpdatedUsername" , language)) });
   } catch (err) {
     
-      return handleZodError(err, next);
+      return handleZodError(err, next, language);
    
   }
 }
