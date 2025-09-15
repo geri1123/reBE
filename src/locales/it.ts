@@ -113,5 +113,13 @@ successadded: "Prodotto registrato con successo",
     listingTypeId: "Devi selezionare un tipo di annuncio",
     attribute: "L'attributo è richiesto",
     attributeValue: "Il valore dell'attributo è richiesto",
- 
+ //
+ documentTooLarge:"Il documento è troppo grande",
+    tooManyDocuments:"Troppi documenti caricati",
+  invalidImageType: "Sono consentiti solo file immagine (jpeg, jpg, png, webp, gif, avif).",
+  imageTooLarge: "L'immagine caricata è troppo grande. La dimensione massima consentita è 5MB.",
+  tooManyImages: "Sono state caricate troppe immagini. Riduci il numero di file.",
+  noImageUploaded: "Nessuna immagine è stata caricata.",
+invalidDocumentType:"Tipo di documento non valido",
+   insufficientPermissions:"Permessi insufficienti"
    } as const

@@ -116,4 +116,14 @@ agencyNameExists:"Agency name already exists.",
     listingTypeId: "You must select a listing type",
     attribute: "Attribute is required",
     attributeValue: "Attribute value is required",
+    //
+    documentTooLarge:"Document is too large",
+    tooManyDocuments:"Too many documents uploaded",
+     invalidImageType: "Only image files (jpeg, jpg, png, webp, gif, avif) are allowed.",
+  imageTooLarge: "The uploaded image is too large. Maximum allowed size is 5MB.",
+  tooManyImages: "Too many images uploaded. Please reduce the number of files.",
+   invalidDocumentType:"Invalid document type",
+
+  noImageUploaded: "No image was uploaded.",
+  insufficientPermissions:"Insufficient permissions"
 } as const

@@ -4,37 +4,31 @@ import type { IAgencyRepository } from '../../repositories/agency/IAgencyReposit
 import { FileSystemError, NotFoundError } from '../../errors/BaseError.js';
 import { SupportedLang } from "../../locales/index.js";
 import { t } from '../../utils/i18n.js';
-
+import {bucket} from "../../config/firebase.js"
+import { uploadFileToFirebase } from '../../utils/firebaseUpload/firebaseUploader.js';
 export class AgencyLogoService {
   constructor(private agencyRepo: IAgencyRepository) {}
 async updateAgencyLogo(
   agencyId: number,
   language:SupportedLang,
   file: Express.Multer.File,
-  _baseDir: string 
+ 
 ): Promise<string> {
   const agency = await this.agencyRepo.findLogoById(agencyId);
   if (!agency) throw new NotFoundError(t('agencyNotFound' ,language));
 
-  const projectRoot = path.resolve();
-  const newLogoPath = `uploads/images/agency_logo/${file.filename}`;
+ const logoPath=agency.logo;
 
-  // Remove old logo if it exists
-  if (agency.logo && agency.logo.trim() !== '') {
-    const oldLogoPath = path.join(projectRoot, agency.logo);
-    try {
-      await fs.unlink(oldLogoPath);
-      console.log(`Old logo deleted: ${oldLogoPath}`);
-    } catch (err: any) {
-      if (err.code !== 'ENOENT') {
-        console.error('Failed to delete logo:', err);
-        throw new FileSystemError(t('faildtoDeleteLogo' ,language));
-      } else {
-        console.warn('Old logo not found:', oldLogoPath);
-      }
-    }
+ if(logoPath){
+  try{
+    await bucket.file(logoPath).delete();
+
+  }catch(err:any){
+    console.warn("Faild to delete old image")
   }
-
+ }
+  // Remove old logo if it exists
+ const newLogoPath=await uploadFileToFirebase(file  , 'agency_logo')
   await this.agencyRepo.updateAgencyFields(agencyId, { logo: newLogoPath });
 
   return newLogoPath;

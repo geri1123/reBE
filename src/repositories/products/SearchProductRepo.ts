@@ -1,4 +1,3 @@
-// repositories/products/SearchProductsRepo.ts
 import { PrismaClient } from "@prisma/client";
 import { SupportedLang } from "../../locales/index.js";
 import { SearchFilters } from "../../types/ProductSearch.js";
@@ -9,11 +8,30 @@ export class SearchProductsRepo {
   async searchProducts(filters: SearchFilters, language: SupportedLang) {
     const whereConditions: any = this.buildWhereConditions(filters);
 
+    // Determine sorting
+    let orderBy: Record<string, "asc" | "desc"> = { createdAt: "desc" }; 
+    if (filters.sortBy) {
+      switch (filters.sortBy) {
+        case "price_asc":
+          orderBy = { price: "asc" };
+          break;
+        case "price_desc":
+          orderBy = { price: "desc" };
+          break;
+        case "date_asc":
+          orderBy = { createdAt: "asc" };
+          break;
+        case "date_desc":
+          orderBy = { createdAt: "desc" };
+          break;
+      }
+    }
+
     return this.prisma.product.findMany({
       where: whereConditions,
       take: filters.limit,
       skip: filters.offset,
-      orderBy: { createdAt: "desc" },
+      orderBy,
       select: {
         id: true,
         title: true,
@@ -29,14 +47,13 @@ export class SearchProductsRepo {
             slug: true, // base slug for filtering
             subcategorytranslation: {
               where: { language },
-              select: { name: true, slug: true }, // translations for display
+              select: { name: true }, // we remove slug
             },
             category: {
               select: {
-                slug: true, // base slug for filtering
                 categorytranslation: {
                   where: { language },
-                  select: { name: true, slug: true }, // translations for display
+                  select: { name: true }, // remove slug
                 },
               },
             },
@@ -44,38 +61,33 @@ export class SearchProductsRepo {
         },
         listingType: {
           select: {
-            slug: true, // base slug
             listing_type_translation: {
               where: { language },
-              select: { name: true, slug: true },
+              select: { name: true }, // remove slug
             },
           },
         },
         attributes: {
           select: {
-            id: true,
             attribute: {
               select: {
-                code: true, // use code for filtering
                 attributeTranslation: {
                   where: { language },
-                  select: { name: true, slug: true }, // translations for display
+                  select: { name: true }, // remove slug & code
                 },
               },
             },
             attributeValue: {
               select: {
-                value_code: true, // use code for filtering
                 attributeValueTranslations: {
                   where: { language },
-                  select: { name: true, slug: true },
+                  select: { name: true }, // remove slug & value_code
                 },
               },
             },
           },
         },
-        user: { select: { username: true, first_name: true, last_name: true } },
-        agency: { select: { agency_name: true, logo: true } },
+        agency: { select: { agency_name: true, logo: true } }, // keep agency
       },
     });
   }
@@ -88,7 +100,6 @@ export class SearchProductsRepo {
   private buildWhereConditions(filters: SearchFilters) {
     const whereConditions: any = {};
 
-    // ✅ Filter by base category or subcategory slug
     if (filters.categorySlug || filters.subcategorySlug) {
       whereConditions.subcategory = {};
 
@@ -103,24 +114,20 @@ export class SearchProductsRepo {
       }
     }
 
-    // ✅ Filter by price
     if (filters.pricelow !== undefined || filters.pricehigh !== undefined) {
       whereConditions.price = {};
       if (filters.pricelow !== undefined) whereConditions.price.gte = filters.pricelow;
       if (filters.pricehigh !== undefined) whereConditions.price.lte = filters.pricehigh;
     }
 
-    // ✅ Filter by city name
     if (filters.city) {
       whereConditions.city = { name: { equals: filters.city } };
     }
 
-    // ✅ Filter by listing type (base slug)
     if (filters.listingtype) {
       whereConditions.listingType = { slug: filters.listingtype };
     }
 
-    // ✅ Filter by attribute code/value_code
     if (filters.attributes && Object.keys(filters.attributes).length > 0) {
       const attributeConditions = [];
       for (const [attributeCode, valueCode] of Object.entries(filters.attributes)) {

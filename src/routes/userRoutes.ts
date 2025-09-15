@@ -5,11 +5,11 @@ import { updateProfileImage } from '../controllers/user/updateprofile.js';
 import { changeUsername } from '../controllers/user/updateUsername.js';
 import { userInfo } from '../controllers/user/userInfo.js';
 import { changePassword } from '../controllers/user/updatePassword.js';
-
+import { multerErrorWrapper } from '../middlewares/multerError.js';
 import { updateProfileFields } from '../controllers/user/updateProfileFields.js';
 const router = express.Router();
 router.use(verifyToken);
-router.patch('/update-profileImg',  uploadSingleProfileImage, updateProfileImage);
+router.patch('/update-profileImg', multerErrorWrapper(uploadSingleProfileImage), updateProfileImage);
 router.patch('/update-username' ,  changeUsername); 
 router.patch('/update-password' ,  changePassword);
 router.patch('/update-me' , updateProfileFields )

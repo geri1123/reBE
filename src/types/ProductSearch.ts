@@ -6,6 +6,7 @@ export interface SearchFilters {
   city?: string;
   listingtype?: string;
   attributes?: Record<string, string>;
+  sortBy?: 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc'; // add whatever you need
   limit?: number;
   offset?: number;
 }
@@ -25,3 +26,18 @@ export type ProductWithRelations = {
   user: { username: string; first_name?: string; last_name?: string };
   agency: { agency_name?: string; logo?: string };
 };
+export interface ProductFrontend {
+  id: number;
+  title: string;
+  price: number;
+  city: string;
+  image: { imageUrl: string | null }[];
+  categoryName: string;
+  subcategoryName: string;
+  listingTypeName: string;
+  createdAt: Date;
+  agency?: {
+    agency_name: string;
+    logo?: string | null;
+  } | null;
+}

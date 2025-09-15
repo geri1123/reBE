@@ -8,8 +8,8 @@ import { AgencyLogoService } from '../../../services/AgencyService/agencyLogoSer
 import { prisma } from '../../../config/prisma.js';
 import { SupportedLang } from '../../../locales/index.js';
 import { t } from '../../../utils/i18n.js';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { getFirebaseImageUrl } from '../../../utils/firebaseUpload/firebaseUtils.js';
+
 
 const agencyRepo = new AgencyRepository(prisma);
 const agencyLogoService = new AgencyLogoService(agencyRepo);
@@ -28,9 +28,9 @@ export async function updateAgencyLogo(
     return;
   }
   try {
-    const baseDir = path.resolve(__dirname, '..', '..', '..');
-    const newPath = await agencyLogoService.updateAgencyLogo(req.agencyId,language, req.file, baseDir);
-    const fullUrl = getFullImageUrl(newPath, req);
+    
+    const newPath = await agencyLogoService.updateAgencyLogo(req.agencyId,language, req.file);
+    const fullUrl = getFirebaseImageUrl(newPath)
 
     res.json({ success: true, logoUrl: fullUrl, message:t("agencyLogoUpdated" , language) });
   } catch (error) {

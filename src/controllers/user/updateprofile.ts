@@ -6,7 +6,7 @@ import { prisma } from '../../config/prisma.js';
 import { getFirebaseImageUrl } from '../../utils/firebaseUpload/firebaseUtils.js';
 import { SupportedLang } from '../../locales/index.js';
 import { t } from '../../utils/i18n.js';
-
+import { NoImageUploadedError } from '../../errors/ImageErrors.js';
 const userRepo = new UserRepositoryPrisma(prisma);
 const profileImageService = new ProfileImageService(userRepo);
 
@@ -21,11 +21,9 @@ export async function updateProfileImage(
     throw new UnauthorizedError(t('userNotAuthenticated', language));
   }
 
-  if (!req.file) {
-    res.status(400).json({ error: t('nofileUpload', language) });
-    return;
+   if (!req.file) {
+    return next(new NoImageUploadedError(language));
   }
-
   try {
     // Upload new image to Firebase and delete old one
     const newImagePath = await profileImageService.updateProfileImage(

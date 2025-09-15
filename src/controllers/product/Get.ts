@@ -20,7 +20,8 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
   pricehigh,
   city,
   listingtype,
-  limit = 10,
+  sortBy,
+  limit = 12,
   offset = 0,
   lang,
   ...attributeFilters
@@ -34,6 +35,7 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
       city: city ? city as string : undefined,
       listingtype: listingtype ? listingtype as string : undefined,
       attributes: attributeFilters as Record<string, string>,
+      sortBy: sortBy ? (sortBy as 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc') : undefined,
       limit: parseInt(limit as string),
       offset: parseInt(offset as string),
     };
@@ -54,94 +56,94 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
 }
 
 
-// Helper function to get available filter options for a category/subcategory
-export async function getAvailableFilters(req: Request, res: Response, next: NextFunction) {
-  try {
-    const language: SupportedLang = res.locals.lang;
-    const { category: categorySlug, subcategory: subcategorySlug } = req.params;
+// // Helper function to get available filter options for a category/subcategory
+// export async function getAvailableFilters(req: Request, res: Response, next: NextFunction) {
+//   try {
+//     const language: SupportedLang = res.locals.lang;
+//     const { category: categorySlug, subcategory: subcategorySlug } = req.params;
 
-    // Get subcategory ID based on slug
-    let subcategoryId: number | undefined;
+//     // Get subcategory ID based on slug
+//     let subcategoryId: number | undefined;
     
-    if (subcategorySlug) {
-      const subcategory = await prisma.subcategory.findFirst({
-        where: {
-          subcategorytranslation: {
-            some: {
-              slug: subcategorySlug,
-              language: language
-            }
-          }
-        }
-      });
-      subcategoryId = subcategory?.id;
-    }
+//     if (subcategorySlug) {
+//       const subcategory = await prisma.subcategory.findFirst({
+//         where: {
+//           subcategorytranslation: {
+//             some: {
+//               slug: subcategorySlug,
+//               language: language
+//             }
+//           }
+//         }
+//       });
+//       subcategoryId = subcategory?.id;
+//     }
 
-    // Get attributes for this subcategory
-    const attributes = subcategoryId ? await prisma.attribute.findMany({
-      where: { subcategoryId },
-      include: {
-        attributeTranslation: {
-          where: { language }
-        },
-        values: {
-          include: {
-            attributeValueTranslations: {
-              where: { language }
-            }
-          }
-        }
-      }
-    }) : [];
+//     // Get attributes for this subcategory
+//     const attributes = subcategoryId ? await prisma.attribute.findMany({
+//       where: { subcategoryId },
+//       include: {
+//         attributeTranslation: {
+//           where: { language }
+//         },
+//         values: {
+//           include: {
+//             attributeValueTranslations: {
+//               where: { language }
+//             }
+//           }
+//         }
+//       }
+//     }) : [];
 
-    // Get price range
-    const priceRange = await prisma.product.aggregate({
-      _min: { price: true },
-      _max: { price: true },
-      where: subcategoryId ? { subcategoryId } : {}
-    });
+//     // Get price range
+//     const priceRange = await prisma.product.aggregate({
+//       _min: { price: true },
+//       _max: { price: true },
+//       where: subcategoryId ? { subcategoryId } : {}
+//     });
 
-    // Get available cities
-    const cities = await prisma.city.findMany({
-      where: {
-        products: {
-          some: subcategoryId ? { subcategoryId } : {}
-        }
-      },
-      include: {
-        country: true
-      }
-    });
+//     // Get available cities
+//     const cities = await prisma.city.findMany({
+//       where: {
+//         products: {
+//           some: subcategoryId ? { subcategoryId } : {}
+//         }
+//       },
+//       include: {
+//         country: true
+//       }
+//     });
 
-    // Get available listing types
-    const listingTypes = await prisma.listing_type.findMany({
-      where: {
-        products: {
-          some: subcategoryId ? { subcategoryId } : {}
-        }
-      },
-      include: {
-        listing_type_translation: {
-          where: { language }
-        }
-      }
-    });
+//     // Get available listing types
+//     const listingTypes = await prisma.listing_type.findMany({
+//       where: {
+//         products: {
+//           some: subcategoryId ? { subcategoryId } : {}
+//         }
+//       },
+//       include: {
+//         listing_type_translation: {
+//           where: { language }
+//         }
+//       }
+//     });
 
-    res.status(200).json({
-      success: true,
-      data: {
-        attributes,
-        priceRange: {
-          min: priceRange._min.price || 0,
-          max: priceRange._max.price || 0
-        },
-        cities,
-        listingTypes
-      }
-    });
+//     res.status(200).json({
+//       success: true,
+//       data: {
+//         attributes,
+//         priceRange: {
+//           min: priceRange._min.price || 0,
+//           max: priceRange._max.price || 0
+//         },
+//         cities,
+//         listingTypes
+//       }
+//     });
 
-  } catch (error) {
-    console.error('Get filters error:', error);
-    next(error);
-  }
-}
+//   } catch (error) {
+//     console.error('Get filters error:', error);
+//     next(error);
+//   }
+// }

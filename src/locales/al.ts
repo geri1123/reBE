@@ -116,5 +116,13 @@ successadded: "Produkti u regjistrua me sukses",
     listingTypeId: "Duhet të zgjedhësh një lloj liste",
     attribute: "Atributi është i nevojshëm",
     attributeValue: "Vlera e atributit është e nevojshme",
-
+    //
+    documentTooLarge:"Dokumenti është shumë i madh",
+    tooManyDocuments:"Janë ngarkuar shumë dokumente",
+      invalidImageType: "Lejohen vetëm skedarë imazhi (jpeg, jpg, png, webp, gif, avif).",
+  imageTooLarge: "Imazhi i ngarkuar është shumë i madh. Madhësia maksimale e lejuar është 5MB.",
+  tooManyImages: "Janë ngarkuar shumë imazhe. Ju lutemi zvogëloni numrin e skedarëve.",
+  noImageUploaded: "Nuk u ngarkua asnjë imazh.",
+  invalidDocumentType:"Lloji i dokumentit i pavlefshëm",
+insufficientPermissions:"Nuk keni leje të mjaftueshme"
 } as const

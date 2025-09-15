@@ -65,18 +65,7 @@ export class Create {
       attributes: attributes.length > 0 ? attributes : undefined,
     });
 
-    // ---- Add images if any ----
-    // if (files && Array.isArray(files)) {
-    //   await Promise.all(
-    //     files.map(file =>
-    //       this.productImagesRepo.addImage({
-    //         imageUrl: file.path.replace(/\\/g, "/"),
-    //         product: { connect: { id: product.id } },
-    //         user: { connect: { id: userId } },
-    //       })
-    //     )
-    //   );
-    // }
+   
 if (files && Array.isArray(files)) {
   await Promise.all(
     files.map(async (file) => {

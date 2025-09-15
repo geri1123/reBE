@@ -19,13 +19,15 @@
 // }
 import { Request, Response, NextFunction } from 'express';
 import { BaseError } from '../errors/BaseError.js';
-
+import { t } from '../utils/i18n.js';
+import { SupportedLang } from '../locales/index.js';
 export default function errorHandler(
   err: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ): Response | void {
+const language: SupportedLang = res.locals.lang;
   if (err instanceof BaseError) {
     return res.status(err.statusCode).json({
       message: err.message,
@@ -35,5 +37,5 @@ export default function errorHandler(
   }
 
   console.error(err);
-  return res.status(500).json({ message: 'Internal server error' });
+  return res.status(500).json({  message: t("internalServerError", language)});
 }

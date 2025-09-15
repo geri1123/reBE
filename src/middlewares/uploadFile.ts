@@ -1,13 +1,14 @@
 import multer, { FileFilterCallback } from 'multer';
 import type { Request } from 'express';
 import path from "path";
+import { InvalidDocumentTypeError, InvalidImageTypeError } from '../errors/ImageErrors.js';
 // File filters (same as your original)
 const imageFilter = (_req: Request, file: Express.Multer.File, cb: FileFilterCallback): void => {
   const allowed = /jpeg|jpg|png|webp|gif|avif/;
   const extOk = allowed.test(path.extname(file.originalname).toLowerCase());
   const mimeOk = allowed.test(file.mimetype);
   if (extOk && mimeOk) cb(null, true);
-  else cb(new Error('Only image files (jpeg, jpg, png, webp, gif, avif) are allowed'));
+  else cb(new InvalidImageTypeError((_req as any).language || "al"));
 };
 
 const documentFilter = (_req: Request, file: Express.Multer.File, cb: FileFilterCallback): void => {
@@ -15,7 +16,7 @@ const documentFilter = (_req: Request, file: Express.Multer.File, cb: FileFilter
   const extOk = allowed.test(path.extname(file.originalname).toLowerCase());
   const mimeOk = allowed.test(file.mimetype);
   if (extOk && mimeOk) cb(null, true);
-  else cb(new Error('Only document files (pdf, doc, docx) are allowed'));
+  else cb(new InvalidDocumentTypeError((_req as any).language || "al"));
 };
 
 // Memory storage for Firebase upload (replaces disk storage)
@@ -72,6 +73,21 @@ export const uploadMultipleProductImages = productImageUpload.array('images', 10
 // Export middleware for documents
 export const uploadSingleDocument = documentUpload.single('document');
 export const uploadMultipleDocuments = documentUpload.array('documents', 5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import multer, { FileFilterCallback, StorageEngine } from 'multer';
 // import path from 'path';
 // import fs from 'fs';
