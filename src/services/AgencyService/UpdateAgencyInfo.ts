@@ -7,7 +7,7 @@ export class updateAgencyInfoService {
 
   async changeAgencyName(agencyId: number, newName: string , language:SupportedLang): Promise<void> {
     if (await this.agencyRepo.agencyNameExist(newName)) {
-     throw new ValidationError({ agencyName: t("agencyNameExists", language) });
+    throw new ValidationError({ agencyName: t("agencyNameExists", language) }, language);
     }
     await this.agencyRepo.updateAgencyFields(agencyId, { agency_name: newName });
   }

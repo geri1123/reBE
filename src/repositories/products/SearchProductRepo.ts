@@ -1,3 +1,4 @@
+// repositories/products/SearchProductRepo.ts
 import { PrismaClient } from "@prisma/client";
 import { SupportedLang } from "../../locales/index.js";
 import { SearchFilters } from "../../types/ProductSearch.js";
@@ -27,6 +28,9 @@ export class SearchProductsRepo {
       }
     }
 
+    console.log("Repository whereConditions:", JSON.stringify(whereConditions, null, 2));
+    console.log("Repository language:", language);
+
     return this.prisma.product.findMany({
       where: whereConditions,
       take: filters.limit,
@@ -47,13 +51,16 @@ export class SearchProductsRepo {
             slug: true, // base slug for filtering
             subcategorytranslation: {
               where: { language },
-              select: { name: true }, // we remove slug
+              select: { name: true },
+              take: 1, // Ensure we get only one result
             },
             category: {
               select: {
+                slug: true, // Add category slug for debugging
                 categorytranslation: {
                   where: { language },
-                  select: { name: true }, // remove slug
+                  select: { name: true },
+                  take: 1, // Ensure we get only one result
                 },
               },
             },
@@ -61,9 +68,11 @@ export class SearchProductsRepo {
         },
         listingType: {
           select: {
+            slug: true, // Add listing type slug for debugging
             listing_type_translation: {
               where: { language },
-              select: { name: true }, // remove slug
+              select: { name: true },
+              take: 1, // Ensure we get only one result
             },
           },
         },
@@ -71,23 +80,27 @@ export class SearchProductsRepo {
           select: {
             attribute: {
               select: {
+                code: true, // Add code for debugging
                 attributeTranslation: {
                   where: { language },
-                  select: { name: true }, // remove slug & code
+                  select: { name: true },
+                  take: 1, 
                 },
               },
             },
             attributeValue: {
               select: {
+                value_code: true, // Add value_code for debugging
                 attributeValueTranslations: {
                   where: { language },
-                  select: { name: true }, // remove slug & value_code
+                  select: { name: true },
+                  take: 1,
                 },
               },
             },
           },
         },
-        agency: { select: { agency_name: true, logo: true } }, // keep agency
+        agency: { select: { agency_name: true, logo: true } },
       },
     });
   }
@@ -100,6 +113,7 @@ export class SearchProductsRepo {
   private buildWhereConditions(filters: SearchFilters) {
     const whereConditions: any = {};
 
+    // Only add subcategory conditions if we have category or subcategory filters
     if (filters.categorySlug || filters.subcategorySlug) {
       whereConditions.subcategory = {};
 
@@ -107,41 +121,74 @@ export class SearchProductsRepo {
         whereConditions.subcategory.slug = filters.subcategorySlug;
       }
 
-      if (filters.categorySlug) {
+      if (filters.categorySlug && !filters.subcategorySlug) {
+        // Only filter by category if no subcategory is specified
         whereConditions.subcategory.category = {
           slug: filters.categorySlug,
         };
       }
     }
 
+    // Price range filter
     if (filters.pricelow !== undefined || filters.pricehigh !== undefined) {
       whereConditions.price = {};
       if (filters.pricelow !== undefined) whereConditions.price.gte = filters.pricelow;
       if (filters.pricehigh !== undefined) whereConditions.price.lte = filters.pricehigh;
     }
 
+    // City filter - more flexible matching
     if (filters.city) {
-      whereConditions.city = { name: { equals: filters.city } };
+      whereConditions.city = { 
+        name: filters.city
+      };
     }
-
+// if (filters.country) {
+//   whereConditions.city = {
+//     country: { code: filters.country } // or name: filters.country
+//   };
+// }
+    // Listing type filter
     if (filters.listingtype) {
       whereConditions.listingType = { slug: filters.listingtype };
     }
 
+    // Attributes filter - improved logic
     if (filters.attributes && Object.keys(filters.attributes).length > 0) {
       const attributeConditions = [];
       for (const [attributeCode, valueCode] of Object.entries(filters.attributes)) {
-        attributeConditions.push({
-          attributes: {
-            some: {
-              attribute: { code: attributeCode },
-              attributeValue: { value_code: valueCode },
-            },
-          },
-        });
+        if (valueCode !== undefined && valueCode !== null && valueCode !== '') {
+          // Handle array of values (e.g., multiple rooms)
+          if (Array.isArray(valueCode)) {
+            attributeConditions.push({
+              attributes: {
+                some: {
+                  attribute: { code: attributeCode },
+                  attributeValue: { 
+                    value_code: { 
+                      in: valueCode.filter(v => v && v.trim() !== '') 
+                    } 
+                  },
+                },
+              },
+            });
+          } else {
+          attributeConditions.push({
+  attributes: {
+    some: {
+      attribute: { code: attributeCode },
+      attributeValue: { value_code: valueCode },
+    },
+  },
+});
+          }
+        }
       }
-      if (attributeConditions.length > 0) whereConditions.AND = attributeConditions;
+      if (attributeConditions.length > 0) {
+        whereConditions.AND = attributeConditions;
+      }
     }
+
+    console.log("Built where conditions:", JSON.stringify(whereConditions, null, 2));
 
     return whereConditions;
   }

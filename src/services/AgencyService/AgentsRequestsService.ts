@@ -34,13 +34,13 @@ export class AgentsRequestsService {
   }> {
     // Validate input parameters
     if (agencyId <= 0) {
-      throw new ValidationError({ agencyId:t("invalidAgencyId" , language)});
+      throw new ValidationError({ agencyId:t("invalidAgencyId" , language)} , language);
     }
     if (limit <= 0 || limit > 100) {
-      throw new ValidationError({ limit:t("invalidLimit" , language) });
+      throw new ValidationError({ limit:t("invalidLimit" , language) } , language);
     }
     if (page <= 0) {
-      throw new ValidationError({ page:t("invalidPage" , language) });
+      throw new ValidationError({ page:t("invalidPage" , language) } , language);
     }
 
     const offset = (page - 1) * limit;
@@ -75,13 +75,13 @@ export class AgentsRequestsService {
     //   throw new ValidationError({ commissionRate: "Commission rate must be between 0 and 100" });
     // }
   if (requestId <= 0) {
-    throw new ValidationError({ requestId: t("invalidRequestId" ,language) });
+    throw new ValidationError({ requestId: t("invalidRequestId" ,language) } , language);
   }
   if (reviewerId <= 0) {
-    throw new ValidationError({ reviewerId: t("invalidReviewerId",language) });
+    throw new ValidationError({ reviewerId: t("invalidReviewerId",language) } , language);
   }
   if (status === "approved" && (commissionRate < 0 || commissionRate > 100)) {
-    throw new ValidationError({ commissionRate: t( "commissionRateInvalid" , language) });
+    throw new ValidationError({ commissionRate: t( "commissionRateInvalid" , language) } , language);
   }
     // Check if request exists before updating
     // const existingRequest = await this.registrationRequestRepo.findById(requestId);
@@ -97,7 +97,7 @@ const existingRequest = await this.registrationRequestRepo.findById(requestId);
      if (existingRequest.status !== "pending") {
     throw new ValidationError({
       status: t( "requestAlreadyProcessed",language).replace("{status}", existingRequest.status),
-    });
+    } , language);
   }
     // Update request status
     const updatedRequest = await this.registrationRequestRepo.updateStatus(
@@ -117,7 +117,7 @@ const existingRequest = await this.registrationRequestRepo.findById(requestId);
   //   throw new ValidationError({ general: "User info missing from request" });
   // }
   if (!fullRequest?.user) {
-    throw new ValidationError({ general: t( "userInfoMissing",language) });
+    throw new ValidationError({ general: t( "userInfoMissing",language) } , language);
   }
 
     // Handle approved requests
@@ -125,7 +125,7 @@ const existingRequest = await this.registrationRequestRepo.findById(requestId);
      
 
       if (!fullRequest.id_card_number) {
-      throw new ValidationError({ id_card_number: t( "idCardRequiredForAgent",language) });
+      throw new ValidationError({ id_card_number: t( "idCardRequiredForAgent",language) } , language);
     }
 
       // Validate required fields
@@ -164,7 +164,7 @@ await welcomeEmail.send();
           'Agent creation failed - request reverted to pending'
         );
         
-      throw new ValidationError({ general: t( "agentCreationFailed",language) });
+      throw new ValidationError({ general: t( "agentCreationFailed",language) } , language);
       }
     } else if (status === "rejected") {
       console.log(`Request ${requestId} has been rejected by reviewer ${reviewerId}`);

@@ -6,6 +6,7 @@ import { uploadMultipleGeneralImages } from "../middlewares/uploadFile.js";
 import { GetProductsBySearch } from "../controllers/product/Get.js";
 // import { getAvailableFilters } from "../controllers/product/Get.js";
 import { multerErrorWrapper } from "../middlewares/multerError.js";
+import { detectLanguage } from "../middlewares/langMiddleware.js";
 import { uploadSingleDocument } from "../middlewares/uploadFile.js";
 import { multerDocumentErrorWrapper } from "../middlewares/documentError.js";
 const router=express.Router();
@@ -26,13 +27,7 @@ router.get('/search', GetProductsBySearch);
 router.get('/search/:category', GetProductsBySearch);
 
 // 3. Category + subcategory
-router.get('/search/:category/:subcategory', GetProductsBySearch);
+router.get('/search/:category/:subcategory',GetProductsBySearch);
 
-// GET /filters/:category - Get available filters for category
-// Example: /filters/property
-// router.get('/filters/:category', getAvailableFilters);
 
-// // GET /filters/:category/:subcategory - Get available filters for subcategory
-// // Example: /filters/property/home
-// router.get('/filters/:category/:subcategory', getAvailableFilters);
 export default router;
