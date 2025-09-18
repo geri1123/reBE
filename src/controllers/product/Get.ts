@@ -28,21 +28,21 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
       ...attributeFilters
     } = req.query;
 
-    // ✅ Fixed limit in backend
+    
     const FIXED_LIMIT = 12;
 
     // Parse page and calculate offset
     const pageValue = Math.max(1, parseInt(page as string, 10) || 1);
     const offsetValue = (pageValue - 1) * FIXED_LIMIT;
 
-    console.log("🎯 Controller Debug:", {
-      categorySlug,
-      subcategorySlug,
-      page: pageValue,
-      limit: FIXED_LIMIT,
-      offset: offsetValue,
-      queryParams: req.query
-    });
+    // console.log("🎯 Controller Debug:", {
+    //   categorySlug,
+    //   subcategorySlug,
+    //   page: pageValue,
+    //   limit: FIXED_LIMIT,
+    //   offset: offsetValue,
+    //   queryParams: req.query
+    // });
 
     const filters: SearchFilters = {
       categorySlug,
@@ -53,7 +53,7 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
       listingtype: listingtype ? (listingtype as string) : undefined,
       attributes: attributeFilters as Record<string, string>,
       sortBy: sortBy ? (sortBy as 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc') : undefined,
-      limit: FIXED_LIMIT,   // <-- fixed limit
+      limit: FIXED_LIMIT,   
       offset: offsetValue,
     };
 
