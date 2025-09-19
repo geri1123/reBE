@@ -6,7 +6,7 @@ export const uploadFileToFirebase = async (
 ): Promise<string> => {
   if (!file) throw new Error("No file provided");
 
-  // Replace spaces with underscores
+  
   const sanitizedFileName = file.originalname.replace(/\s+/g, "_");
 
   const fileName = `${folder}/${Date.now()}_${sanitizedFileName}`;
@@ -14,7 +14,7 @@ export const uploadFileToFirebase = async (
 
   await fileUpload.save(file.buffer, {
     contentType: file.mimetype,
-    public: true, // optional
+    public: true, //optional
   });
 
 

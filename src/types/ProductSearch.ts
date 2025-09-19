@@ -6,7 +6,7 @@ export interface SearchFilters {
   city?: string;
   listingtype?: string;
   attributes?: Record<string, string>;
-  sortBy?: 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc'; // add whatever you need
+  sortBy?: 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc';
   limit?: number;
   offset?: number;
 }
@@ -20,7 +20,7 @@ export type ProductWithRelations = {
   updatedAt: Date;
   image: { imageUrl: string | null }[];
   city: { name: string };
-  subcategory: any; // you can make this more precise
+  subcategory: any; 
   listingType: any;
   attributes: any[];
   user: { username: string; first_name?: string; last_name?: string };

@@ -39,16 +39,16 @@ export class PasswordService extends BaseUserService {
 
     const validCurrent = await this.isCurrentPasswordValid(currentPassword, storedPassword);
     if (!validCurrent) {
-      throw new ValidationError({ password: t("currentPasswordIncorrect", language) });
+      throw new ValidationError({ password: t("currentPasswordIncorrect", language) } , language);
     }
 
     const samePassword = await this.isNewPasswordSameAsCurrent(newPassword, storedPassword);
     if (samePassword) {
-      throw new ValidationError({ password: t("passwordSameAsCurrent", language) });
+      throw new ValidationError({ password: t("passwordSameAsCurrent", language) },language);
     }
 
     const hashedNewPassword = await this.hashNewPassword(newPassword);
-    await this.userRepo.updateFieldsById(userId, { password: hashedNewPassword });
+    await this.userRepo.updateFieldsById(userId, { password: hashedNewPassword },);
 
     // Fetch full user to send email
     const user = await this.userRepo.findById(userId);

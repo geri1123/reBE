@@ -20,7 +20,7 @@ export class UsernameService extends BaseUserService {
   async changeUsername(userId: number, newUsername: string ,language:SupportedLang): Promise<void> {
     const usernameTaken = await this.userRepo.usernameExists(newUsername);
     if (usernameTaken) {
-   throw new ValidationError({ message: t("usernameExists", language) });
+   throw new ValidationError({ message: t("usernameExists", language) } ,language);
 }
 
     const currentUsername = await this.userRepo.getUsernameById(userId);

@@ -1,84 +1,94 @@
-# RealEstate Backend API
+# 🏠 RealEstate Backend API
 
-A RESTful backend API for a real estate platform supporting user registration, role-based access (users, agents, agency owners), profile management (including profile images), secure authentication, and file uploads. Built with Node.js, Express, TypeScript, and MySQL.
+A **RESTful + real-time backend API** for a real estate platform supporting user management, property listings, role-based access (users, agents, agency owners), secure authentication, email verification, password recovery, profile images, property media uploads to **Firebase**, **real-time notifications with Socket.IO**, and **caching for better performance**.  
 
----
-
-## Features
-
-- User registration and login with email verification
-- Role-based access control: users, agents, agency owners
-- Profile image upload and management (local storage or AWS S3)
-- Update profile info: about me, phone, website, username, password
-- File upload support for images and documents with validation
-- Secure JWT authentication and token verification middleware
-- Agent and agency management with approval and rejection workflows
-- Email notifications for verification, approval, rejection, and password changes
-- Custom error handling with clear, consistent responses
+Built with **Node.js, Express, TypeScript, Prisma, MySQL, Firebase, and Socket.IO**.  
 
 ---
 
-## Technologies Used
+## 🚀 Features
 
-- Node.js & Express.js
-- TypeScript
-- MySQL with Prisma ORM
-- Multer for file uploads (local and AWS S3 options)
-- AWS SDK (optional for S3 storage)
-- JSON Web Tokens (JWT) for authentication
-- dotenv for environment variable management
+- 🔐 **Authentication & Security**
+  - User registration and login with **email verification**
+  - **JWT-based authentication** with token middleware
+  - Password recovery (send reset email + reset password)
+  - Role-based access: **Users, Agents, Agency Owners**
 
+- 👤 **User Profiles**
+  - Upload and manage **profile images** (stored in Firebase)
+  - Update profile info: about me, phone, website, username, password
+
+- 🏘 **Properties**
+  - Agents and agency owners can add/manage properties
+  - Upload property **photos & documents** directly to Firebase
+  - Property approval/rejection workflows
+
+- 📩 **Real-time Notifications**
+  - **Socket.IO integration** for property updates, approvals, and system notifications
+
+- ⚡ **Performance & Caching**
+  - Category data cached for faster responses
+  - File validation for images and documents
+
+- 📧 **Email Support**
+  - Email verification on signup
+  - Notifications for approvals, rejections, and password changes
+  - Password reset workflow
+
+- 🛠 **Error Handling**
+  - Centralized custom error handling with consistent JSON responses
+
+---
+
+## 🛠️ Technologies Used
+
+- **Backend**: Node.js, Express.js, TypeScript  
+- **Database**: MySQL + Prisma ORM  
+- **Authentication**: JWT  
+- **File Storage**: Firebase Storage (replaces AWS S3)  
+- **Real-time**: Socket.IO  
+- **Uploads**: Multer (validation + upload to Firebase)  
+- **Email**: Nodemailer (with Gmail or SMTP service)  
+- **Caching**: In-memory caching for categories  
+- **Environment Management**: dotenv  
+
+---
 
 ## 🌱 Environment Variables
 
-Before running the project, create a `.env` file in the root directory. You can copy `.env.example` as a starting point:
+Create a `.env` file in the root directory.  
 
 ```bash
-cp .env.example .env
-
-# Database configuration
+# Database
 DB_HOST=localhost
-DB_USER=db_user
-DB_PASSWORD=db_password
-DB_NAME=your_db_name
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=re_db
 DB_PORT=3306
+DATABASE_URL="mysql://root:your_password@localhost:3306/re_db"
 
-# Full DATABASE_URL (used by Prisma or other ORMs)
-DATABASE_URL="mysql://db_user:db_password@localhost:3306/your_db_name"
+# CORS
+CORS_ORIGIN=http://localhost:3000,http://192.168.0.104:3000
 
-# Allowed frontend origins for CORS (comma-separated)
-CORS_ORIGIN=http://localhost:3000,http://127.0.0.1:3000
-
-# Base URL of your frontend client (used in email links, redirects, etc.)
+# Client
 CLIENT_BASE_URL=http://localhost:3000
 
-# Email configuration for sending emails
+# Email
 EMAIL_USER=your_email@example.com
 EMAIL_PASS=your_app_password
 EMAIL_SERVICE=gmail
 
-# JWT secret for authentication
+# JWT
 JWT_SECRET=your_jwt_secret_key
 
-# Express server port
+# Server
 PORT=8080
-
-
-
-# Node environment (can be development, production, or test)
 NODE_ENV=development
-git clone https://github.com/geri1123/backendRE
-cd your-repo
 
-# Install dependencies
-npm install
-
-# Create your .env file
-cp .env.example .env
-
-# Build the project (for production or when using TypeScript)
-npm run build
-
-
-# OR in development mode
-npm run dev
+# Firebase
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_PRIVATE_KEY_ID=your_private_key_id
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+FIREBASE_CLIENT_EMAIL=your_service_account_email
+FIREBASE_CLIENT_ID=your_client_id
+FIREBASE_STORAGE_BUCKET=your_bucket_name

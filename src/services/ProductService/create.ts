@@ -72,7 +72,7 @@ if (files && Array.isArray(files)) {
       const imageUrl = await uploadFileToFirebase(file, "product_images");
 
       await this.productImagesRepo.addImage({
-        imageUrl, // <-- this is the Firebase URL
+        imageUrl, 
         product: { connect: { id: product.id } },
         user: { connect: { id: userId } },
       });
