@@ -27,6 +27,7 @@ export class Create {
       cityId: number;
       subcategoryId: number;
       listingTypeId: number;
+   area: number | null;
     };
     attributesData?: { attributeId: number; attributeValueId: number }[];
     files?: Express.Multer.File[];

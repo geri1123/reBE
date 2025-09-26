@@ -10,11 +10,13 @@ import { t } from "../../utils/i18n.js";
 
 import { handleZodError } from "../../validators/zodErrorFormated.js";
 import { createProductSchema } from "../../validators/product/CreateProductSchema.js";
+
 const productsRepo = new ProductsRepository(prisma);
 const productImagesRepo = new ProductImagesRepository(prisma);
 const attributeRepo = new AttributeRepo(prisma);
 
 const createService = new Create(productsRepo, productImagesRepo, attributeRepo);
+
 export async function CreateProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = req.userId;
@@ -23,20 +25,13 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
 
     if (!userId) throw new UnauthorizedError(t("userNotAuthenticated", language));
 
-    // ---- Parse attributes if they are sent as a string ----
     let bodyData: any = { ...req.body };
     if (bodyData.attributes && typeof bodyData.attributes === "string") {
       bodyData.attributes = JSON.parse(bodyData.attributes);
     }
 
-    // ---- Zod validation ----
-    const parsedData = createProductSchema(language).parse({
-      ...bodyData,
-      price: parseFloat(bodyData.price),
-      cityId: parseInt(bodyData.cityId),
-      subcategoryId: parseInt(bodyData.subcategoryId),
-      listingTypeId: parseInt(bodyData.listingTypeId),
-    });
+    // ---- Zod validation ---- (Remove manual parsing, let schema handle it)
+    const parsedData = createProductSchema(language).parse(bodyData);
 
     // ---- Call service ----
     const product = await createService.execute({
@@ -50,6 +45,7 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
         cityId: parsedData.cityId,
         subcategoryId: parsedData.subcategoryId,
         listingTypeId: parsedData.listingTypeId,
+      area: parsedData.area ?? 0,
       },
       attributesData: parsedData.attributes,
       files: req.files as Express.Multer.File[],
@@ -58,10 +54,12 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
     // ---- Fetch product with relations ----
     const productWithDetails = await productsRepo.getProductWithRelations(product.id, language);
 
-    res.status(201).json({ success: true,  message: t("successadded", language),product: productWithDetails });
+    res.status(201).json({ 
+      success: true, 
+      message: t("successadded", language), 
+      product: productWithDetails 
+    });
   } catch (err) {
-    
-    
-     handleZodError(err, next, res.locals.lang);
+    handleZodError(err, next, res.locals.lang);
   }
 }

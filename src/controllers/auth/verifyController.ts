@@ -47,17 +47,4 @@ export async function resendVerificationEmail(
     next(error);
   }
 }
-// export async function resendVerificationEmail(req: Request, res: Response, next: NextFunction) {
-//   const language: SupportedLang = res.locals.lang;
-//   try {
-//     const { email } = req.body;
-//     await emailVerificationService.resend(email , language);
-
-//     res.status(200).json({
-//       success: true,
-//        message: t("verificationEmailResent" , language),
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
 

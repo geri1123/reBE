@@ -27,7 +27,7 @@ async updateAgencyLogo(
     console.warn("Faild to delete old image")
   }
  }
-  // Remove old logo if it exists
+  // Remove old logo
  const newLogoPath=await uploadFileToFirebase(file  , 'agency_logo')
   await this.agencyRepo.updateAgencyFields(agencyId, { logo: newLogoPath });
 

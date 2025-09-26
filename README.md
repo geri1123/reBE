@@ -92,3 +92,100 @@ FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY----
 FIREBASE_CLIENT_EMAIL=your_service_account_email
 FIREBASE_CLIENT_ID=your_client_id
 FIREBASE_STORAGE_BUCKET=your_bucket_name
+
+
+
+📦 Installation & Setup
+
+# Clone repo
+git clone https://github.com/geri1123/backendRE
+cd reBE
+
+# Install dependencies
+npm install
+
+# Copy environment variables
+cp .env.example .env
+
+# Build project (for production)
+npm run build
+
+# Run in development
+npm run dev
+
+
+# 📌 API Routes Documentation
+## 🔑 Auth Routes (`/api/auth`)
+| Method | Endpoint                 | Description |
+|--------|---------------------------|-------------|
+| POST   | `/register`              | Register a new user |
+| POST   | `/login`                 | Login with email & password (rate-limited) |
+| GET    | `/verify-email`          | Verify user email using token |
+| POST   | `/resend-verification`   | Resend email verification link |
+| POST   | `/recover-password`      | Request password recovery link |
+| POST   | `/reset-password`        | Reset password using recovery token |
+
+---
+
+## 👤 User Routes (`/profile`)
+| Method | Endpoint                  | Description |
+|--------|----------------------------|-------------|
+| PATCH  | `/update-profileImg`      | Update profile picture |
+| PATCH  | `/update-username`        | Change username |
+| PATCH  | `/update-password`        | Change password |
+| PATCH  | `/update-me`              | Update profile fields |
+| GET    | `/userInfo`               | Get logged-in user info |
+
+---
+
+## 🏢 Agency Routes (`/agencyapi`)
+| Method | Endpoint                     | Description |
+|--------|-------------------------------|-------------|
+| PATCH  | `/updateAgencyFields`        | Update agency details |
+| GET    | `/getAgentsRequest`          | Get pending agent requests |
+| PATCH  | `/agent-request/respond`     | Respond to agent request |
+| PATCH  | `/update-logo`               | Update agency logo |
+
+---
+
+## 🔔 Notification Routes (`/api/notification`)
+| Method | Endpoint                   | Description |
+|--------|-----------------------------|-------------|
+| GET    | `/getNotifications`        | Get all notifications for logged-in user |
+| PATCH  | `/markAsRead/:id`          | Mark notification as read |
+
+---
+
+## 🗂 Category Routes (`/apiCat`)
+| Method | Endpoint                     | Description |
+|--------|-------------------------------|-------------|
+| GET    | `/filter`                    | Get available filters |
+| GET    | `/attributes/:subcategoryId` | Get attributes by subcategory |
+| GET    | `/attributes/:language/:subcategoryId` | Get attributes (localized) |
+
+---
+
+## 📋 Listing Type Routes (`/apiLT`)
+| Method | Endpoint          | Description |
+|--------|-------------------|-------------|
+| GET    | `/listingTypes`   | Get all listing types |
+| GET    | `/countries`      | Get list of countries |
+| GET    | `/cities/:code`   | Get cities by country code |
+
+---
+
+## 🛍 Product Routes (`/product`)
+| Method | Endpoint                          | Description |
+|--------|------------------------------------|-------------|
+| POST   | `/addProduct`                     | Add new product (with images) |
+| GET    | `/search`                         | Search products |
+| GET    | `/search/:category`               | Search products by category |
+| GET    | `/search/:category/:subcategory`  | Search products by category + subcategory |
+
+---
+
+## 🩺 Health Check
+| Method | Endpoint      | Description |
+|--------|---------------|-------------|
+| GET    | `/`           | Root health info |
+| GET    | `/health`     | Health check with uptime & timestamp |

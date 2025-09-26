@@ -6,6 +6,7 @@ export interface CreateProduct {
   streetAddress?:string;
   subcategoryId: number;
   listingTypeId: number;
+    area: number | null;
   attributes?: Array<{
     attributeId: number;
     attributeValueId: number; 

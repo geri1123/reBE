@@ -49,7 +49,7 @@ export class SearchProductsRepo {
         city: { select: { name: true } },
         subcategory: {
           select: {
-            slug: true, // base slug for reference
+            slug: true, 
             subcategorytranslation: {
               where: { language },
               select: { name: true },
@@ -57,7 +57,7 @@ export class SearchProductsRepo {
             },
             category: {
               select: {
-                slug: true, // base slug for reference
+                slug: true, 
                 categorytranslation: {
                   where: { language },
                   select: { name: true },
@@ -69,7 +69,7 @@ export class SearchProductsRepo {
         },
         listingType: {
           select: {
-            slug: true, // base slug for reference
+            slug: true, 
             listing_type_translation: {
               where: { language },
               select: { name: true },
@@ -81,7 +81,7 @@ export class SearchProductsRepo {
           select: {
             attribute: {
               select: {
-                code: true, // base code for reference
+                code: true,
                 attributeTranslation: {
                   where: { language },
                   select: { name: true },
@@ -91,7 +91,7 @@ export class SearchProductsRepo {
             },
             attributeValue: {
               select: {
-                value_code: true, // base value_code for reference
+                value_code: true, 
                 attributeValueTranslations: {
                   where: { language },
                   select: { name: true },
@@ -114,10 +114,7 @@ export class SearchProductsRepo {
   private buildWhereConditions(filters: SearchFilters, language: SupportedLang) {
     const whereConditions: any = {};
 
-    /**
-     * CATEGORY + SUBCATEGORY
-     * Search by translation slugs (categorytranslation.slug and subcategorytranslation.slug)
-     */
+  
     if (filters.categorySlug || filters.subcategorySlug) {
       whereConditions.subcategory = {};
       
@@ -144,10 +141,7 @@ export class SearchProductsRepo {
       }
     }
 
-    /**
-     * LISTING TYPE
-     * Search by listing type translation slug (listing_type_translation.slug)
-     */
+   
     if (filters.listingtype) {
       whereConditions.listingType = {
         listing_type_translation: {
@@ -180,7 +174,7 @@ export class SearchProductsRepo {
                 attributeValueTranslations: {
                   some: { 
                     language, 
-                    slug: { in: valuesArray } // ✅ Search by attribute_value_translation.slug
+                    slug: { in: valuesArray } 
                   },
                 },
               },

@@ -35,12 +35,12 @@ export async function ResetPassword(req: Request, res: Response, next: NextFunct
       }));
       
       return res.status(400).json({ 
-        message: "Validation failed", // Use a simple string or find the correct key
+        message: "Validation failed", 
         errors: formattedErrors 
       });
     }
 
-    // Handle service errors
+   
     if (error instanceof Error) {
       if (error.message === "INVALID_TOKEN") {
         return res.status(400).json({ 
@@ -70,7 +70,7 @@ export async function ResetPassword(req: Request, res: Response, next: NextFunct
       }
     }
 
-    // Fallback to default error handler
+    
   return next(new InternalServerError(language));
   }
 }

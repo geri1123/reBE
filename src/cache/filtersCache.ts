@@ -6,10 +6,10 @@ export type CacheEntry<T = any> = {
 // Cache store type
 type CacheStore = Record<string, CacheEntry>;
 
-// In-memory store
+// memory store
 const cache: CacheStore = {};
 
-// --- Categories cache (20 min TTL) ---
+//Categories cache (20 min TTL) 
 const CATEGORY_TTL = 20 * 60 * 1000;
 
 export function getCategoriesFromCache(lang: string) {
@@ -32,7 +32,7 @@ export function setCategoriesCache(lang: string, data: any) {
   };
 }
 
-// --- Listing types cache (forever) ---
+// Listing types cache (forever)
 export function getListingTypesFromCache(lang: string) {
   return cache[`listingTypes:${lang}`]?.data || null;
 }
@@ -43,11 +43,11 @@ export function setListingTypesCache(lang: string, data: any) {
   };
 }
 
-// Optional: cleanup expired entries periodically
+
 let cleanupInterval: ReturnType<typeof setInterval> | null = null;
 
 export function startCacheCleanup(interval = 5 * 60 * 1000) {
-  if (cleanupInterval) return; // already running
+  if (cleanupInterval) return; 
   cleanupInterval = setInterval(() => {
     const now = Date.now();
     Object.keys(cache).forEach((key) => {
@@ -62,46 +62,3 @@ export function stopCacheCleanup() {
   if (cleanupInterval) clearInterval(cleanupInterval);
   cleanupInterval = null;
 }
-
-// type CacheEntry = {
-//   data: any;
-//   expiresAt?: number; // optional: only for TTL caches
-// };
-
-// type CacheStore = Record<string, CacheEntry>;
-// const cache: CacheStore = {};
-
-// // --- Categories cache (20 min TTL) ---
-// const CATEGORY_TTL = 20 * 60 * 1000;
-
-// export function getCategoriesFromCache(lang: string) {
-//   const entry = cache[`categories:${lang}`];
-//   if (!entry) return null;
-
-//   // Check TTL
-//   if (entry.expiresAt && Date.now() > entry.expiresAt) {
-//     delete cache[`categories:${lang}`];
-//     return null;
-//   }
-
-//   return entry.data;
-// }
-
-// export function setCategoriesCache(lang: string, data: any) {
-//   cache[`categories:${lang}`] = {
-//     data,
-//     expiresAt: Date.now() + CATEGORY_TTL,
-//   };
-// }
-
-// // --- Listing types cache (forever) ---
-// export function getListingTypesFromCache(lang: string) {
-//   return cache[`listingTypes:${lang}`]?.data || null;
-// }
-
-// export function setListingTypesCache(lang: string, data: any) {
-//   cache[`listingTypes:${lang}`] = {
-//     data,
-//     // no expiresAt → cached “forever”
-//   };
-// }

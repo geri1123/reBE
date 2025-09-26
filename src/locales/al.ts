@@ -111,6 +111,7 @@ successadded: "Produkti u regjistrua me sukses",
  title: "Duhet të shkruash një titull",
     price: "Duhet të shkruash një çmim",
     pricePositive: "Çmimi duhet të jetë më i madh se 0",
+    
     cityId: "Duhet të zgjedhësh një qytet",
     subcategoryId: "Duhet të zgjedhësh një nënkategori",
     listingTypeId: "Duhet të zgjedhësh një lloj liste",

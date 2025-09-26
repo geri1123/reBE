@@ -25,7 +25,7 @@ export class EmailVerificationService {
 
   async verify(token: string , language: SupportedLang): Promise<void> {
     if (!token) {
-     throw new ValidationError({ token: t("tokenRequired", language) });
+     throw new ValidationError({ token: t("tokenRequired", language) } , language);
     }
 
     const user = await this.userRepo.findByVerificationToken(token);
@@ -119,7 +119,7 @@ const agentIdentifier = user.username ?? user.email;
   
   async resend(identifier: string, language: SupportedLang): Promise<void> {
   if (!identifier) {
-    throw new ValidationError({ identifier: t("identifierRequired", language) });
+    throw new ValidationError({ identifier: t("identifierRequired", language) } , language);
   }
 
   const user = await this.userRepo.findByIdentifier(identifier);
@@ -129,7 +129,7 @@ const agentIdentifier = user.username ?? user.email;
   }
 
   if (user.email_verified) {
-    throw new ValidationError({ email: t("emailAlreadyVerified", language) });
+    throw new ValidationError({ email: t("emailAlreadyVerified", language) } , language);
   }
 
   // Generate new verification token

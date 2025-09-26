@@ -1,106 +1,55 @@
-
-export type UserStatus = 'active' | 'inactive' | 'pending' | 'suspended';
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  first_name?: string;
-  last_name?: string;
-  about_me?: string;
-  profile_img?: string;
-  phone?: string;
-  website?: string;
-  role: 'user' | 'agency_owner' | 'agent';
-  status: UserStatus;
-  email_verified: boolean;
-  last_login?: Date;
-  last_active?: Date;
-  created_at: Date;
-  updated_at: Date;
-  verification_token?: string;
-  verification_token_expires?: Date;
-}
-
-export interface Agency {
-  id: number;
-  agency_name: string;
-  public_code?: string;
-  logo?: string;
-  license_number: string;
-  agency_email?: string;
-  phone?: string;
-  address?: string;
-  website?: string;
-  status: 'active' | 'inactive' | 'suspended';
-  owner_user_id: number;
-}
-
-export interface RegistrationRequest {
-  id: number;
-  user_id: number;
-  request_type: 'agent_license_verification';
-  id_card_number?: string;
-  agency_name?: string;
-  supporting_documents?: any;
-  status: 'pending' | 'approved' | 'rejected';
-  reviewed_by?: number;
-  review_notes?: string;
-  created_at: Date;
-  updated_at: Date;
-  agency_id?: number;
-}
-
-// Base registration interface
+// types/auth.ts
 export interface BaseRegistration {
   username: string;
   email: string;
   password: string;
-  repeatPassword?: string;
   first_name: string;
   last_name: string;
-  phone?: string;
-  about_me?: string;
-  website?: string;
-  // terms_accepted: boolean;
 }
 
-// User registration (simple user)
 export interface UserRegistration extends BaseRegistration {
   role: 'user';
+  terms_accepted: true;
+  repeatPassword: string;
 }
 
-// Agency owner registration
 export interface AgencyOwnerRegistration extends BaseRegistration {
   role: 'agency_owner';
+  terms_accepted: true;
+  repeatPassword: string;
   agency_name: string;
   license_number: string;
-  agency_email?: string;
   address: string;
-  agency_website?: string;
 }
-// Agent registration
+
 export interface AgentRegistration extends BaseRegistration {
   role: 'agent';
-  agency_name?:string;
-  requested_role:'agent' | 'senior_agent' | 'team_lead';
+  terms_accepted: true;
+  repeatPassword: string;
   public_code: string;
   id_card_number: string;
+  requested_role: 'agent' | 'senior_agent' | 'team_lead';
 }
 
+// Union type for the registration data that comes from Zod validation
 export type RegistrationData = UserRegistration | AgencyOwnerRegistration | AgentRegistration;
 
-export interface AuthResponse {
-  id: number;
+// Type for the raw input data (before validation)
+export interface RegistrationInput {
   username: string;
   email: string;
-  role: string;
-  status: string;
-  message: string;
-  emailSent: boolean;
-  requiresApproval?: boolean;
-}
-export interface LoginRequest {
-  identifier: string;
   password: string;
+  repeatPassword: string;
+  first_name: string;
+  last_name: string;
+  terms_accepted: boolean;
+  role: 'user' | 'agency_owner' | 'agent';
+  
+  // Optional fields for different roles
+  agency_name?: string;
+  license_number?: string;
+  address?: string;
+  public_code?: string;
+  id_card_number?: string;
+  requested_role?: 'agent' | 'senior_agent' | 'team_lead';
 }

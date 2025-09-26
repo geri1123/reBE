@@ -116,6 +116,9 @@ agencyNameExists:"Agency name already exists.",
     listingTypeId: "You must select a listing type",
     attribute: "Attribute is required",
     attributeValue: "Attribute value is required",
+    errorCity:"You must select a city",
+  
+
     //
     documentTooLarge:"Document is too large",
     tooManyDocuments:"Too many documents uploaded",

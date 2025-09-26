@@ -26,6 +26,7 @@ export class ProductsRepository implements IProductRepository {
         listingTypeId: data.listingTypeId,
         userId: data.userId,
         agencyId: data.agencyId,
+        area:data.area,
       },
     });
 

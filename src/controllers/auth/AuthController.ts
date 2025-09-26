@@ -33,7 +33,7 @@ export async function register(
       userId,
     });
   } catch (err) {
-  handleZodError(err, next, res.locals.lang);
+  handleZodError(err, next, language);
   }
 }
 
@@ -53,8 +53,10 @@ export async function loginUser(
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      // secure: false,
+       secure: true, 
+      // sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite:"none",
       maxAge,
       path: '/',
     });

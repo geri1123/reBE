@@ -8,7 +8,7 @@ export function handleZodError(err: unknown, next: any, lang: SupportedLang) {
 
     for (const issue of err.issues) {
       const field = issue.path.join(".");
-      formatted[field] = issue.message; // keep original zod message
+      formatted[field] = issue.message; 
     }
 
     return next(new ValidationError(formatted, lang));
@@ -16,6 +16,25 @@ export function handleZodError(err: unknown, next: any, lang: SupportedLang) {
 
   return next(err);
 }
+
+// import { ZodError } from "zod";
+// import { ValidationError } from "../errors/BaseError.js";
+// import { SupportedLang } from "../locales/index.js";
+
+// export function handleZodError(err: unknown, next: any, lang: SupportedLang) {
+//   if (err instanceof ZodError) {
+//     const formatted: Record<string, string> = {};
+
+//     for (const issue of err.issues) {
+//       const field = issue.path.join(".");
+//       formatted[field] = issue.message; // keep original zod message
+//     }
+
+//     return next(new ValidationError(formatted, lang));
+//   }
+
+//   return next(err);
+// }
 
 
 // import { ZodError } from "zod";

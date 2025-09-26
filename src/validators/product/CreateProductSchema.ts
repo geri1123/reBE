@@ -11,10 +11,27 @@ export const createProductSchema = (language: SupportedLang) =>
     price: z.preprocess(val => Number(val), 
       z.number(t("price", language)).refine(v => v > 0, t("pricePositive", language))
     ),
-    cityId: z.preprocess(val => Number(val), z.number(t("cityId", language))),
+cityId: z.preprocess(
+      val => {
+        if (val === "" || val === null || val === undefined) return NaN;
+        return Number(val);
+      },
+      z.number({ message: t("cityId", language) }).refine(
+        val => !isNaN(val) && val > 0,
+        { message: t("cityId", language) }
+      )
+    ),
     subcategoryId: z.preprocess(val => Number(val), z.number(t("subcategoryId", language))),
     listingTypeId: z.preprocess(val => Number(val), z.number(t("listingTypeId", language))),
     description: z.string().optional(),
+    area: z.preprocess(
+  val => {
+    if (val === "" || val === undefined || val === null) return null; // handle empty input
+    const num = Number(val);
+    return isNaN(num) ? null : num;
+  },
+  z.number().nullable()
+),
     streetAddress: z.string().optional(),
   attributes: z.preprocess((val) => {
   if (!val) return undefined;            
