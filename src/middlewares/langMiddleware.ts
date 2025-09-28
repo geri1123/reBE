@@ -10,5 +10,6 @@ export function detectLanguage(req: Request, res: Response, next: NextFunction) 
 
   setLang(lang);
   res.locals.lang = lang;
+  (req as any).language = lang; 
   next();
 }

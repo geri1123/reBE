@@ -28,7 +28,8 @@ export class Create {
       subcategoryId: number;
       listingTypeId: number;
    area: number | null;
-    };
+    buildYear: number | null;
+      };
     attributesData?: { attributeId: number; attributeValueId: number }[];
     files?: Express.Multer.File[];
   }) {

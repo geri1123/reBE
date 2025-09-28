@@ -16,6 +16,7 @@ export async function updateProfileImage(
   next: NextFunction
 ): Promise<void> {
   const language: SupportedLang = res.locals.lang;
+   
 
   if (!req.userId) {
     throw new UnauthorizedError(t('userNotAuthenticated', language));

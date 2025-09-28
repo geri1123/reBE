@@ -24,6 +24,7 @@ export async function register(
   next: NextFunction
 ): Promise<void> {
     const language: SupportedLang = res.locals.lang;
+    //  const language = req.language || "al" as SupportedLang;
   try {
       const validatedBody = await registrationSchema(language).parseAsync(req.body);
     const userId = await authService.registerUserByRole(validatedBody ,language);

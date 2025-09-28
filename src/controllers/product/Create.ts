@@ -7,7 +7,7 @@ import { Create } from "../../services/ProductService/create.js";
 import { UnauthorizedError } from "../../errors/BaseError.js";
 import { SupportedLang } from "../../locales/index.js";
 import { t } from "../../utils/i18n.js";
-
+import { CreateProductInput } from "../../types/CreateProduct.js";
 import { handleZodError } from "../../validators/zodErrorFormated.js";
 import { createProductSchema } from "../../validators/product/CreateProductSchema.js";
 
@@ -16,6 +16,7 @@ const productImagesRepo = new ProductImagesRepository(prisma);
 const attributeRepo = new AttributeRepo(prisma);
 
 const createService = new Create(productsRepo, productImagesRepo, attributeRepo);
+
 
 export async function CreateProduct(req: Request, res: Response, next: NextFunction) {
   try {
@@ -41,6 +42,7 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
         title: parsedData.title,
         price: parsedData.price,
         description: parsedData.description ?? "",
+        buildYear: parsedData.buildYear ?? null,
         streetAddress: parsedData.streetAddress ?? "",
         cityId: parsedData.cityId,
         subcategoryId: parsedData.subcategoryId,

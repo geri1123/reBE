@@ -281,7 +281,7 @@ model Product {
   
   title        String
   price        Float
-
+ buildYear    Int?
     description  String?       @db.Text
      streetAddress  String? 
     area        Int?
@@ -294,7 +294,7 @@ model Product {
   user         user          @relation(fields: [userId], references: [id])
   subcategoryId Int
   subcategory   subcategory   @relation(fields: [subcategoryId], references: [id])
- 
+
   listingTypeId Int
   listingType   listing_type  @relation(fields: [listingTypeId], references: [id])
  createdAt              DateTime                 @default(now())

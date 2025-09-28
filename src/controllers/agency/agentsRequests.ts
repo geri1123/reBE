@@ -11,6 +11,7 @@ import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPris
 import { prisma } from "../../config/prisma.js";
 import { SupportedLang } from "../../locales/index.js";
 import { t } from "../../utils/i18n.js";
+import { TranslatedError } from "../../errors/TranslatedError.js";
 const registrationRequestRepo = new RegistrationRequestRepository(prisma);
 const agentRepo = new AgentsRepository(prisma);
 const userRepo = new UserRepositoryPrisma(prisma);
@@ -24,7 +25,7 @@ export class AgentRequestController {
       const userId = req.userId;
       const agencyId = req.agencyId;
 
-      if (!userId) throw new UnauthorizedError(t('userNotFound' , language));
+      if (!userId) throw new TranslatedError('userNotFound' , language);
       if (!agencyId) throw new ForbiddenError(t('agencyNotFound' , language));
 
       const page = parseInt(req.query.page as string) || 1;

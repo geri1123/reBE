@@ -3,6 +3,7 @@ export const it = {
      userNotAuthenticated: "Utente non autenticato",
     notificationMarkedRead: "Notifica contrassegnata come letta",
      internalServerError: "Si è verificato un errore imprevisto",
+        noTokenProvided: "Nessun token fornito",
      tooManyLoginAttempts: "Troppi tentativi di accesso da questo IP, riprova tra 15 minuti.",
     //login,registration
       registrationSuccess: "Registrazione completata. Si prega di verificare la tua email.",
@@ -113,6 +114,10 @@ successadded: "Prodotto registrato con successo",
     listingTypeId: "Devi selezionare un tipo di annuncio",
     attribute: "L'attributo è richiesto",
     attributeValue: "Il valore dell'attributo è richiesto",
+    buildYear: "L'anno di costruzione deve essere un numero",
+    buildYearInt: "L'anno di costruzione deve essere un numero intero",
+    buildYearMin: "L'anno di costruzione non può essere prima del 1900",
+    buildYearMax: "L'anno di costruzione non può essere nel futuro",
  //
  documentTooLarge:"Il documento è troppo grande",
     tooManyDocuments:"Troppi documenti caricati",

@@ -4,6 +4,8 @@ export interface SearchFilters {
   pricelow?: number;
   pricehigh?: number;
   city?: string;
+  areaLow?: number;
+  areaHigh?: number;
   listingtype?: string;
   attributes?: Record<string, string>;
   sortBy?: 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc';

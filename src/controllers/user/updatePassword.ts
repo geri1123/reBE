@@ -16,6 +16,7 @@ export async function changePassword(
   next: NextFunction
 ): Promise<void> {
    const language: SupportedLang = res.locals.lang;
+  
   const userId = req.userId;
   if (!userId) {
   throw new UnauthorizedError(t('userNotAuthenticated' , language));

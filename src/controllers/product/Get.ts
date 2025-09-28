@@ -16,17 +16,28 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
     // These might be undefined for /products route
     const categorySlug = req.params.category || undefined;
     const subcategorySlug = req.params.subcategory || undefined;
-    
-    const {
-      pricelow,
-      pricehigh,
-      city,
-      listingtype,
-      sortBy,
-      page = "1",
-      lang,
-      ...attributeFilters
-    } = req.query;
+   const {
+  pricelow,
+  pricehigh,
+  areaLow,
+  areaHigh,
+  city,
+  listingtype,
+  sortBy,
+  page = "1",
+  lang,
+  ...attributeFilters
+} = req.query; 
+    // const {
+    //   pricelow,
+    //   pricehigh,
+    //   city,
+    //   listingtype,
+    //   sortBy,
+    //   page = "1",
+    //   lang,
+    //   ...attributeFilters
+    // } = req.query;
 
     
     const FIXED_LIMIT = 12;
@@ -44,19 +55,32 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
     //   queryParams: req.query
     // });
 
-    const filters: SearchFilters = {
-      categorySlug,
-      subcategorySlug,
-      pricelow: pricelow ? parseFloat(pricelow as string) : undefined,
-      pricehigh: pricehigh ? parseFloat(pricehigh as string) : undefined,
-      city: city ? (city as string) : undefined,
-      listingtype: listingtype ? (listingtype as string) : undefined,
-      attributes: attributeFilters as Record<string, string>,
-      sortBy: sortBy ? (sortBy as 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc') : undefined,
-      limit: FIXED_LIMIT,   
-      offset: offsetValue,
-    };
-
+    // const filters: SearchFilters = {
+    //   categorySlug,
+    //   subcategorySlug,
+    //   pricelow: pricelow ? parseFloat(pricelow as string) : undefined,
+    //   pricehigh: pricehigh ? parseFloat(pricehigh as string) : undefined,
+    //   city: city ? (city as string) : undefined,
+    //   listingtype: listingtype ? (listingtype as string) : undefined,
+    //   attributes: attributeFilters as Record<string, string>,
+    //   sortBy: sortBy ? (sortBy as 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc') : undefined,
+    //   limit: FIXED_LIMIT,   
+    //   offset: offsetValue,
+    // };
+const filters: SearchFilters = {
+  categorySlug,
+  subcategorySlug,
+  pricelow: pricelow ? parseFloat(pricelow as string) : undefined,
+  pricehigh: pricehigh ? parseFloat(pricehigh as string) : undefined,
+  areaLow: areaLow ? parseFloat(areaLow as string) : undefined,   
+  areaHigh: areaHigh ? parseFloat(areaHigh as string) : undefined,
+  city: city ? (city as string) : undefined,
+  listingtype: listingtype ? (listingtype as string) : undefined,
+  attributes: attributeFilters as Record<string, string>,
+  sortBy: sortBy ? (sortBy as 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc') : undefined,
+  limit: FIXED_LIMIT,
+  offset: offsetValue,
+};
     console.log("🔍 Controller filters:", filters);
 
     const result = await searchProductsService.getProducts(filters, language);

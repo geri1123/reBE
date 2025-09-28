@@ -3,6 +3,9 @@ export const al = {
      userNotAuthenticated: "Përdoruesi nuk është autentikuar",
     notificationMarkedRead: "Njoftimi u shënua si i lexuar",
     internalServerError: "Ndodhi një gabim i papritur",
+     
+       noTokenProvided: "Asnjë token nuk u sigurua",
+    
      tooManyLoginAttempts: "Shumë përpjekje për t'u kyçur nga ky IP, provoni përsëri pas 15 minutash.",
     //login,registration
      registrationSuccess: "Regjistrimi u krye me sukses. Ju lutemi verifikoni email-in tuaj.",
@@ -117,6 +120,10 @@ successadded: "Produkti u regjistrua me sukses",
     listingTypeId: "Duhet të zgjedhësh një lloj liste",
     attribute: "Atributi është i nevojshëm",
     attributeValue: "Vlera e atributit është e nevojshme",
+    buildYear: "Viti i ndërtimit duhet të jetë numër",
+    buildYearInt: "Viti i ndërtimit duhet të jetë një numër i plotë",
+    buildYearMin: "Viti i ndërtimit nuk mund të jetë më i hershëm se 1900",
+    buildYearMax: "Viti i ndërtimit nuk mund të jetë në të ardhmen",
     //
     documentTooLarge:"Dokumenti është shumë i madh",
     tooManyDocuments:"Janë ngarkuar shumë dokumente",

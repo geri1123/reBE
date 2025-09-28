@@ -1,18 +1,18 @@
 import { PrismaClient, Product } from "@prisma/client";
-import { CreateProduct } from "../../types/CreateProduct.js";
+import { CreateProduct ,CreateProductInput} from "../../types/CreateProduct.js";
 import { SupportedLang } from "../../locales/index.js";
 import { IProductRepository } from "./IProductRepository.js";
-import { LanguageCode } from "@prisma/client";
-import { SearchFilters } from "../../types/ProductSearch.js";
+
 export class ProductsRepository implements IProductRepository {
   constructor(private prisma: PrismaClient) {}
   
   async createProduct(
-    data: CreateProduct & {
-      userId: number;
-      agencyId?: number;
-      attributes?: { attributeId: number; attributeValueId: number }[];
-    }
+    data:CreateProductInput
+    //  CreateProduct & {
+    //   userId: number;
+    //   agencyId?: number;
+    //   // attributes?: { attributeId: number; attributeValueId: number }[];
+    // }
   ): Promise<Product> {
     // Create product first
     const product = await this.prisma.product.create({
@@ -27,6 +27,7 @@ export class ProductsRepository implements IProductRepository {
         userId: data.userId,
         agencyId: data.agencyId,
         area:data.area,
+        buildYear: data.buildYear,
       },
     });
 

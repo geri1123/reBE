@@ -114,7 +114,11 @@ export class SearchProductsRepo {
   private buildWhereConditions(filters: SearchFilters, language: SupportedLang) {
     const whereConditions: any = {};
 
-  
+  if (filters.areaLow !== undefined || filters.areaHigh !== undefined) {
+  whereConditions.area = {}; 
+  if (filters.areaLow !== undefined) whereConditions.area.gte = filters.areaLow;
+  if (filters.areaHigh !== undefined) whereConditions.area.lte = filters.areaHigh;
+}
     if (filters.categorySlug || filters.subcategorySlug) {
       whereConditions.subcategory = {};
       

@@ -1,4 +1,5 @@
 export const en = {
+   noTokenProvided: "No token provided",
    validationFailed: "Validation failed",
   userNotAuthenticated: "User not authenticated",
    internalServerError: "An unexpected error occurred",
@@ -116,7 +117,10 @@ agencyNameExists:"Agency name already exists.",
     listingTypeId: "You must select a listing type",
     attribute: "Attribute is required",
     attributeValue: "Attribute value is required",
-    errorCity:"You must select a city",
+    buildYear: "Build year must be a number",
+    buildYearInt: "Build year must be an integer",
+    buildYearMin: "Build year cannot be before 1900",
+    buildYearMax: "Build year cannot be in the future",
   
 
     //
