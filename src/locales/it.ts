@@ -4,6 +4,7 @@ export const it = {
     notificationMarkedRead: "Notifica contrassegnata come letta",
      internalServerError: "Si è verificato un errore imprevisto",
         noTokenProvided: "Nessun token fornito",
+        usernotfound: "Utente non trovato",
      tooManyLoginAttempts: "Troppi tentativi di accesso da questo IP, riprova tra 15 minuti.",
     //login,registration
       registrationSuccess: "Registrazione completata. Si prega di verificare la tua email.",

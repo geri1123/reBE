@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { t } from "../../utils/i18n.js";
+import { t } from "../../locales/index.js";
 import { SupportedLang } from "../../locales/index.js";
 
 export const createProductSchema = (language: SupportedLang) =>
@@ -16,7 +16,7 @@ export const createProductSchema = (language: SupportedLang) =>
     listingTypeId: z.preprocess(val => Number(val), z.number(t("listingTypeId", language))),
     
     description: z.string().optional().default(""),
-    streetAddress: z.string().optional().default(""),
+    address: z.string().optional().default(""),
 
  area: z.preprocess(val => {
   if (val === "" || val == null) return 0; // default 0

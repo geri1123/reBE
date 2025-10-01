@@ -1,6 +1,5 @@
 import { BaseError } from "./BaseError.js";
-import { SupportedLang } from "../locales/index.js";
-import { t } from "../utils/i18n.js";
+import { SupportedLang,t } from "../locales/index.js";
 
 export class InvalidDocumentTypeError extends BaseError {
   constructor(lang: SupportedLang) {

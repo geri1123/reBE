@@ -4,7 +4,7 @@ import { generateToken } from '../../../utils/hash.js';
 import type { AgencyOwnerRegistration as AgencyOwnerRegistrationType } from '../../../types/auth.js';
 import type { IUserRepository } from '../../../repositories/user/IUserRepository.js';
 import { IAgencyRepository } from '../../../repositories/agency/IAgencyRepository.js';
-import { LanguageCode } from '@prisma/client';
+
 import { SupportedLang } from '../../../locales/index.js';
 
 export class AgencyOwnerRegistration {

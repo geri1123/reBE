@@ -4,8 +4,7 @@ import { IAgencyRepository } from '../../repositories/agency/IAgencyRepository.j
 import { IRegistrationRequestRepository } from '../../repositories/registrationRequest/IRegistrationRequestRepository.js';
 import { ValidationError, NotFoundError } from '../../errors/BaseError.js';
 import { generateToken } from '../../utils/hash.js';
-import { SupportedLang } from '../../locales/index.js';
-import { t } from '../../utils/i18n.js';
+import { SupportedLang,t } from '../../locales/index.js';
 import {
   VerificationEmail,
   WelcomeEmail,

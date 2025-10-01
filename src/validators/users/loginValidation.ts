@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { t } from "../../utils/i18n.js";
+import { t } from "../../locales/index.js";
 import { SupportedLang } from "../../locales/index.js";
 
 export const loginValidation = (language: SupportedLang) =>

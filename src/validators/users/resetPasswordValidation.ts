@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { t } from "../../utils/i18n.js";
-import { SupportedLang } from "../../locales/index.js";
+
+import { SupportedLang, t } from "../../locales/index.js";
 
 export const resetPasswordValidation = (lang: SupportedLang) =>
   z

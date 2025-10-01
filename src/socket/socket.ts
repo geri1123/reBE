@@ -24,7 +24,7 @@ const AgencyQueries = new AgencyRepository(prisma);
 
 const userSockets = new Map<number, string>();
 
-// Store last active update time per userId (in ms timestamp)
+
 const lastActiveCache = new Map<number, number>();
 
 const UPDATE_THROTTLE_MS = 5 * 60 * 1000; // 5 minutes throttle
@@ -83,7 +83,7 @@ export function setupSocket(ioServer: Server) {
 
       next();
     } catch (err) {
-      console.error('❌ Socket auth error:', err);
+      console.error(' Socket auth error:', err);
       next(new UnauthorizedError('Invalid or expired token'));
     }
   });
@@ -97,11 +97,11 @@ export function setupSocket(ioServer: Server) {
     userSockets.set(socket.userId, socket.id);
     socket.join(`user_${socket.userId}`);
 
-    console.log(`✅ User ${socket.userId} connected (agencyId: ${socket.agencyId ?? 'none'})`);
+    console.log(` User ${socket.userId} connected (agencyId: ${socket.agencyId ?? 'none'})`);
 
     socket.on('disconnect', () => {
       userSockets.delete(socket.userId!);
-      console.log(`❌ User ${socket.userId} disconnected`);
+      console.log(`User ${socket.userId} disconnected`);
     });
   });
 }

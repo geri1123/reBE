@@ -1,9 +1,9 @@
 import { ValidationError, NotFoundError } from "../../errors/BaseError.js";
-import { SupportedLang } from "../../locales/index.js";
+import { SupportedLang ,t} from "../../locales/index.js";
 import type { IUserRepository } from "../../repositories/user/IUserRepository.js";
 import type { IUsernameHistoryRepository } from "../../repositories/usernameHistory/IUsernameHistoryRepository.js";
 import { BaseUserService } from "./BaseUserService.js";
-import { t } from "../../utils/i18n.js";
+
 export class UsernameService extends BaseUserService {
   
     constructor(userRepo: IUserRepository, private usernameHistoryRepo: IUsernameHistoryRepository) {

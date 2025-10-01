@@ -5,10 +5,10 @@ import { UserRepositoryPrisma } from '../../repositories/user/UserRepositoryPris
 import { ProfileInfoService } from '../../services/userService/profileInfoService.js';
 import { updateProfileSchema } from '../../validators/users/updateProfileSchema.js';
 import { prisma } from '../../config/prisma.js';
-import { SupportedLang } from "../../locales/index.js";
+import { SupportedLang, t } from "../../locales/index.js";
 const userRepo = new UserRepositoryPrisma(prisma);
 const profileInfoService = new ProfileInfoService(userRepo);
-import { t } from '../../utils/i18n.js';
+
 export async function updateProfileFields(
   req: Request,
   res: Response,
@@ -30,7 +30,7 @@ export async function updateProfileFields(
     }
      if (data.lastName !== undefined) {
         await profileInfoService.updateLName(userId, data.lastName);
-        messages.push(t('lastNameUpdated') , language);
+        messages.push(t('lastNameUpdated',language) );
       }
 
     if (data.aboutMe !== undefined) {

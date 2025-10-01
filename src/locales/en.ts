@@ -2,6 +2,7 @@ export const en = {
    noTokenProvided: "No token provided",
    validationFailed: "Validation failed",
   userNotAuthenticated: "User not authenticated",
+  
    internalServerError: "An unexpected error occurred",
     notificationMarkedRead: "Notification marked as read",
     tooManyLoginAttempts: "Too many login attempts from this IP, please try again after 15 minutes.",

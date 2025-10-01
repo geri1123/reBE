@@ -3,7 +3,7 @@ export const al = {
      userNotAuthenticated: "Përdoruesi nuk është autentikuar",
     notificationMarkedRead: "Njoftimi u shënua si i lexuar",
     internalServerError: "Ndodhi një gabim i papritur",
-     
+     usernotfound: "Përdoruesi nuk u gjet",
        noTokenProvided: "Asnjë token nuk u sigurua",
     
      tooManyLoginAttempts: "Shumë përpjekje për t'u kyçur nga ky IP, provoni përsëri pas 15 minutash.",

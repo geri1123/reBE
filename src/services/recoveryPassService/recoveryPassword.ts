@@ -3,6 +3,9 @@ import { IPasswordResetToken } from "../../repositories/passwordResetToken/IPass
 import { PasswordRecoveryEmail } from "../emailServices/verificationEmailservice.js";
 import { comparePassword, generateToken } from "../../utils/hash.js";
 import { hashPassword } from "../../utils/hash.js";
+import {ForbiddenError} from "../../errors/BaseError.js";
+import { NotFoundError } from "../../errors/BaseError.js";
+import { SupportedLang, t } from "../../locales/index.js";
 export class RecoveryPasswordService {
   private userRepo: IUserRepository;
   private tokenRepo: IPasswordResetToken;
@@ -34,12 +37,10 @@ export class RecoveryPasswordService {
     
     await this.tokenRepo.delete(token);
   }
-  async recoverPassword(email: string, lang: string): Promise<void> {
+  async recoverPassword(email: string, lang: SupportedLang): Promise<void> {
     const user = await this.userRepo.findByEmail(email);
-    if (!user) throw new Error("USER_NOT_FOUND");
-    if (user.status !== "active") throw new Error("ACCOUNT_NOT_ACTIVE");
-
-  
+    if (!user) throw new NotFoundError(t("userNotFound", lang));
+if (user.status !== "active") throw new ForbiddenError(t("accountNotActive", lang));
     await this.tokenRepo.deleteByUserId(user.id);
 
     // Generate new token

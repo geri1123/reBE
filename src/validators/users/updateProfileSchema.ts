@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { t } from "../../utils/i18n.js";
-import type { SupportedLang } from "../../locales/index.js";
+
+import  { SupportedLang ,t} from "../../locales/index.js";
 
 export const updateProfileSchema = (language: SupportedLang) =>
   z

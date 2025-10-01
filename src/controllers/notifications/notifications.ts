@@ -5,8 +5,8 @@ import { NotificationRepository } from "../../repositories/notification/notifica
 
 import { GetNotificationService } from "../../services/Notifications/getNotifications.js";
 import { prisma } from "../../config/prisma.js";
-import {t} from '../../utils/i18n.js';
-import { SupportedLang } from "../../locales/index.js";
+
+import { SupportedLang , t } from "../../locales/index.js";
 const notificationRepo = new NotificationRepository(prisma);
 const getNotificationService = new GetNotificationService(notificationRepo);
 

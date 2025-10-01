@@ -2,7 +2,7 @@ import { VerificationEmail } from '../../emailServices/verificationEmailservice.
 import { generateToken } from '../../../utils/hash.js';
 import type { UserRegistration as UserRegistrationType } from '../../../types/auth.js';
 import type { IUserRepository } from '../../../repositories/user/IUserRepository.js';
-import { SupportedLang } from '../../../locales/index.js';
+
 
 export class UserRegistration {
   private userRepo: IUserRepository;

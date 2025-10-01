@@ -5,23 +5,15 @@ import { prisma } from '../config/prisma.js';
 import { UserRepositoryPrisma } from '../repositories/user/UserRepositoryPrisma.js';
 import { AgencyRepository } from '../repositories/agency/AgencyRepository.js';
 import { UnauthorizedError } from '../errors/BaseError.js';
-import { SupportedLang } from '../locales/index.js';
-import { t } from '../utils/i18n.js';
-interface DecodedToken extends jwt.JwtPayload {
+import { SupportedLang,t } from '../locales/index.js';
+
+export interface DecodedToken extends jwt.JwtPayload {
   userId: number;
   username: string;
   role: string;
   agencyId?: number | null;
 }
-declare global {
-  namespace Express {
-    interface Request {
-      user?: DecodedToken;
-      userId?: number;
-      agencyId?:number;
-    }
-  }
-}
+
 const UserUpdates = new UserRepositoryPrisma(prisma);
 const   AgencyQueries = new AgencyRepository(prisma);
 export const verifyToken = async (req: Request, res: Response, next: NextFunction): Promise<void>=> {
@@ -48,11 +40,11 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
       }
     }
 
-    await UserUpdates.updateFieldsById(req.userId, {last_active:new Date})
+    await UserUpdates.updateFieldsById(req.userId, {last_active:new Date()});
     next();
   } catch (error) {
     //  res.status(401).json({ error: 'unauthorized', message: 'Invalid or expired token' });
     throw new UnauthorizedError(t("invalidOrExpiredToken", lang));
-    return;
+    // return;
     }
 };

@@ -8,8 +8,8 @@ import { ChangeUsernameBody } from "../../validators/users/updateUsernameSchema.
 import { UsernameHistoryRepository } from "../../repositories/usernameHistory/UsernameHistoryRepository.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
 import {prisma} from "../../config/prisma.js";
-import { SupportedLang } from "../../locales/index.js";
-import { t } from "../../utils/i18n.js";
+import { SupportedLang ,t } from "../../locales/index.js";
+
 const userRepo = new UserRepositoryPrisma(prisma);
 const usernameHistoryRepo = new UsernameHistoryRepository(prisma);
 const usernameService = new UsernameService(userRepo, usernameHistoryRepo);

@@ -1,8 +1,8 @@
 
 import { Request, Response, NextFunction } from "express";
-import { t } from "../../utils/i18n.js";
-import { SupportedLang } from "../../locales/index.js";
-import { handleZodError } from "../../validators/zodErrorFormated.js";
+
+import { SupportedLang , t } from "../../locales/index.js";
+
 import { resetPasswordValidation } from "../../validators/users/resetPasswordValidation.js";
 import { ZodError } from "zod";
 import { InternalServerError } from "../../errors/BaseError.js";

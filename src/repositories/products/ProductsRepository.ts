@@ -8,11 +8,7 @@ export class ProductsRepository implements IProductRepository {
   
   async createProduct(
     data:CreateProductInput
-    //  CreateProduct & {
-    //   userId: number;
-    //   agencyId?: number;
-    //   // attributes?: { attributeId: number; attributeValueId: number }[];
-    // }
+   
   ): Promise<Product> {
     // Create product first
     const product = await this.prisma.product.create({
@@ -104,29 +100,5 @@ async getProductWithRelations(productId: number, language: SupportedLang) {
     },
   });
 }
-  // async getProductWithRelations(productId: number) {
-  //   return this.prisma.product.findUnique({
-  //     where: { id: productId },
-  //     include: {
-  //       image: true,
-  //       city: true,
-  //       subcategory: {
-  //         include: { subcategorytranslation: true },
-  //       },
-  //       listingType: {
-  //         include: { listing_type_translation: true },
-  //       },
-  //       attributes: {
-  //         include: {
-  //           attribute: {
-  //             include: { attributeTranslation: true },
-  //           },
-  //           attributeValue: {
-  //             include: { attributeValueTranslations: true },
-  //           },
-          // },
-        // },
-      // },
-    // });
-  // }
+  
 }

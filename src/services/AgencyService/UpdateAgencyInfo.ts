@@ -1,7 +1,6 @@
 import { ValidationError } from "../../errors/BaseError.js";
-import { SupportedLang } from "../../locales/index.js";
+import { SupportedLang,t } from "../../locales/index.js";
 import { IAgencyRepository } from "../../repositories/agency/IAgencyRepository.js";
-import { t } from "../../utils/i18n.js";
 export class updateAgencyInfoService {
   constructor(private agencyRepo: IAgencyRepository) {}
 

@@ -5,8 +5,8 @@ import { ValidationError } from "../../../errors/BaseError.js";
 import { updateAgencySchema } from "../../../validators/agency/updateAgencyFields.js";
 import { handleZodError } from "../../../validators/zodErrorFormated.js";
 import { prisma } from "../../../config/prisma.js";
-import { SupportedLang } from "../../../locales/index.js";
-import { t } from "../../../utils/i18n.js";
+import { SupportedLang  , t} from "../../../locales/index.js";
+
 const agencyrepo = new AgencyRepository(prisma);
 const service = new updateAgencyInfoService(agencyrepo);
 

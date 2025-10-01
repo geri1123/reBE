@@ -6,12 +6,12 @@ import { UnauthorizedError } from '../../errors/BaseError.js';
 import jwt from 'jsonwebtoken';
 import { comparePassword } from '../../utils/hash.js';
 import { config } from '../../config/config.js';
-import { SupportedLang  } from '../../locales/index.js';
-import { t } from '../../utils/i18n.js';
+import { SupportedLang  ,t} from '../../locales/index.js';
+
 import type { IUserRepository } from '../../repositories/user/IUserRepository.js';
 import { IAgencyRepository } from '../../repositories/agency/IAgencyRepository.js';
 
-import { loginValidation , type LoginRequestData } from '../../validators/users/loginValidation.js';
+import {   type LoginRequestData } from '../../validators/users/loginValidation.js';
 import type { IRegistrationRequestRepository } from '../../repositories/registrationRequest/IRegistrationRequestRepository.js';
 // import { NotificationService } from '../Notifications/Notifications.js';
 import { RegistrationData } from '../../validators/users/authValidatorAsync.js';

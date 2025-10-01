@@ -1,7 +1,5 @@
 import { SupportedLang } from "../../locales/index.js";
 import { SearchFilters } from "../../types/ProductSearch.js";
-import { SearchProductsRepo } from "../../repositories/products/SearchProductRepo.js";
-import { config } from "../../config/config.js";
 import { ISearchProductRepo } from "../../repositories/products/ISearchProductRepo.js";
 import { ProductWithRelations } from "../../types/ProductSearch.js";
 import {getFirebaseImageUrl} from "../../utils/firebaseUpload/firebaseUtils.js"

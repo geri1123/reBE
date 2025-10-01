@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { SupportedLang } from "../../locales/index.js";
-import { t } from "../../utils/i18n.js";
+import { SupportedLang , t } from "../../locales/index.js";
+
 
 export const changePasswordSchema = (language: SupportedLang) => 
   z.object({

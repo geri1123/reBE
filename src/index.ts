@@ -16,6 +16,7 @@ import notificationRouter from './routes/notificationRouter.js';
 import category from './routes/categoryRouter.js';
 import listingtype from './routes/listingTypes.js';
 import productRouter from './routes/productRouter.js'
+import translationRoutes from "./routes/translationRoutes.js";
 // import listingType from './routes/listingTypes.js';
 import { setupSocket } from './socket/socket.js';
 
@@ -47,10 +48,10 @@ app.use(cors({
   credentials: true,
 }));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(detectLanguage);
 
 // Routes
@@ -61,6 +62,7 @@ app.use('/api/notification', notificationRouter);
 app.use('/apiCat', category);
 app.use('/apiLT', listingtype);
 app.use('/product',productRouter);
+app.use("/api", translationRoutes);
 // Health check endpoints
 app.get('/', (req: Request, res: Response) => {
   res.json({

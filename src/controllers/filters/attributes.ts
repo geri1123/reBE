@@ -3,7 +3,7 @@ import { prisma } from "../../config/prisma.js";
 import { AttributeRepo } from "../../repositories/attributes/attributesRepo.js";
 import { AttributeService } from "../../services/AttributeService/AttributeService.js";
 
-import { SupportedLang } from "../../locales/index.js";
+import { SupportedLang} from "../../locales/index.js";
 const attributeRepo = new AttributeRepo(prisma);
 const attributeService = new AttributeService(attributeRepo);
 export async function getAttributes(req: Request, res: Response, next: NextFunction): Promise<void> {

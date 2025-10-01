@@ -2,8 +2,8 @@ import path from 'path';
 import fs from 'fs/promises';
 import type { IAgencyRepository } from '../../repositories/agency/IAgencyRepository.js';
 import { FileSystemError, NotFoundError } from '../../errors/BaseError.js';
-import { SupportedLang } from "../../locales/index.js";
-import { t } from '../../utils/i18n.js';
+import { SupportedLang,t } from "../../locales/index.js";
+
 import {bucket} from "../../config/firebase.js"
 import { uploadFileToFirebase } from '../../utils/firebaseUpload/firebaseUploader.js';
 export class AgencyLogoService {

@@ -12,8 +12,7 @@
 // });
 import { Request , Response } from 'express';
 import rateLimit from 'express-rate-limit';
-import { t } from '../utils/i18n.js';
-import { SupportedLang } from '../locales/index.js';
+import { SupportedLang ,t} from '../locales/index.js';
 
 export const loginRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

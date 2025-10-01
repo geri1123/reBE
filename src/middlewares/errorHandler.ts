@@ -19,8 +19,8 @@
 // }
 import { Request, Response, NextFunction } from 'express';
 import { BaseError } from '../errors/BaseError.js';
-import { t } from '../utils/i18n.js';
-import { SupportedLang } from '../locales/index.js';
+
+import { SupportedLang,t } from '../locales/index.js';
 export default function errorHandler(
   err: Error,
   req: Request,

@@ -9,9 +9,9 @@ import { registrationSchema } from '../../validators/users/authValidatorAsync.js
 import { prisma } from '../../config/prisma.js';
 import { loginValidation, type LoginRequestData } from '../../validators/users/loginValidation.js';
 import { RegistrationData } from '../../validators/users/authValidatorAsync.js';
-import { SupportedLang } from '../../locales/index.js';
+import { SupportedLang ,t } from '../../locales/index.js';
 const userRepo = new UserRepositoryPrisma(prisma);
-import { t } from '../../utils/i18n.js';
+
 const agencyRepo = new AgencyRepository(prisma);
 const requestRepo = new RegistrationRequestRepository(prisma);
 

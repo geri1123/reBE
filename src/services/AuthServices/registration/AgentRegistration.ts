@@ -2,12 +2,12 @@ import { BaseRegistration } from '../../../types/auth.js';
 
 import { VerificationEmail } from '../../emailServices/verificationEmailservice.js';
 import { generateToken } from '../../../utils/hash.js';
-import { t } from '../../../utils/i18n.js';
+
 import type { AgentRegistration as AgentRegistrationType } from '../../../types/auth.js';
 import type { IUserRepository } from '../../../repositories/user/IUserRepository.js';
 import { IRegistrationRequestRepository } from '../../../repositories/registrationRequest/IRegistrationRequestRepository.js';
 import { IAgencyRepository } from '../../../repositories/agency/IAgencyRepository.js';
-import { SupportedLang } from '../../../locales/index.js';
+import { SupportedLang,t } from '../../../locales/index.js';
 export class AgentRegistration {
   constructor(
     private readonly userRepo: IUserRepository,

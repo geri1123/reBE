@@ -2,37 +2,23 @@ import { IAttributeRepo } from "../../repositories/attributes/IattributeRepo.js"
 import { IProductImageRepo } from "../../repositories/productImages/IProductImageRepo.js";
 import { IProductRepository } from "../../repositories/products/IProductRepository.js";
 import { uploadFileToFirebase } from "../../utils/firebaseUpload/firebaseUploader.js";
+import { CreateProductInput } from "../../types/CreateProduct.js";
+
+export interface CreateProductServiceInput extends CreateProductInput {
+  files?: Express.Multer.File[];
+}
+
 export class Create {
   constructor(
-    private productsRepo:IProductRepository,
-    private productImagesRepo:IProductImageRepo,
-    private attributeRepo:IAttributeRepo
+    private productsRepo: IProductRepository,
+    private productImagesRepo: IProductImageRepo,
+    private attributeRepo: IAttributeRepo
   ) {}
 
   // Main service method to handle product creation
-  async execute({
-    userId,
-    agencyId,
-    productData,
-    attributesData,
-    files,
-  }: {
-    userId: number;
-    agencyId?: number;
-    productData: {
-      title: string;
-      price: number;
-      description: string;
-      streetAddress:string;
-      cityId: number;
-      subcategoryId: number;
-      listingTypeId: number;
-   area: number | null;
-    buildYear: number | null;
-      };
-    attributesData?: { attributeId: number; attributeValueId: number }[];
-    files?: Express.Multer.File[];
-  }) {
+  async execute(input: CreateProductServiceInput) {
+    const { userId, agencyId, attributes: attributesData, files, ...productData } = input;
+
     // ---- Validate attributes ----
     let attributes: { attributeId: number; attributeValueId: number }[] = [];
 
@@ -63,24 +49,25 @@ export class Create {
     const product = await this.productsRepo.createProduct({
       ...productData,
       userId,
-      agencyId: agencyId ?? undefined,
+      agencyId,
       attributes: attributes.length > 0 ? attributes : undefined,
     });
 
-   
-if (files && Array.isArray(files)) {
-  await Promise.all(
-    files.map(async (file) => {
-      const imageUrl = await uploadFileToFirebase(file, "product_images");
+    // ---- Upload images ----
+    if (files && Array.isArray(files)) {
+      await Promise.all(
+        files.map(async (file) => {
+          const imageUrl = await uploadFileToFirebase(file, "product_images");
 
-      await this.productImagesRepo.addImage({
-        imageUrl, 
-        product: { connect: { id: product.id } },
-        user: { connect: { id: userId } },
-      });
-    })
-  );
-}
+          await this.productImagesRepo.addImage({
+            imageUrl,
+            product: { connect: { id: product.id } },
+            user: { connect: { id: userId } },
+          });
+        })
+      );
+    }
+
     return product;
   }
 }

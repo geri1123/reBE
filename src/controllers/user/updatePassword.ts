@@ -5,8 +5,8 @@ import { changePasswordSchema } from "../../validators/users/updatePasswordSchem
 import { handleZodError } from "../../validators/zodErrorFormated.js";
 import { prisma } from "../../config/prisma.js";
 import { UserRepositoryPrisma } from "../../repositories/user/UserRepositoryPrisma.js";
-import { t } from "../../utils/i18n.js";
-import { SupportedLang } from "../../locales/index.js";
+
+import { SupportedLang ,t} from "../../locales/index.js";
 const userRepo = new UserRepositoryPrisma(prisma);
 const passwordService = new PasswordService(userRepo);
 

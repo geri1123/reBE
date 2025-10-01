@@ -1,3 +1,4 @@
+
 import { Request, Response, NextFunction } from "express";
 import { prisma } from "../../config/prisma.js";
 import { ProductsRepository } from "../../repositories/products/ProductsRepository.js";
@@ -5,9 +6,8 @@ import { ProductImagesRepository } from "../../repositories/productImages/Produc
 import { AttributeRepo } from "../../repositories/attributes/attributesRepo.js";
 import { Create } from "../../services/ProductService/create.js";
 import { UnauthorizedError } from "../../errors/BaseError.js";
-import { SupportedLang } from "../../locales/index.js";
-import { t } from "../../utils/i18n.js";
-import { CreateProductInput } from "../../types/CreateProduct.js";
+import { SupportedLang ,t } from "../../locales/index.js";
+
 import { handleZodError } from "../../validators/zodErrorFormated.js";
 import { createProductSchema } from "../../validators/product/CreateProductSchema.js";
 
@@ -16,7 +16,6 @@ const productImagesRepo = new ProductImagesRepository(prisma);
 const attributeRepo = new AttributeRepo(prisma);
 
 const createService = new Create(productsRepo, productImagesRepo, attributeRepo);
-
 
 export async function CreateProduct(req: Request, res: Response, next: NextFunction) {
   try {
@@ -31,25 +30,23 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
       bodyData.attributes = JSON.parse(bodyData.attributes);
     }
 
-    // ---- Zod validation ---- (Remove manual parsing, let schema handle it)
+    // ---- Zod validation ----
     const parsedData = createProductSchema(language).parse(bodyData);
 
-    // ---- Call service ----
+    // ---- Call service with flattened structure ----
     const product = await createService.execute({
       userId,
       agencyId,
-      productData: {
-        title: parsedData.title,
-        price: parsedData.price,
-        description: parsedData.description ?? "",
-        buildYear: parsedData.buildYear ?? null,
-        streetAddress: parsedData.streetAddress ?? "",
-        cityId: parsedData.cityId,
-        subcategoryId: parsedData.subcategoryId,
-        listingTypeId: parsedData.listingTypeId,
-      area: parsedData.area ?? 0,
-      },
-      attributesData: parsedData.attributes,
+      title: parsedData.title,
+      price: parsedData.price,
+      description: parsedData.description ?? "",
+      streetAddress: parsedData.address ?? "",
+      cityId: parsedData.cityId,
+      subcategoryId: parsedData.subcategoryId,
+      listingTypeId: parsedData.listingTypeId,
+      area: parsedData.area ?? null,
+      buildYear: parsedData.buildYear ?? null,
+      attributes: parsedData.attributes,
       files: req.files as Express.Multer.File[],
     });
 

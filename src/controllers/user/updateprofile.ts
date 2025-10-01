@@ -4,8 +4,8 @@ import { ProfileImageService } from '../../services/userService/profileImgServic
 import { UserRepositoryPrisma } from '../../repositories/user/UserRepositoryPrisma.js';
 import { prisma } from '../../config/prisma.js';
 import { getFirebaseImageUrl } from '../../utils/firebaseUpload/firebaseUtils.js';
-import { SupportedLang } from '../../locales/index.js';
-import { t } from '../../utils/i18n.js';
+import { SupportedLang  , t} from '../../locales/index.js';
+
 import { NoImageUploadedError } from '../../errors/ImageErrors.js';
 const userRepo = new UserRepositoryPrisma(prisma);
 const profileImageService = new ProfileImageService(userRepo);

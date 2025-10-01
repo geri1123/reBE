@@ -1,8 +1,8 @@
 import { BaseError } from "./BaseError.js";
 
 
-import { SupportedLang } from "../locales/index.js";
-import { t } from "../utils/i18n.js";
+import { SupportedLang ,t} from "../locales/index.js";
+
 
 // 🔹 Invalid image type error
 export class InvalidImageTypeError extends BaseError {
@@ -14,7 +14,7 @@ export class InvalidImageTypeError extends BaseError {
 // 🔹 Image too large error
 export class ImageTooLargeError extends BaseError {
   constructor(lang: SupportedLang) {
-    super(t("imageTooLarge", lang), 413); // 413 Payload Too Large
+    super(t("imageTooLarge", lang), 413); 
   }
 }
 

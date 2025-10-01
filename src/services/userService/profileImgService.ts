@@ -1,7 +1,7 @@
 import type { IUserRepository } from '../../repositories/user/IUserRepository.js';
 import { NotFoundError } from '../../errors/BaseError.js';
-import { t } from '../../utils/i18n.js';
-import { SupportedLang } from '../../locales/index.js';
+
+import { SupportedLang,t } from '../../locales/index.js';
 import { uploadFileToFirebase } from '../../utils/firebaseUpload/firebaseUploader.js';
 import { bucket } from '../../config/firebase.js';
 

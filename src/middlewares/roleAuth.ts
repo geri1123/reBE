@@ -2,13 +2,13 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { UnauthorizedError, ForbiddenError } from '../errors/BaseError.js';
-import { t } from '../utils/i18n.js';
-import { SupportedLang } from '../locales/index.js';
+
+import { SupportedLang,t } from '../locales/index.js';
 export const requireRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
    const language: SupportedLang = res.locals.lang
     if (!req.user) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError(t("userNotAuthenticated", language));
     }
 
     if (!allowedRoles.includes(req.user.role)) {
@@ -19,7 +19,7 @@ export const requireRole = (allowedRoles: string[]) => {
   };
 };
 
-// Convenience functions
+
 export const requireUser = requireRole(['user']);
 export const requireAgent = requireRole(['agent']);
 export const requireAgencyOwner = requireRole(['agency_owner']);

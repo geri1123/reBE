@@ -6,8 +6,8 @@ import { getFullImageUrl } from '../../../utils/imageUrl.js';
 import { AgencyRepository } from '../../../repositories/agency/AgencyRepository.js';
 import { AgencyLogoService } from '../../../services/AgencyService/agencyLogoService.js';
 import { prisma } from '../../../config/prisma.js';
-import { SupportedLang } from '../../../locales/index.js';
-import { t } from '../../../utils/i18n.js';
+import { SupportedLang, t } from '../../../locales/index.js';
+
 import { getFirebaseImageUrl } from '../../../utils/firebaseUpload/firebaseUtils.js';
 
 

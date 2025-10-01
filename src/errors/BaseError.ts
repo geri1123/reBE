@@ -1,5 +1,5 @@
-import { SupportedLang } from "../locales/index.js";
-import { t } from "../utils/i18n.js";
+import { SupportedLang ,t } from "../locales/index.js";
+
 export class BaseError extends Error {
   public statusCode: number;
   public errors?: Record<string, string>;

@@ -5,9 +5,8 @@ import { IAgentsRepository } from "../../repositories/agents/IAgentsRepository.j
 import { AgentWellcomeEmail } from "../emailServices/verificationEmailservice.js";
 import { RejectionEmail } from "../emailServices/verificationEmailservice.js";
 import { IUserRepository } from "../../repositories/user/IUserRepository.js";
-import { SupportedLang } from "../../locales/index.js";
-import { t } from "../../utils/i18n.js";
-import { LanguageCode } from "@prisma/client";
+import { SupportedLang,t } from "../../locales/index.js";
+
 export class AgentsRequestsService {
   constructor(
     private readonly registrationRequestRepo: IRegistrationRequestRepository,
