@@ -13,6 +13,7 @@
 //     attributeValueId: number; 
 //   }>;
 // }
+type statusType = "active" | "inactive" | "sold" | "pending" | "draft";
 export interface CreateProduct {
   title: string;
   price: number;
@@ -27,6 +28,7 @@ export interface CreateProduct {
     attributeId: number;
     attributeValueId: number;
   }>;
+  status?: statusType;
 }
 
 // Input for creating a product (includes user info)

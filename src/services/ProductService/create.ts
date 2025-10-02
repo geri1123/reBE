@@ -17,13 +17,13 @@ export class Create {
 
   // Main service method to handle product creation
   async execute(input: CreateProductServiceInput) {
-    const { userId, agencyId, attributes: attributesData, files, ...productData } = input;
+    const { userId, agencyId, files, ...productData } = input;
 
     // ---- Validate attributes ----
     let attributes: { attributeId: number; attributeValueId: number }[] = [];
 
-    if (attributesData && Array.isArray(attributesData)) {
-      attributes = attributesData
+    if (productData.attributes && Array.isArray(productData.attributes)) {
+      attributes = productData.attributes
         .map(attr => ({
           attributeId: parseInt(attr.attributeId as any),
           attributeValueId: parseInt(attr.attributeValueId as any),

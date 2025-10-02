@@ -17,7 +17,7 @@ import category from './routes/categoryRouter.js';
 import listingtype from './routes/listingTypes.js';
 import productRouter from './routes/productRouter.js'
 import translationRoutes from "./routes/translationRoutes.js";
-// import listingType from './routes/listingTypes.js';
+
 import { setupSocket } from './socket/socket.js';
 
 dotenv.config();

@@ -48,6 +48,7 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
       buildYear: parsedData.buildYear ?? null,
       attributes: parsedData.attributes,
       files: req.files as Express.Multer.File[],
+      status: parsedData.status || "draft",
     });
 
     // ---- Fetch product with relations ----

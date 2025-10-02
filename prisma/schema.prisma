@@ -294,7 +294,7 @@ model Product {
   user         user          @relation(fields: [userId], references: [id])
   subcategoryId Int
   subcategory   subcategory   @relation(fields: [subcategoryId], references: [id])
-
+  status        productsStatus  @default(draft) 
   listingTypeId Int
   listingType   listing_type  @relation(fields: [listingTypeId], references: [id])
  createdAt              DateTime                 @default(now())
@@ -341,7 +341,13 @@ enum NotificationStatus {
   unread
   read
 }
-
+enum productsStatus{
+  active
+  inactive 
+  draft
+  sold
+  pending
+}
 enum agencyagent_role_in_agency {
   agent
   senior_agent

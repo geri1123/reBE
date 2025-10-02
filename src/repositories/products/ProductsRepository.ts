@@ -24,6 +24,7 @@ export class ProductsRepository implements IProductRepository {
         agencyId: data.agencyId,
         area:data.area,
         buildYear: data.buildYear,
+        status: data.status || "draft",
       },
     });
 

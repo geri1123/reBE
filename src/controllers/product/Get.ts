@@ -22,6 +22,7 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
   areaLow,
   areaHigh,
   city,
+  country,
   listingtype,
   sortBy,
   page = "1",
@@ -36,7 +37,14 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
     // Parse page and calculate offset
     const pageValue = Math.max(1, parseInt(page as string, 10) || 1);
     const offsetValue = (pageValue - 1) * FIXED_LIMIT;
-
+  let cities: string[] | undefined;
+    if (city) {
+      if (Array.isArray(city)) {
+        cities = city.map(c => String(c).toLowerCase());
+      } else {
+        cities = String(city).split(',').map(c => c.trim().toLowerCase());
+      }
+    }
    
 const filters: SearchFilters = {
   categorySlug,
@@ -45,12 +53,17 @@ const filters: SearchFilters = {
   pricehigh: pricehigh ? parseFloat(pricehigh as string) : undefined,
   areaLow: areaLow ? parseFloat(areaLow as string) : undefined,   
   areaHigh: areaHigh ? parseFloat(areaHigh as string) : undefined,
-  city: city ? (city as string) : undefined,
+  // city: city ? (city as string) : undefined,
+  cities,
+  country:country ? (country as string) : undefined,
   listingtype: listingtype ? (listingtype as string) : undefined,
   attributes: attributeFilters as Record<string, string>,
+   status: "active",
+
   sortBy: sortBy ? (sortBy as 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc') : undefined,
   limit: FIXED_LIMIT,
   offset: offsetValue,
+  
 };
     console.log("🔍 Controller filters:", filters);
 

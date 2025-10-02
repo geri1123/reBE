@@ -1,9 +1,11 @@
+type statusType = "active" | "inactive" | "sold" | "pending" | "draft";
 export interface SearchFilters {
   categorySlug?: string;
   subcategorySlug?: string;
   pricelow?: number;
   pricehigh?: number;
-  city?: string;
+  // city?: string;
+  cities?: string[];
   areaLow?: number;
   areaHigh?: number;
   listingtype?: string;
@@ -11,6 +13,8 @@ export interface SearchFilters {
   sortBy?: 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc';
   limit?: number;
   offset?: number;
+  country?: string;
+  status?: statusType;
 }
 export type ProductWithRelations = {
   id: number;

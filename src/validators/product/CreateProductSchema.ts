@@ -44,7 +44,8 @@ export const createProductSchema = (language: SupportedLang) =>
     }, z.array(z.object({
       attributeId: z.number(t("attribute", language)),
       attributeValueId: z.number(t("attributeValue", language)),
-    })).optional())
+    })).optional()),
+    status: z.enum(["active", "inactive", "sold", "pending", "draft"]).optional().default("draft"),
   });
 
 
