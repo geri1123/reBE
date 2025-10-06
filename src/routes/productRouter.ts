@@ -3,7 +3,7 @@ import { verifyToken } from "../middlewares/verifyToken.js";
 
 import { CreateProduct } from "../controllers/product/Create.js";
 import { uploadMultipleGeneralImages } from "../middlewares/uploadFile.js";
-import { GetProductsBySearch } from "../controllers/product/Get.js";
+import { GetProductsBySearch } from "../controllers/product/GetAll.js";
 // import { getAvailableFilters } from "../controllers/product/Get.js";
 import { multerErrorWrapper } from "../middlewares/multerError.js";
 import { detectLanguage } from "../middlewares/langMiddleware.js";

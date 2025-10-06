@@ -95,11 +95,26 @@ export class TranslationService {
       : this.translateSimpleParams(searchParams, sourceListingTypes, targetListingTypes);
 
     // Build final URL
-    const path = "/" + translatedSegments.join("/");
-    const finalPath = targetLang === "en" ? path : `/${targetLang}${path}`;
-    const queryString = new URLSearchParams(translatedParams).toString();
+    // const path = "/" + translatedSegments.join("/");
+    // const finalPath = targetLang === "en" ? path : `/${targetLang}${path}`;
+    // const queryString = new URLSearchParams(translatedParams).toString();
 
-    return `${finalPath}${queryString ? `?${queryString}` : ""}`;
+    // return `${finalPath}${queryString ? `?${queryString}` : ""}`;
+    const path = "/" + translatedSegments.join("/");
+const finalPath = targetLang === "al" ? path : `/${targetLang}${path}`;
+
+// Custom query string handling
+const queryString = Object.entries(translatedParams)
+  .map(([key, value]) => {
+    if (key === "city") {
+      // Keep literal commas
+      return `${encodeURIComponent(key)}=${value}`;
+    }
+    return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+  })
+  .join("&");
+
+return `${finalPath}${queryString ? `?${queryString}` : ""}`;
   }
 
   private async getCategoriesForLang(lang: SupportedLang) {

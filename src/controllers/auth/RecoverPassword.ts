@@ -24,6 +24,6 @@ export async function RecoverPassword(req: Request, res: Response, next: NextFun
     return res.status(200).json({ message: t("passwordResetLinkSent", language) });
   } catch (error) {
     handleZodError(error, next, res.locals.lang);
-    next(error); 
+    // next(error); 
   }
 }

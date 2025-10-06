@@ -16,7 +16,6 @@ const productImagesRepo = new ProductImagesRepository(prisma);
 const attributeRepo = new AttributeRepo(prisma);
 
 const createService = new Create(productsRepo, productImagesRepo, attributeRepo);
-
 export async function CreateProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = req.userId;
@@ -30,10 +29,9 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
       bodyData.attributes = JSON.parse(bodyData.attributes);
     }
 
-    // ---- Zod validation ----
     const parsedData = createProductSchema(language).parse(bodyData);
 
-    // ---- Call service with flattened structure ----
+    // Service now returns complete product - controller just forwards it
     const product = await createService.execute({
       userId,
       agencyId,
@@ -49,17 +47,60 @@ export async function CreateProduct(req: Request, res: Response, next: NextFunct
       attributes: parsedData.attributes,
       files: req.files as Express.Multer.File[],
       status: parsedData.status || "draft",
-    });
-
-    // ---- Fetch product with relations ----
-    const productWithDetails = await productsRepo.getProductWithRelations(product.id, language);
+    }, language);
 
     res.status(201).json({ 
       success: true, 
       message: t("successadded", language), 
-      product: productWithDetails 
+      product 
     });
   } catch (err) {
     handleZodError(err, next, res.locals.lang);
   }
 }
+// export async function CreateProduct(req: Request, res: Response, next: NextFunction) {
+//   try {
+//     const userId = req.userId;
+//     const agencyId = req.agencyId;
+//     const language: SupportedLang = res.locals.lang;
+
+//     if (!userId) throw new UnauthorizedError(t("userNotAuthenticated", language));
+
+//     let bodyData: any = { ...req.body };
+//     if (bodyData.attributes && typeof bodyData.attributes === "string") {
+//       bodyData.attributes = JSON.parse(bodyData.attributes);
+//     }
+
+//     // ---- Zod validation ----
+//     const parsedData = createProductSchema(language).parse(bodyData);
+
+//     // ---- Call service with flattened structure ----
+//     const product = await createService.execute({
+//       userId,
+//       agencyId,
+//       title: parsedData.title,
+//       price: parsedData.price,
+//       description: parsedData.description ?? "",
+//       streetAddress: parsedData.address ?? "",
+//       cityId: parsedData.cityId,
+//       subcategoryId: parsedData.subcategoryId,
+//       listingTypeId: parsedData.listingTypeId,
+//       area: parsedData.area ?? null,
+//       buildYear: parsedData.buildYear ?? null,
+//       attributes: parsedData.attributes,
+//       files: req.files as Express.Multer.File[],
+//       status: parsedData.status || "draft",
+//     });
+
+//     // ---- Fetch product with relations ----
+//     const productWithDetails = await productsRepo.getProductWithRelations(product.id, language);
+
+//     res.status(201).json({ 
+//       success: true, 
+//       message: t("successadded", language), 
+//       product: productWithDetails 
+//     });
+//   } catch (err) {
+//     handleZodError(err, next, res.locals.lang);
+//   }
+// }
