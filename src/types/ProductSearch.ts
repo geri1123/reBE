@@ -9,7 +9,7 @@ export interface SearchFilters {
   areaLow?: number;
   areaHigh?: number;
   listingtype?: string;
-  attributes?: Record<string, string>;
+ attributes?: Record<string, string | string[]>; 
   sortBy?: 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc';
   limit?: number;
   offset?: number;

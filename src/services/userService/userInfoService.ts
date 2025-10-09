@@ -4,6 +4,7 @@ import { IAgentsRepository } from "../../repositories/agents/IAgentsRepository.j
 import { IAgencyRepository } from "../../repositories/agency/IAgencyRepository.js";
 import { BaseUserService } from "./BaseUserService.js";
 import { UserWithRoleInfo, AgentInfo, AgencyInfo } from "../../types/userinfo.js";
+import { getFirebaseImageUrl } from "../../utils/firebaseUpload/firebaseUtils.js";
 
 export class UserInfoService extends BaseUserService {
   constructor(
@@ -18,7 +19,10 @@ export class UserInfoService extends BaseUserService {
     const user = await this.userRepo.findById(userId);
     if (!user) return null;
 
-    const result: UserWithRoleInfo = { ...user };
+   const result: UserWithRoleInfo = {
+  ...user,
+  profile_img: user.profile_img ? getFirebaseImageUrl(user.profile_img) : null
+};
 
     // Agent role
     if (user.role === "agent") {
@@ -29,7 +33,7 @@ export class UserInfoService extends BaseUserService {
     // Agency owner role
     if (user.role === "agency_owner") {
       const agencyData: AgencyInfo | null = await this.agencyRepo.findAgencyByUserId(userId);
-      if (agencyData) result.agencyInfo = agencyData;
+      if (agencyData) result.agencyInfo = {...agencyData , logo:agencyData.logo ? getFirebaseImageUrl(agencyData.logo):null};
     }
 
     return result;

@@ -1,11 +1,11 @@
-import { LanguageCode, PrismaClient } from "@prisma/client";
+import { LanguageCode, PrismaClient ,productsStatus} from "@prisma/client";
 import { IListingTypeRepo } from "./IlistingTypeRepo.js";
 
 export class ListingTypeRepo implements IListingTypeRepo {
     constructor(private prisma: PrismaClient) {}
 
     async getAllListingTypes(
-        language: LanguageCode = LanguageCode.al
+        language: LanguageCode = LanguageCode.al, status:productsStatus
     ): Promise<{ id: number; name: string; slug: string | null; productCount: number; }[]> {
         const listingTypes = await this.prisma.listing_type.findMany({
             select: {
@@ -15,7 +15,12 @@ export class ListingTypeRepo implements IListingTypeRepo {
                     select: { name: true, slug: true },
                 },
                 _count: {
-                    select: { products: true }  
+                select: {
+                products: {
+                 
+                  where: status ? { status } : undefined,
+                },
+              },
                 }
             },
         });

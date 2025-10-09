@@ -1,11 +1,13 @@
-import { PrismaClient, LanguageCode } from "@prisma/client";
+// categoryRepository.ts
+import { PrismaClient, LanguageCode, productsStatus } from "@prisma/client";
 import { ICatRepository } from "./ICatRepository.js";
 
 export class CategoryRepository implements ICatRepository {
   constructor(private prisma: PrismaClient) {}
 
   async getAllCategories(
-    language: LanguageCode = LanguageCode.al
+    language: LanguageCode = LanguageCode.al,
+    status?: productsStatus 
   ): Promise<{ 
     id: number; 
     name: string; 
@@ -17,7 +19,7 @@ export class CategoryRepository implements ICatRepository {
       include: {
         categorytranslation: {
           where: { language },
-          select: { name: true, slug: true }, 
+          select: { name: true, slug: true },
         },
         subcategory: {
           include: {
@@ -26,8 +28,13 @@ export class CategoryRepository implements ICatRepository {
               select: { name: true, slug: true },
             },
             _count: {
-              select: { products: true }
-            }
+              select: {
+                products: {
+                 
+                  where: status ? { status } : undefined,
+                },
+              },
+            },
           },
         },
       },
@@ -39,12 +46,11 @@ export class CategoryRepository implements ICatRepository {
         name: subcat.subcategorytranslation[0]?.name ?? "No translation",
         slug: subcat.subcategorytranslation[0]?.slug ?? null,
         categoryId: subcat.categoryId,
-        productCount: subcat._count.products
+        productCount: subcat._count.products,
       }));
 
-      // Calculate total products for the category (sum of all subcategories)
       const totalCategoryProducts = subcategoriesWithCounts.reduce(
-        (sum, subcat) => sum + subcat.productCount, 
+        (sum, subcat) => sum + subcat.productCount,
         0
       );
 
@@ -58,6 +64,8 @@ export class CategoryRepository implements ICatRepository {
     });
   }
 }
+
+
 // import { PrismaClient, LanguageCode } from "@prisma/client";
 // import { ICatRepository } from "./ICatRepository.js";
 

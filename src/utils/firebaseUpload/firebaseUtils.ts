@@ -1,4 +1,6 @@
+import { config } from "../../config/config.js";
+
 export const getFirebaseImageUrl = (imagePath: string | null) => {
   if (!imagePath) return null;
-  return `https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/${imagePath}`;
+  return `https://storage.googleapis.com/${config.firebase.firebaseImgUrl}/${imagePath}`;
 };

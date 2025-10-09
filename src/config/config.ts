@@ -26,5 +26,8 @@ export const config = {
     baseUrl: process.env.CLIENT_BASE_URL || 'http://localhost:3000',
     
   },
+  firebase:{
+    firebaseImgUrl:process.env.FIREBASE_STORAGE_BUCKET,
+  },
   nodeenv: process.env.NODE_ENV || 'development'
 };

@@ -1,8 +1,13 @@
-
-import { LanguageCode } from "@prisma/client";
+import { LanguageCode, productsStatus } from "@prisma/client";
 
 export interface IListingTypeRepo {
   getAllListingTypes(
-    language?: LanguageCode
-  ): Promise<{ id: number; name: string }[]>;
+    language: LanguageCode,
+    status: productsStatus
+  ): Promise<{
+    id: number;
+    name: string;
+    slug: string | null;
+    productCount: number;
+  }[]>;
 }

@@ -54,7 +54,7 @@ export class AuthService {
   );
 }
     const isMatch = await comparePassword(password, user.password);
-    if (!isMatch) throw new UnauthorizedError(t('invalidPassword', language));
+    if (!isMatch) throw new UnauthorizedError(t('invalidCredentials', language));
 
     await this.userRepo.updateFieldsById(user.id, { last_login: new Date() });
 const tokenExpiry = rememberMe ? '30d' : '1d';

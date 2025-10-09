@@ -15,19 +15,19 @@ const listingTypeRepo = new ListingTypeRepo(prisma);
 
 export async function getFilters(req: Request, res: Response, next: NextFunction) {
   const lang = res.locals.lang;
-
+const productsStatus="active";
   try {
     // --- Categories ---
     let categories = getCategoriesFromCache(lang);
     if (!categories) {
-      categories = await categoryRepository.getAllCategories(lang);
+      categories = await categoryRepository.getAllCategories(lang , productsStatus);
       setCategoriesCache(lang, categories);
     }
 
     // --- Listing Types (forever cache) ---
     let listingTypes = getListingTypesFromCache(lang);
     if (!listingTypes) {
-      listingTypes = await listingTypeRepo.getAllListingTypes(lang);
+      listingTypes = await listingTypeRepo.getAllListingTypes(lang , productsStatus);
       setListingTypesCache(lang, listingTypes);
     }
 

@@ -45,7 +45,20 @@ export async function GetProductsBySearch(req: Request, res: Response, next: Nex
         cities = String(city).split(',').map(c => c.trim().toLowerCase());
       }
     }
-   
+
+  const parsedAttributes: Record<string, string[]> = {};
+
+for (const [key, value] of Object.entries(attributeFilters)) {
+  if (!value) continue;
+
+  if (Array.isArray(value)) {
+    parsedAttributes[key] = value.map(v => String(v).toLowerCase());
+  } else if (typeof value === "string" && value.includes(",")) {
+    parsedAttributes[key] = value.split(",").map(v => v.trim().toLowerCase());
+  } else {
+    parsedAttributes[key] = [String(value).toLowerCase()];
+  }
+}
 const filters: SearchFilters = {
   categorySlug,
   subcategorySlug,
@@ -57,7 +70,8 @@ const filters: SearchFilters = {
   cities,
   country:country ? (country as string) : undefined,
   listingtype: listingtype ? (listingtype as string) : undefined,
-  attributes: attributeFilters as Record<string, string>,
+  // attributes: attributeFilters as Record<string, string>,
+   attributes: parsedAttributes,
    status: "active",
 
   sortBy: sortBy ? (sortBy as 'price_asc' | 'price_desc' | 'date_asc' | 'date_desc') : undefined,
